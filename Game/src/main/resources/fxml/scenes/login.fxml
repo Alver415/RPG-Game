@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.stage.Stage?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.TabPane.TabClosingPolicy?>
+<?import gui.components.MessagePane?>
+
+<Scene xmlns:fx="http://javafx.com/fxml" fx:controller="gui.controllers.LoginController" stylesheets="fxml/css/login.css">
+	<StackPane>
+		<VBox>
+			<TabPane tabClosingPolicy="UNAVAILABLE"> 
+				<tabs>
+					<Tab fx:id="loginTab" text="Login">
+       	 				<GridPane id="fieldWrapper" alignment="center" hgap="10" vgap="10">
+							<columnConstraints>
+	      			  			<ColumnConstraints halignment="right"/>
+			   			 	</columnConstraints>
+							<padding>
+								<Insets top="10" right="25" bottom="10" left="25"/>
+							</padding>
+							<Label text="User Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+							<TextField  fx:id="login_usernameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+				
+							<Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+							<PasswordField fx:id="login_passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+						</GridPane>
+	    			</Tab>
+					<Tab fx:id="signUpTab" text="Sign Up">
+	       	 			<GridPane id="fieldWrapper" alignment="center" hgap="10" vgap="10">
+							<columnConstraints>
+		      			  		<ColumnConstraints halignment="right"/>
+			   			 	</columnConstraints>
+							<padding>
+								<Insets top="10" right="25" bottom="10" left="25"/>
+							</padding>
+							<Label text="User Name" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+							<TextField  fx:id="signUp_usernameField" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+				
+							<Label text="Email" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+							<TextField  fx:id="signUp_emailField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+				
+							<Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+							<PasswordField fx:id="signUp_passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+				
+							<Label text="Confirm Password" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+							<PasswordField fx:id="signUp_passwordConfirmField" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+						</GridPane>
+	    			</Tab>
+				</tabs>
+			</TabPane>
+			
+			<HBox spacing="10" alignment="center">
+			    <Button fx:id="submitButton" text="Submit" onAction="#submit"/> 
+			</HBox>
+		</VBox>
+		<MessagePane fx:id="messagePane"/>
+	</StackPane>
+</Scene>

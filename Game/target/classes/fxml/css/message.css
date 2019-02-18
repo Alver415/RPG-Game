@@ -1,0 +1,19 @@
+#titleLabel{
+  	-fx-font-weight: bold;
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 2px;
+}
+
+#messageText{
+    -fx-fill: white;
+}
+
+
+.success{
+	-fx-background-color: #aaccaa;
+}
+
+.normal{
+	-fx-background-color: #aaaacc;
+}
