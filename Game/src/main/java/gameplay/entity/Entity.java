@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import gameplay.Position;
+import gameplay.Vector2D;
 import gameplay.effects.Effect;
 import gameplay.items.Equipment;
 import gameplay.items.Inventory;
@@ -22,6 +22,7 @@ public class Entity {
 
 	protected final String		name;
 	protected final Position	position;
+	protected final Velocity	velocity;
 
 	protected final Map<Attribute, Value>	attributes;
 	protected final Map<String, Ability>	abilities;
@@ -33,6 +34,7 @@ public class Entity {
 	public Entity(String name) {
 		this.name = name;
 		this.position = new Position();
+		this.velocity = new Velocity();
 		this.equipment = new HashSet<Equipment>();
 
 		attributes = new HashMap<Attribute, Value>();
@@ -144,6 +146,10 @@ public class Entity {
 		return position;
 	}
 
+	public Velocity getVelocity() {
+		return velocity;
+	}
+
 	public boolean isDead() {
 		return getAttributeAfterModifiers(Attribute.HEALTH).getVal() <= 0;
 	}
@@ -157,7 +163,10 @@ public class Entity {
 		consumable.consume();
 	}
 
-	public void tick() {
+	public void tick(double dt) {
+		double speed = getAttributeAfterModifiers(Attribute.SPEED).getVal();
+		Vector2D velocity = this.velocity.asVector().scalar(speed * dt);
+		position.add(velocity);
 	}
 
 }

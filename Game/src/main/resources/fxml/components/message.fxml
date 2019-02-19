@@ -6,9 +6,9 @@
 <?import javafx.scene.text.*?>
 <?import javafx.stage.Stage?>
 <?import javafx.scene.Scene?>
-<?import gui.components.Message?>
+<?import frontend.fxml.components.Message?>
 
-<fx:root fx:id="root" xmlns:fx="http://javafx.com/fxml" type="gui.components.Message" stylesheets="fxml/css/message.css">
+<fx:root fx:id="root" xmlns:fx="http://javafx.com/fxml" type="frontend.fxml.components.Message" stylesheets="fxml/css/message.css">
 	<Label fx:id="titleLabel"/>
 	<Text fx:id="messageText"/>
 	

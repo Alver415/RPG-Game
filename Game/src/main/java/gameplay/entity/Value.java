@@ -105,7 +105,7 @@ public class Value {
 	}
 
 	public Value copy() {
-		return new Value(this.max, this.max, this.val, this.unit);
+		return new Value(this.max, this.min, this.val, this.unit);
 	}
 
 	/* OVERRIDES */

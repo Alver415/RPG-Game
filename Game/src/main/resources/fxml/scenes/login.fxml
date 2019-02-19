@@ -7,9 +7,9 @@
 <?import javafx.stage.Stage?>
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.TabPane.TabClosingPolicy?>
-<?import gui.components.MessagePane?>
+<?import frontend.fxml.components.MessagePane?>
 
-<Scene xmlns:fx="http://javafx.com/fxml" fx:controller="gui.controllers.LoginController" stylesheets="fxml/css/login.css">
+<Scene xmlns:fx="http://javafx.com/fxml" fx:controller="frontend.fxml.controllers.LoginController" stylesheets="fxml/css/login.css">
 	<StackPane>
 		<VBox>
 			<TabPane tabClosingPolicy="UNAVAILABLE"> 
