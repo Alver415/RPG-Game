@@ -10,7 +10,7 @@ public class HibernateUtil {
 
 	private static final SessionFactory sessionFactory = null; // buildSessionFactory();
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings("unused")
 	private static SessionFactory buildSessionFactory() {
 		try {
 			// Create the SessionFactory from hibernate.cfg.xml

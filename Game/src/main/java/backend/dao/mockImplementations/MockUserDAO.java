@@ -1,4 +1,4 @@
-package backend.dao.mock;
+package backend.dao.mockImplementations;
 
 import backend.dao.implementations.UserDAO;
 

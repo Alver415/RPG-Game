@@ -23,7 +23,6 @@ public class GameWorld {
 		this.renderers = new HashSet<>();
 		this.inputHandlers = new HashSet<>();
 		this.timer = new GameTimer();
-		timer.start();
 	}
 
 	private void tick(double dt) {
@@ -42,7 +41,7 @@ public class GameWorld {
 
 	public void render() {
 		for (Renderer renderer : renderers) {
-			renderer.render(this);
+			renderer.render();
 		}
 	}
 

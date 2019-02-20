@@ -46,7 +46,7 @@
 				<configuration>
 	                <source>1.8</source>
 	                <target>1.8</target>
-	                <executable>C:/projects/tools/jdk1.8.0_131/bin/javac</executable>
+	                <executable>%JAVA_HOME%/bin/javac</executable>
 	                <verbose>true</verbose>
 	                <fork>true</fork>
 	            </configuration>

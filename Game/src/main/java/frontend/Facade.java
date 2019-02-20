@@ -3,21 +3,17 @@ package frontend;
 import backend.HibernateObject;
 import backend.dao.interfaces.IBaseDAO;
 import backend.dao.interfaces.IUserDAO;
-import backend.dao.mock.MockBaseDAO;
-import backend.dao.mock.MockUserDAO;
-import frontend.fxml.components.GameScene;
+import backend.dao.mockImplementations.MockBaseDAO;
+import backend.dao.mockImplementations.MockUserDAO;
 import frontend.fxml.components.Message;
 import frontend.fxml.components.Message.Type;
-import frontend.fxml.components.MessagePane;
-import gameplay.GameWorld;
-import gameplay.entity.Entity;
-import javafx.stage.Stage;
 
 public class Facade {
 
-	private static GameApplication	APPLICATION;
 	private static final IBaseDAO	BASE_DAO	= new MockBaseDAO();	// new BaseDAO();
 	private static final IUserDAO	USER_DAO	= new MockUserDAO();	// new UserDAO();
+
+	private static GameApplication gameApplication;
 
 	public static void save(HibernateObject object) {
 		BASE_DAO.save(object);
@@ -44,46 +40,22 @@ public class Facade {
 	}
 
 	public static void addMessage(String title, String message, Type type) {
-		((MessagePane) APPLICATION.getStage().getScene().lookup(MessagePane.ID)).addMessage(title, message, type);
+//		((MessagePane) gameApplication.getStage().getScene().lookup(MessagePane.ID)).addMessage(title, message, type);
 	}
 
 	public static void removeMessage(Message message) {
-		((MessagePane) APPLICATION.getStage().getScene().lookup(MessagePane.ID)).removeMessage(message);
+//		((MessagePane) gameApplication.getStage().getScene().lookup(MessagePane.ID)).removeMessage(message);
 	}
-
-	private static GameWorld	gameWorld;
-	private static GameScene	gameScene;
 
 	public static void startGame() {
-		gameWorld = new GameWorld();
-		Stage stage = APPLICATION.getStage();
-		Stage stage2 = new Stage();
-		gameScene = new GameScene(gameWorld);
-		GameScene gameScene2 = new GameScene(gameWorld);
-
-		stage.setTitle("Game");
-		stage.setScene(gameScene);
-		stage2.setTitle("Game 2");
-		stage2.setScene(gameScene2);
-		stage2.show();
-
-		Entity player = new Entity("Player");
-		gameWorld.addEntity(player);
-		gameScene.addHuman(player);
+		gameApplication.setAppScene(AppScene.GAME);
 	}
 
-	public static void addComputer() {
-		Entity enemy = new Entity("Enemy");
-		gameWorld.addEntity(enemy);
-		gameScene.addComputer(enemy);
+	public static void setGameApplication(GameApplication gameApplication) {
+		Facade.gameApplication = gameApplication;
 	}
-
-	public static GameApplication getApplication() {
-		return APPLICATION;
+	
+	public static GameApplication getGameApplication() {
+		return gameApplication;
 	}
-
-	public static void setApplication(GameApplication application) {
-		APPLICATION = application;
-	}
-
 }

@@ -54,9 +54,6 @@ public class PlayerController extends Controller {
 		case RIGHT:
 			dx++;
 			break;
-		case SPACE:
-			Facade.addComputer();
-			break;
 		default:
 			break;
 		}
