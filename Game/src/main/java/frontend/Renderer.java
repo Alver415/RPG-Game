@@ -30,7 +30,7 @@ public class Renderer {
 	public void render() {
 		width = canvas.getWidth();
 		height = canvas.getHeight();
-		
+
 		graphicsContext.clearRect(0, 0, width, height);
 		
 		renderEntities(gameworld.getEntities());

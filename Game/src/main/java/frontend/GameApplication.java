@@ -22,10 +22,7 @@ public class GameApplication extends Application {
 	
 	private Stage 				primaryStage;
 	
-	private AnimationTimer 		timer;
-	
 	private GameWorld 			gameWorld;
-	private GameInputHandler	inputHandler;
 
 	public GameApplication() {
 		Facade.setGameApplication(this);
@@ -35,27 +32,27 @@ public class GameApplication extends Application {
 	public void start(Stage primaryStage) throws IOException {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setOnCloseRequest(e -> System.exit(0));
-		this.primaryStage.show();
 		
 		setAppScene(AppScene.LOGIN);
+
+		this.primaryStage.show();
 	}
 	
 	
 	public void setAppScene(AppScene appScene) {
 		Scene scene = SceneLoader.load(appScene);
-		primaryStage.setTitle(appScene.getTitle());
-		primaryStage.setScene(scene);
-		
 		if (appScene.equals(AppScene.GAME)) {
 			setupGame(scene);
 		}
+
+		primaryStage.setTitle(appScene.getTitle());
+		primaryStage.setScene(scene);
 	}
 
 	private void setupGame(Scene scene) {
 		this.gameWorld = new GameWorld();
 		
-		this.inputHandler = new GameInputHandler();
-		this.gameWorld.addInputHandler(inputHandler);
+		GameInputHandler inputHandler = gameWorld.getinputHandler();
 		scene.setOnMouseMoved(inputHandler);
 		scene.setOnMousePressed(inputHandler);
 		scene.setOnMouseReleased(inputHandler);
@@ -71,22 +68,8 @@ public class GameApplication extends Application {
 		Renderer renderer = new Renderer(gameWorld, canvas);
 		this.gameWorld.addRenderer(renderer);
 
-		this.gameWorld.start();
-		
-//		this.timer = new GameTimer() {
-//			@Override
-//			public void tick(double dt) {
-//				
-//			}
-//		};
-	}
-	
-	public void addHuman(Entity entity) {
-		this.inputHandler.addController(new PlayerController(inputHandler, entity));
-	}
+		gameWorld.addHuman(new Entity("Player"));
 
-	public void addComputer(Entity entity) {
-		this.inputHandler.addController(new ComputerController(entity));
+		this.gameWorld.start();
 	}
-	
 }

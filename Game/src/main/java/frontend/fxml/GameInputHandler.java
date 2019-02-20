@@ -14,12 +14,10 @@ import javafx.scene.input.MouseEvent;
 
 public class GameInputHandler implements EventHandler<InputEvent> {
 
-	private final Set<Controller>	controllers;
 	private final Set<KeyCode>		pressedKeys;
 	private final Queue<MouseEvent>	mouseEvents;
 
 	public GameInputHandler() {
-		this.controllers = new HashSet<>();
 		this.pressedKeys = new HashSet<>();
 		this.mouseEvents = new LinkedList<>();
 	}
@@ -36,17 +34,6 @@ public class GameInputHandler implements EventHandler<InputEvent> {
 		} else if (event instanceof MouseEvent) {
 			mouseEvents.add((MouseEvent) event);
 		}
-	}
-
-	public void addController(Controller inputProcessor) {
-		this.controllers.add(inputProcessor);
-	}
-
-	public void process() {
-		for (Controller controller : controllers) {
-			controller.tick();
-		}
-		mouseEvents.clear();
 	}
 
 	public Set<KeyCode> getPressedKeys() {
