@@ -7,7 +7,9 @@ import game.engine.GameWorld;
 import game.engine.components.AIController;
 import game.engine.components.Controller;
 import game.engine.components.Render;
+import game.engine.components.RigidBody;
 import game.engine.systems.InputSystem;
+import game.engine.systems.PhysicsSystem;
 import game.engine.systems.Renderer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -69,22 +71,27 @@ public class GameApplication extends Application {
 		canvas.heightProperty().bind(root.heightProperty());
 		Renderer renderer = new Renderer(canvas);
 
+		PhysicsSystem physics = new PhysicsSystem();
+
 		GameWorld gameWorld = GameWorld.get();
 		gameWorld.addSystem(inputSystem);
 		gameWorld.addSystem(renderer);
+		gameWorld.addSystem(physics);
 
 		Entity player = new Entity();
 		player.addComponent(new Controller());
 		player.addComponent(new Render());
+		player.addComponent(new RigidBody(1));
 
 		Entity enemy = new Entity();
 		enemy.addComponent(new AIController());
 		enemy.addComponent(new Render());
+		enemy.addComponent(new RigidBody(1));
 
 		gameWorld.addEntity(player);
 		gameWorld.addEntity(enemy);
 
-		gameWorld.start();
+		gameWorld.getTimer().start();
 	}
 
 

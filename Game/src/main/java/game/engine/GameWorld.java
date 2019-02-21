@@ -1,6 +1,7 @@
 package game.engine;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import game.engine.systems.GameSystem;
@@ -25,6 +26,7 @@ public class GameWorld {
 				}
 			}
 		};
+		this.timer.start();
 	}
 	
 	public void addSystem(GameSystem system) {
@@ -34,19 +36,15 @@ public class GameWorld {
 	public void addEntity(Entity entity) {
 		this.entities.add(entity);
 	}
-
-	public void stop() {
-		timer.stop();
-	}
-
-	public void start() {
-		timer.start();
-	}
 	
 	public static GameWorld get() {
 		if (instance == null) {
 			instance = new GameWorld();
 		}
 		return instance;
+	}
+
+	public GameTimer getTimer() {
+		return timer;
 	}
 }
