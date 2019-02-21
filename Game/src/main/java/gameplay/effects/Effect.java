@@ -5,36 +5,36 @@ import java.util.Map;
 import java.util.Set;
 
 import gameplay.entity.Attribute;
-import gameplay.entity.Entity;
+import gameplay.entity.Character;
 import gameplay.entity.Modifier;
 
 public abstract class Effect {
 
-	protected Entity	source;
-	protected Entity	target;
+	protected Character	source;
+	protected Character	target;
 
 	protected Map<Attribute, Set<Modifier>> modifiers;
 
-	public Effect(Entity source, Entity target) {
+	public Effect(Character source, Character target) {
 		this.modifiers = new HashMap<Attribute, Set<Modifier>>();
 		this.source = source;
 		this.target = target;
 		apply();
 	}
 
-	public Entity getSource() {
+	public Character getSource() {
 		return source;
 	}
 
-	public void setSource(Entity source) {
+	public void setSource(Character source) {
 		this.source = source;
 	}
 
-	public Entity getTarget() {
+	public Character getTarget() {
 		return target;
 	}
 
-	public void setTarget(Entity target) {
+	public void setTarget(Character target) {
 		this.target = target;
 	}
 

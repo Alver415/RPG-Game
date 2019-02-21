@@ -1,10 +1,10 @@
 package gameplay.effects;
 
-import gameplay.entity.Entity;
+import gameplay.entity.Character;
 
 public class Burn extends Effect {
 
-	public Burn(Entity source, Entity target) {
+	public Burn(Character source, Character target) {
 		super(source, target);
 	}
 

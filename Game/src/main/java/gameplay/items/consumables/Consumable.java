@@ -1,11 +1,11 @@
 package gameplay.items.consumables;
 
-import gameplay.entity.Entity;
+import gameplay.entity.Character;
 import gameplay.items.Item;
 
 public abstract class Consumable extends Item {
 
-	protected Entity target;
+	protected Character target;
 
 	public Consumable(String name) {
 		super(name);
@@ -13,11 +13,11 @@ public abstract class Consumable extends Item {
 
 	public abstract void consume();
 
-	public Entity getTarget() {
+	public Character getTarget() {
 		return target;
 	}
 
-	public void setTarget(Entity target) {
+	public void setTarget(Character target) {
 		this.target = target;
 	}
 

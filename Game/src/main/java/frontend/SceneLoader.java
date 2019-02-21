@@ -9,11 +9,11 @@ import javafx.scene.Scene;
 
 public class SceneLoader{
 
-	
-	
 	public static Scene load(AppScene scene) {
+		return load(scene.getFxmlLocation());
+	}
+	public static Scene load(String fxmlLocation) {
 		try {
-			String fxmlLocation = scene.getFxmlLocation();
 			URL resource = SceneLoader.class.getResource(fxmlLocation);
 			return FXMLLoader.load(resource);
 		} catch (IOException e) {

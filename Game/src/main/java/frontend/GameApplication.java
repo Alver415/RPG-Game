@@ -2,12 +2,13 @@ package frontend;
 
 import java.io.IOException;
 
-import frontend.control.ComputerController;
-import frontend.control.PlayerController;
-import frontend.fxml.GameInputHandler;
-import gameplay.GameWorld;
-import gameplay.entity.Entity;
-import javafx.animation.AnimationTimer;
+import game.engine.Entity;
+import game.engine.GameWorld;
+import game.engine.components.AIController;
+import game.engine.components.Controller;
+import game.engine.components.Render;
+import game.engine.systems.InputSystem;
+import game.engine.systems.Renderer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -20,9 +21,7 @@ public class GameApplication extends Application {
 		GameApplication.launch(strings);
 	}
 	
-	private Stage 				primaryStage;
-	
-	private GameWorld 			gameWorld;
+	private Stage primaryStage;
 
 	public GameApplication() {
 		Facade.setGameApplication(this);
@@ -40,24 +39,27 @@ public class GameApplication extends Application {
 	
 	
 	public void setAppScene(AppScene appScene) {
-		Scene scene = SceneLoader.load(appScene);
-		if (appScene.equals(AppScene.GAME)) {
+		Scene scene = appScene.getScene();
+		switch(appScene) {
+		case GAME:
 			setupGame(scene);
+			break;
+		case LOGIN:
+			break;
+		case SETTINGS:
+			break;
+		default:
+			break;
 		}
-
+		
 		primaryStage.setTitle(appScene.getTitle());
 		primaryStage.setScene(scene);
 	}
 
 	private void setupGame(Scene scene) {
-		this.gameWorld = new GameWorld();
-		
-		GameInputHandler inputHandler = gameWorld.getinputHandler();
-		scene.setOnMouseMoved(inputHandler);
-		scene.setOnMousePressed(inputHandler);
-		scene.setOnMouseReleased(inputHandler);
-		scene.setOnKeyPressed(inputHandler);
-		scene.setOnKeyReleased(inputHandler);
+		InputSystem inputSystem = new InputSystem();
+		scene.setOnKeyPressed(inputSystem.getInputHandler());
+		scene.setOnKeyReleased(inputSystem.getInputHandler());
 
 		Pane root = new Pane();
 		scene.setRoot(root);
@@ -65,11 +67,25 @@ public class GameApplication extends Application {
 		root.getChildren().add(canvas);
 		canvas.widthProperty().bind(root.widthProperty());
 		canvas.heightProperty().bind(root.heightProperty());
-		Renderer renderer = new Renderer(gameWorld, canvas);
-		this.gameWorld.addRenderer(renderer);
+		Renderer renderer = new Renderer(canvas);
 
-		gameWorld.addHuman(new Entity("Player"));
+		GameWorld gameWorld = GameWorld.get();
+		gameWorld.addSystem(inputSystem);
+		gameWorld.addSystem(renderer);
 
-		this.gameWorld.start();
+		Entity player = new Entity();
+		player.addComponent(new Controller());
+		player.addComponent(new Render());
+
+		Entity enemy = new Entity();
+		enemy.addComponent(new AIController());
+		enemy.addComponent(new Render());
+
+		gameWorld.addEntity(player);
+		gameWorld.addEntity(enemy);
+
+		gameWorld.start();
 	}
+
+
 }

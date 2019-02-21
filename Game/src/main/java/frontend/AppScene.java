@@ -1,4 +1,7 @@
 package frontend;
+
+import javafx.scene.Scene;
+
 public enum AppScene{
 
 	LOGIN("Login", "../fxml/scenes/login.fxml"),
@@ -7,6 +10,7 @@ public enum AppScene{
 	
 	private final String fxmlLocation;
 	private final String title;
+	private Scene scene;
 	
 	AppScene(String fxmlLocation){
 		this.title = this.name();
@@ -24,4 +28,14 @@ public enum AppScene{
 	public String getTitle() {
 		return title;
 	}
+	
+	/** Lazy initialize scenes 
+	 */
+	public Scene getScene() {
+		if (scene == null) {
+			scene = SceneLoader.load(fxmlLocation);
+		}
+		return scene;
+	}
+	
 }

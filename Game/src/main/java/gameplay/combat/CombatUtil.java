@@ -1,7 +1,7 @@
 package gameplay.combat;
 
 import gameplay.entity.Attribute;
-import gameplay.entity.Entity;
+import gameplay.entity.Character;
 
 public final class CombatUtil {
 
@@ -11,7 +11,7 @@ public final class CombatUtil {
 	 */
 	private static final double DEFENSE_CONSTANT = 100d;
 
-	public static void attack(Entity source, Entity target) {
+	public static void attack(Character source, Character target) {
 
 		double sourceAtk = source.getAttributeAfterModifiers(Attribute.ATTACK).getVal();
 		double targetDef = source.getAttributeAfterModifiers(Attribute.DEFENSE).getVal();

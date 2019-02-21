@@ -2,28 +2,28 @@ package gameplay.entity;
 
 public abstract class Ability {
 
-	protected Entity	source;
-	protected Entity	target;
+	protected Character	source;
+	protected Character	target;
 
-	public Ability(Entity source, Entity target) {
+	public Ability(Character source, Character target) {
 		this.source = source;
 		this.target = target;
 
 	}
 
-	public Entity getSource() {
+	public Character getSource() {
 		return source;
 	}
 
-	public void setSource(Entity source) {
+	public void setSource(Character source) {
 		this.source = source;
 	}
 
-	public Entity getTarget() {
+	public Character getTarget() {
 		return target;
 	}
 
-	public void setTarget(Entity target) {
+	public void setTarget(Character target) {
 		this.target = target;
 	}
 

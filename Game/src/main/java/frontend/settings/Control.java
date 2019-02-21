@@ -34,7 +34,7 @@ public enum Control {
 
 	// Static fields and methods
 
-	private static final Map<KeyCode, Control> MAP = new HashMap<KeyCode, Control>();
+	private static Map<KeyCode, Control> MAP = new HashMap<KeyCode, Control>();
 
 	public static Control get(KeyCode keyCode) {
 		return MAP.get(keyCode);
@@ -44,21 +44,7 @@ public enum Control {
 	private static final Properties	PROPERTIES			= new Properties();
 
 	static {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				synchronized (this) {
-					while (true) {
-						read();
-						try {
-							wait(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}).start();
+		read();
 	}
 
 	public static void read() {
@@ -67,8 +53,7 @@ public enum Control {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		MAP.clear();
+		Map<KeyCode, Control> newMap = new HashMap<KeyCode, Control>();
 		for (Control control : values()) {
 			String stringVal = PROPERTIES.getProperty(control.name());
 			if (stringVal == null) {
@@ -76,8 +61,9 @@ public enum Control {
 			} else {
 				control.currentKeyCode = KeyCode.valueOf(stringVal);
 			}
-			MAP.put(control.get(), control);
+			newMap.put(control.get(), control);
 		}
+		MAP = newMap;
 	}
 
 }

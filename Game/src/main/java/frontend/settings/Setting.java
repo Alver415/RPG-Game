@@ -33,21 +33,7 @@ public enum Setting {
 	private static final Properties	PROPERTIES			= new Properties();
 
 	static {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				synchronized (this) {
-					while (true) {
-						read();
-						try {
-							wait(1000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}).start();
+		read();
 	}
 
 	public static void read() {
