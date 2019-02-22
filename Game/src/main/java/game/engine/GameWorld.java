@@ -45,4 +45,8 @@ public class GameWorld {
 	public GameTimer getTimer() {
 		return timer;
 	}
+
+	public Set<Entity> getEntities() {
+		return entities;
+	}
 }

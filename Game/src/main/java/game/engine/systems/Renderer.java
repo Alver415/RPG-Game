@@ -8,6 +8,7 @@ import game.engine.components.Render;
 import gameplay.Vector2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Renderer extends GameSystem{
@@ -43,11 +44,25 @@ public class Renderer extends GameSystem{
 	protected void render(Render render) {
 		graphicsContext.setStroke(Color.BLACK);
 		Vector2D position = render.getPosition().asVector();
-		Color color = render.getColor();
 		double radius = render.getRadius();
-		drawCircle(position, radius, color);
+
+		if (render.getSprite() != null) {
+			drawSprite(position, render.getSprite());
+		} else {
+			Color color = render.getColor();
+			drawCircle(position, radius, color);
+		}
 	}
 	
+	private void drawSprite(Vector2D center, Image sprite) {
+		double radius = sprite.getWidth();
+		double x = center.getX();
+		double y = center.getY();
+		double relativeX = (x + width / 2) - radius / 2;
+		double relativeY = ((height - y) - height / 2) - radius;
+		graphicsContext.drawImage(sprite, relativeX, relativeY);
+	}
+
 	private void drawCircle(Vector2D center, double radius, Color color) {
 		graphicsContext.setFill(color);
 		double diameter = radius * 2;

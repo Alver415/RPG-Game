@@ -8,10 +8,10 @@ import java.util.Set;
 
 import game.engine.components.Collider;
 import game.engine.components.Component;
-import game.engine.components.Controller;
 import game.engine.components.Position;
 import game.engine.components.Render;
 import game.engine.components.RigidBody;
+import game.engine.components.controllers.Controller;
 
 public class Entity {
 

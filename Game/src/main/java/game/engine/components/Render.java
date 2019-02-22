@@ -1,25 +1,33 @@
 package game.engine.components;
 
+import java.io.File;
+
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Render extends Component {
 
-	private Color baseColor = randomColor();
+	private Image	sprite;
+	private Color	color;
+
+	public Render(Image sprite) {
+		this.sprite = sprite;
+	}
+
+	public Image getSprite() {
+		return sprite;
+	}
 
 	public Color getColor() {
 		if (entity.hasCollider()) {
 			boolean collision = entity.getCollider().isCollided();
-			return collision ? Color.RED : baseColor;
+			return collision ? Color.RED : color;
 		}
-		return baseColor;
+		return color;
 	}
 
-	public Color getBaseColor() {
-		return baseColor;
-	}
-
-	public void setBaseColor(Color baseColor) {
-		this.baseColor = baseColor;
+	public void setColor(Color baseColor) {
+		this.color = baseColor;
 	}
 
 	public Position getPosition() {

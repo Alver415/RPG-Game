@@ -1,4 +1,4 @@
-package game.engine.components;
+package game.engine.components.controllers;
 
 import java.util.Set;
 
@@ -6,11 +6,12 @@ import frontend.settings.Control;
 import game.engine.Entity;
 import gameplay.Vector2D;
 
-public class Controller extends Component{
+public class PlayerController extends Controller {
 
-	private static final double speed = 1;
+	private double		speed	= 25;
+	private Vector2D	direction;
 	
-	public void process(Set<Control> controls) {
+	public void processInput(Set<Control> controls) {
 		double dx = 0;
 		double dy = 0;
 		
@@ -29,19 +30,26 @@ public class Controller extends Component{
 				dx++;
 				break;
 			case SPACE:
+				speed = 50;
 				break;
 			default:
 				break;
-			
 			}
 		}
-		Vector2D delta= Vector2D.normalize(dx, dy).scalar(speed);
 		
-		move(entity, delta);
+		this.direction = Vector2D.normalize(dx, dy);
+
 	}
 
-	private void move(Entity entity, Vector2D delta) {
+	@Override
+	protected void move(Vector2D delta) {
 		entity.getPosition().add(delta);
+	}
+
+	@Override
+	public void tick(double dt) {
+		move(direction.scalar(speed * dt));
+		speed = 25;
 	}
 
 }

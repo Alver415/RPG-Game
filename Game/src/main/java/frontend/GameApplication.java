@@ -4,15 +4,17 @@ import java.io.IOException;
 
 import game.engine.Entity;
 import game.engine.GameWorld;
-import game.engine.components.AIController;
 import game.engine.components.Collider;
-import game.engine.components.Controller;
 import game.engine.components.Position;
 import game.engine.components.Render;
 import game.engine.components.RigidBody;
+import game.engine.components.controllers.AIController;
+import game.engine.components.controllers.Controller;
+import game.engine.components.controllers.PlayerController;
 import game.engine.systems.InputSystem;
 import game.engine.systems.PhysicsSystem;
 import game.engine.systems.Renderer;
+import gameplay.Sprite;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -83,8 +85,8 @@ public class GameApplication extends Application {
 
 		Entity player = new Entity();
 		player.setPosition(new Position());
-		player.setController(new Controller());
-		player.setRender(new Render());
+		player.setController(new PlayerController());
+		player.setRender(new Render(Sprite.CHARMANDER.getImage()));
 		player.setRigidBody(new RigidBody(1));
 		player.setCollider(new Collider());
 		gameWorld.addEntity(player);
@@ -93,7 +95,7 @@ public class GameApplication extends Application {
 		Entity enemy = new Entity();
 			enemy.setPosition(new Position());
 			enemy.setController(new AIController());
-			enemy.setRender(new Render());
+			enemy.setRender(new Render(Sprite.SQUIRTLE.getImage()));
 			enemy.setRigidBody(new RigidBody(1));
 			enemy.setCollider(new Collider());
 			gameWorld.addEntity(enemy);

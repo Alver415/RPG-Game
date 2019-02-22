@@ -5,8 +5,9 @@ import java.util.Set;
 
 import frontend.settings.Control;
 import game.engine.Entity;
-import game.engine.components.AIController;
-import game.engine.components.Controller;
+import game.engine.components.controllers.AIController;
+import game.engine.components.controllers.Controller;
+import game.engine.components.controllers.PlayerController;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
@@ -50,7 +51,10 @@ public class InputSystem extends GameSystem {
 		}
 		
 		for (Controller controller : controllers) {
-			controller.process(buttonsDown);
+			if (controller instanceof PlayerController) {
+				((PlayerController) controller).processInput(buttonsDown);
+			}
+			controller.tick(dt);
 		}
 	}
 	
