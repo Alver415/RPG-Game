@@ -1,7 +1,7 @@
 package game.engine.components.controllers;
 
+import game.engine.Vector2D;
 import game.engine.components.Component;
-import gameplay.Vector2D;
 
 public abstract class Controller extends Component {
 

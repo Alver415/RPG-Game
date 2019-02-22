@@ -14,6 +14,10 @@ public enum Control {
 	DOWN(KeyCode.S),
 	LEFT(KeyCode.A),
 	RIGHT(KeyCode.D),
+	
+	ZOOM_IN(KeyCode.E),
+	ZOOM_OUT(KeyCode.Q),
+	
 	SPACE(KeyCode.SPACE);
 
 	private final KeyCode	defaultKeyCode;

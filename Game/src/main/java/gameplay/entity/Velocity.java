@@ -1,6 +1,6 @@
 package gameplay.entity;
 
-import gameplay.Vector2D;
+import game.engine.Vector2D;
 
 public class Velocity {
 

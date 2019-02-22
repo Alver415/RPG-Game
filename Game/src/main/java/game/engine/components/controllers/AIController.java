@@ -4,7 +4,7 @@ import java.util.Set;
 
 import game.engine.Entity;
 import game.engine.GameWorld;
-import gameplay.Vector2D;
+import game.engine.Vector2D;
 
 public class AIController extends Controller {
 

@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import game.engine.Vector2D;
 import game.engine.components.Position;
-import gameplay.Vector2D;
 import gameplay.effects.Effect;
 import gameplay.items.Equipment;
 import gameplay.items.Inventory;

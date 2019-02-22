@@ -1,4 +1,4 @@
-package gameplay;
+package game.engine;
 
 public class Vector2D {
 

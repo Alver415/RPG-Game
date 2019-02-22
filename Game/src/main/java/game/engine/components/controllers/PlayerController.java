@@ -4,7 +4,8 @@ import java.util.Set;
 
 import frontend.settings.Control;
 import game.engine.Entity;
-import gameplay.Vector2D;
+import game.engine.Vector2D;
+import game.engine.Viewport;
 
 public class PlayerController extends Controller {
 
@@ -31,6 +32,12 @@ public class PlayerController extends Controller {
 				break;
 			case SPACE:
 				speed = 50;
+				break;
+			case ZOOM_IN:
+				Viewport.zoom += 0.1;
+				break;
+			case ZOOM_OUT:
+				Viewport.zoom -= 0.1;
 				break;
 			default:
 				break;

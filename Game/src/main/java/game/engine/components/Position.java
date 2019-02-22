@@ -1,6 +1,6 @@
 package game.engine.components;
 
-import gameplay.Vector2D;
+import game.engine.Vector2D;
 
 public class Position extends Component{
 

@@ -4,22 +4,25 @@ import java.io.IOException;
 
 import game.engine.Entity;
 import game.engine.GameWorld;
-import game.engine.components.Collider;
+import game.engine.Sprite;
 import game.engine.components.Position;
 import game.engine.components.Render;
 import game.engine.components.RigidBody;
+import game.engine.components.colliders.CircleCollider;
+import game.engine.components.colliders.Collider;
+import game.engine.components.colliders.RectangleCollider;
 import game.engine.components.controllers.AIController;
 import game.engine.components.controllers.Controller;
 import game.engine.components.controllers.PlayerController;
 import game.engine.systems.InputSystem;
 import game.engine.systems.PhysicsSystem;
 import game.engine.systems.Renderer;
-import gameplay.Sprite;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class GameApplication extends Application {
@@ -86,19 +89,26 @@ public class GameApplication extends Application {
 		Entity player = new Entity();
 		player.setPosition(new Position());
 		player.setController(new PlayerController());
-		player.setRender(new Render(Sprite.CHARMANDER.getImage()));
+		player.setRender(new Render(Color.BLUE, 10, 10));
 		player.setRigidBody(new RigidBody(1));
-		player.setCollider(new Collider());
+		player.setCollider(new CircleCollider(5));
 		gameWorld.addEntity(player);
+		
+		renderer.setTarget(player);
 
 		for (int i = 0; i < 1; i++) {
 		Entity enemy = new Entity();
 			enemy.setPosition(new Position());
 			enemy.setController(new AIController());
-			enemy.setRender(new Render(Sprite.SQUIRTLE.getImage()));
+			enemy.setRender(new Render(Sprite.CHARMANDER, 10, 10));
 			enemy.setRigidBody(new RigidBody(1));
-			enemy.setCollider(new Collider());
+			enemy.setCollider(new RectangleCollider(10, 10));
 			gameWorld.addEntity(enemy);
 		}
+		
+//		Entity background = new Entity();
+//		background.setPosition(new Position());
+//		background.setRender(new Render(Sprite.PALLET_TOWN, -1));
+//		gameWorld.addEntity(background);
 	}
 }

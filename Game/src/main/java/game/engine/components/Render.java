@@ -1,46 +1,96 @@
 package game.engine.components;
 
-import java.io.File;
-
-import javafx.scene.image.Image;
+import game.engine.Sprite;
+import game.engine.Vector2D;
 import javafx.scene.paint.Color;
 
 public class Render extends Component {
 
-	private Image	sprite;
-	private Color	color;
+	private Sprite sprite;
+	private Color fill;
+	private Color border;
+	
+	private double width;
+	private double height;
 
-	public Render(Image sprite) {
+	private double zIndex;
+	
+	public Render(Sprite sprite) {
 		this.sprite = sprite;
+		this.fill = null;
+		this.width = sprite.getImage().getWidth();
+		this.height = sprite.getImage().getWidth();
 	}
 
-	public Image getSprite() {
+	public Render(Sprite sprite, double width, double height) {
+		this.sprite = sprite;
+		this.fill = null;
+		this.width = width;
+		this.height = height;
+	}
+
+	public Render(Color color, double width, double height) {
+		this.sprite = null;
+		this.fill = color;
+		this.width = width;
+		this.height = height;
+	}
+
+	public Render(Sprite sprite, double zIndex) {
+		this(sprite);
+		this.zIndex = zIndex;
+	}
+
+	public Vector2D getCenter() {
+		return entity.getPosition().asVector();
+	}
+	
+	public Sprite getSprite() {
 		return sprite;
 	}
 
-	public Color getColor() {
-		if (entity.hasCollider()) {
-			boolean collision = entity.getCollider().isCollided();
-			return collision ? Color.RED : color;
-		}
-		return color;
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
 	}
 
-	public void setColor(Color baseColor) {
-		this.color = baseColor;
+	public Color getFill() {
+		return fill;
 	}
 
-	public Position getPosition() {
-		return entity.getPosition();
+	public void setFill(Color fill) {
+		this.fill = fill;
 	}
 	
-	public double getRadius() {
-		if (entity.hasCollider()) {
-			return entity.getCollider().getRadius();
-		}
-		else {
-			return 50;
-		}
+	public Color getBorder() {
+		return border;
+	}
+
+	public void setBorder(Color border) {
+		this.border = border;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public void setWidth(double width) {
+		this.width = width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
+
+	public void setHeight(double height) {
+		this.height = height;
+	}
+	
+	public double getzIndex() {
+		return zIndex;
+	}
+
+	public void setzIndex(double zIndex) {
+		this.zIndex = zIndex;
 	}
 
 	private static Color randomColor() {
