@@ -5,7 +5,9 @@ import java.io.IOException;
 import game.engine.Entity;
 import game.engine.GameWorld;
 import game.engine.components.AIController;
+import game.engine.components.Collider;
 import game.engine.components.Controller;
+import game.engine.components.Position;
 import game.engine.components.Render;
 import game.engine.components.RigidBody;
 import game.engine.systems.InputSystem;
@@ -14,6 +16,7 @@ import game.engine.systems.Renderer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -79,20 +82,21 @@ public class GameApplication extends Application {
 		gameWorld.addSystem(physics);
 
 		Entity player = new Entity();
-		player.addComponent(new Controller());
-		player.addComponent(new Render());
-		player.addComponent(new RigidBody(1));
-
-		Entity enemy = new Entity();
-		enemy.addComponent(new AIController());
-		enemy.addComponent(new Render());
-		enemy.addComponent(new RigidBody(1));
-
+		player.setPosition(new Position());
+		player.setController(new Controller());
+		player.setRender(new Render());
+		player.setRigidBody(new RigidBody(1));
+		player.setCollider(new Collider());
 		gameWorld.addEntity(player);
-		gameWorld.addEntity(enemy);
 
-		gameWorld.getTimer().start();
+		for (int i = 0; i < 1; i++) {
+		Entity enemy = new Entity();
+			enemy.setPosition(new Position());
+			enemy.setController(new AIController());
+			enemy.setRender(new Render());
+			enemy.setRigidBody(new RigidBody(1));
+			enemy.setCollider(new Collider());
+			gameWorld.addEntity(enemy);
+		}
 	}
-
-
 }

@@ -1,21 +1,16 @@
 package game.engine.systems;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 
-import antlr.debug.Event;
 import frontend.settings.Control;
 import game.engine.Entity;
 import game.engine.components.AIController;
 import game.engine.components.Controller;
-import game.engine.components.RigidBody;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 
 public class InputSystem extends GameSystem {
 
@@ -49,11 +44,8 @@ public class InputSystem extends GameSystem {
 		Set<Controller> controllers = new HashSet<Controller>();
 		
 		for (Entity entity : entities) {
-			if (entity.hasComponent(Controller.class)) {
-				controllers.add(entity.getComponent(Controller.class));
-			}
-			if (entity.hasComponent(AIController.class)) {
-				controllers.add(entity.getComponent(AIController.class));
+			if (entity.hasController()) {
+				controllers.add(entity.getController());
 			}
 		}
 		

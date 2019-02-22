@@ -1,4 +1,4 @@
-package gameplay;
+package game.engine;
 
 
 import javafx.animation.AnimationTimer;
@@ -14,9 +14,9 @@ public abstract class GameTimer extends AnimationTimer {
 
 	@Override
 	public void handle(long nanoTime) {
-		this.dt = (nanoTime - lastTick) / NANO_CONVERSION;
-		this.lastTick = nanoTime;
 		if (gameThread == null) {
+			this.dt = (nanoTime - lastTick) / NANO_CONVERSION;
+			this.lastTick = nanoTime;
 			gameThread = new Thread(new Runnable() {
 				@Override
 				public void run() {

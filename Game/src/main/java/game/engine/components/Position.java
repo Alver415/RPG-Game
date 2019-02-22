@@ -1,8 +1,8 @@
-package gameplay.entity;
+package game.engine.components;
 
 import gameplay.Vector2D;
 
-public class Position {
+public class Position extends Component{
 
 	private Vector2D vector;
 

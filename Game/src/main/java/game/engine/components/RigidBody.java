@@ -1,7 +1,5 @@
 package game.engine.components;
 
-import gameplay.entity.Position;
-
 public class RigidBody extends Component{
 
 	private double mass = 1;

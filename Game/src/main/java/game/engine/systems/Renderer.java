@@ -5,7 +5,7 @@ import java.util.Set;
 
 import game.engine.Entity;
 import game.engine.components.Render;
-import gameplay.entity.Position;
+import gameplay.Vector2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -30,8 +30,8 @@ public class Renderer extends GameSystem{
 		Set<Render> renders = new HashSet<Render>();
 		
 		for (Entity entity : entities) {
-			if (entity.hasComponent(Render.class)) {
-				renders.add(entity.getComponent(Render.class));
+			if (entity.hasRender()) {
+				renders.add(entity.getRender());
 			}
 		}
 		
@@ -42,19 +42,21 @@ public class Renderer extends GameSystem{
 	
 	protected void render(Render render) {
 		graphicsContext.setStroke(Color.BLACK);
-		Position position = render.getPosition();
+		Vector2D position = render.getPosition().asVector();
 		Color color = render.getColor();
-		drawCircle(position, 25, color);
+		double radius = render.getRadius();
+		drawCircle(position, radius, color);
 	}
 	
-	private void drawCircle(Position center, double radius, Color color) {
+	private void drawCircle(Vector2D center, double radius, Color color) {
 		graphicsContext.setFill(color);
+		double diameter = radius * 2;
 		double x = center.getX();
 		double y = center.getY();
 		double relativeX = (x + width / 2) - radius / 2;
-		double relativeY = ((height - y) - height / 2) - radius / 2;
-		graphicsContext.strokeOval(relativeX, relativeY, radius, radius);
-		graphicsContext.fillOval(relativeX, relativeY, radius, radius);
+		double relativeY = ((height - y) - height / 2) - radius;
+		graphicsContext.strokeOval(relativeX, relativeY, diameter, diameter);
+		graphicsContext.fillOval(relativeX, relativeY, diameter, diameter);
 	}
 
 	

@@ -1,11 +1,9 @@
 package game.engine;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import game.engine.systems.GameSystem;
-import gameplay.GameTimer;
 
 public class GameWorld {
 

@@ -3,79 +3,82 @@ package game.engine.systems;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.sun.prism.paint.Color;
-
 import game.engine.Entity;
-import game.engine.components.Render;
-import game.engine.components.RigidBody;
+import game.engine.components.Collider;
 import gameplay.Vector2D;
 
 public class PhysicsSystem extends GameSystem {
 
+	private final Set<Collider> colliders = new HashSet<Collider>();
+	
 	@Override
 	public void process(Set<Entity> entities, double dt) {
-		Set<RigidBody> rigidBodies = new HashSet<RigidBody>();
+		colliders.clear();
 		
 		for (Entity entity : entities) {
-			if (entity.hasComponent(RigidBody.class)) {
-				rigidBodies.add(entity.getComponent(RigidBody.class));
+			if (entity.hasCollider()) {
+				colliders.add(entity.getCollider());
 			}
 		}
 		
-		Set<Collision> collisions;
+		for (Collider collider : colliders) {
+			collider.setCollided(false);
+		}
 
-		collisions = broadPhaseCollision();
-		collisions = narrowPhaseCollisions();
+		Set<Collision> potentialCollisions = broadPhaseCollision(colliders);
+		Set<Collision> actualCollisions = narrowPhaseCollisions(potentialCollisions);
 
-		for (RigidBody a : rigidBodies) {
-			for (RigidBody b : rigidBodies) {
+		for (Collision collision : actualCollisions) {
+			collision.handle();
+		}
+
+	}
+
+	private Set<Collision> broadPhaseCollision(Set<Collider> colliders) {
+		Set<Collision> collisions = new HashSet<Collision>();
+
+		for (Collider a : colliders) {
+			for (Collider b : colliders) {
 				if (a == b) {
 					continue;
 				}
-				if (isCollision(a,b)) {
-					handleCollision(a, b);
-				}
-				else {
-					Render ra = a.getEntity().getComponent(Render.class);
-					Render rb = b.getEntity().getComponent(Render.class);
+				if (isCollision(a, b)) {
+					collisions.add(new Collision(a, b));
+				} 
 
-					ra.setCollosion(false);
-					rb.setCollosion(false);
-				}
 			}
 		}
+		return collisions;
 	}
 
-	private Set<Collision> broadPhaseCollision() {
-		// TODO Auto-generated method stub
-		return null;
+	private Set<Collision> narrowPhaseCollisions(Set<Collision> potentialCollisions) {
+		return potentialCollisions;
 	}
 
-	private Set<Collision> narrowPhaseCollisions() {
-		return null;
-	}
-
-	private boolean isCollision(RigidBody a, RigidBody b) {
+	private boolean isCollision(Collider a, Collider b) {
 		Vector2D ap = a.getPosition().asVector();
 		Vector2D bp = b.getPosition().asVector();
-		return ap.distance(bp) < 25;
+		double sumRadius = a.getRadius() + b.getRadius();
+		double distance = ap.distance(bp);
+		
+		return distance < sumRadius;
 	}
-	
-	private void handleCollision(RigidBody a, RigidBody b) {
-		Render ra = a.getEntity().getComponent(Render.class);
-		Render rb = b.getEntity().getComponent(Render.class);
 
-		ra.setCollosion(true);
-		rb.setCollosion(true);
-	}
 
 	private class Collision {
-		private final RigidBody	a;
-		private final RigidBody	b;
+		private final Collider a;
+		private final Collider b;
 
-		public Collision(RigidBody a, RigidBody b) {
+		public Collision(Collider a, Collider b) {
 			this.a = a;
 			this.b = b;
+			a.setCollided(true);
+			b.setCollided(true);
 		}
+
+		public void handle() {
+			
+		}
+
 	}
 }
