@@ -5,13 +5,14 @@ import java.util.Set;
 
 import game.engine.Entity;
 import game.engine.Vector2D;
-import game.engine.components.Position;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
+import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
+import game.engine.components.transforms.Position;
 import javafx.scene.paint.Color;
 
-public class PhysicsSystem extends GameSystem {
+public class CollisionSystem extends GameSystem {
 
 	private final Set<Collider> colliders = new HashSet<Collider>();
 	
@@ -183,10 +184,10 @@ public class PhysicsSystem extends GameSystem {
 		public Collider getB() {
 			return b;
 		}
-
+		
 		public void handle() {
-			
+			a.handleCollision(b);
+			b.handleCollision(a);
 		}
-
 	}
 }

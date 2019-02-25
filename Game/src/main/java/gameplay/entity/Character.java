@@ -1,8 +1,8 @@
 package gameplay.entity;
 
-import static gameplay.entity.Attribute.ATTACK;
-import static gameplay.entity.Attribute.HEALTH;
-import static gameplay.entity.Attribute.MAGIC;
+import static gameplay.entity.AttributeType.ATTACK;
+import static gameplay.entity.AttributeType.HEALTH;
+import static gameplay.entity.AttributeType.MAGIC;
 import static gameplay.entity.Modifier.Type.ADDITIVE;
 import static gameplay.entity.Modifier.Type.MULTIPLICATIVE;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import game.engine.Vector2D;
-import game.engine.components.Position;
+import game.engine.components.transforms.Position;
 import gameplay.effects.Effect;
 import gameplay.items.Equipment;
 import gameplay.items.Inventory;
@@ -23,9 +23,8 @@ public class Character {
 
 	protected final String		name;
 	protected final Position	position;
-	protected final Velocity	velocity;
 
-	protected final Map<Attribute, Value>	attributes;
+	protected final Map<AttributeType, Value>	attributes;
 	protected final Map<String, Ability>	abilities;
 	protected final Set<Effect>				effects;
 
@@ -35,11 +34,10 @@ public class Character {
 	public Character(String name) {
 		this.name = name;
 		this.position = new Position();
-		this.velocity = new Velocity();
 		this.equipment = new HashSet<Equipment>();
 
-		attributes = new HashMap<Attribute, Value>();
-		for (Attribute attr : Attribute.values()) {
+		attributes = new HashMap<AttributeType, Value>();
+		for (AttributeType attr : AttributeType.values()) {
 			attributes.put(attr, new Value(100));
 		}
 		abilities = new HashMap<String, Ability>();
@@ -111,11 +109,11 @@ public class Character {
 		return effects;
 	}
 
-	public Value getAttribute(Attribute key) {
+	public Value getAttribute(AttributeType key) {
 		return attributes.get(key);
 	}
 
-	public Value getAttributeAfterModifiers(Attribute key) {
+	public Value getAttributeAfterModifiers(AttributeType key) {
 		Value value = attributes.get(key).copy();
 
 		double product = 1;
@@ -147,12 +145,8 @@ public class Character {
 		return position;
 	}
 
-	public Velocity getVelocity() {
-		return velocity;
-	}
-
 	public boolean isDead() {
-		return getAttributeAfterModifiers(Attribute.HEALTH).getVal() <= 0;
+		return getAttributeAfterModifiers(AttributeType.HEALTH).getVal() <= 0;
 	}
 
 	public Map<String, Ability> getAbilities() {
@@ -165,9 +159,9 @@ public class Character {
 	}
 
 	public void tick(double dt) {
-		double speed = getAttributeAfterModifiers(Attribute.SPEED).getVal();
-		Vector2D velocity = this.velocity.asVector().scalar(speed * dt);
-		position.add(velocity);
+//		double speed = getAttributeAfterModifiers(Attribute.SPEED).getVal();
+//		Vector2D velocity = this.getVelocity().asVector().scalar(speed * dt);
+//		position.add(velocity);
 	}
 
 }

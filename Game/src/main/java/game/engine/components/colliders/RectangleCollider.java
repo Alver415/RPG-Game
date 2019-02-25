@@ -26,5 +26,10 @@ public class RectangleCollider extends Collider{
 		this.height = height;
 	}
 
+	@Override
+	public void handleCollision(Collider other) {
+		// TODO Auto-generated method stub
+	}
+
 	
 }

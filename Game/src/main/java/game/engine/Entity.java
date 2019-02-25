@@ -7,11 +7,13 @@ import java.util.Map;
 import java.util.Set;
 
 import game.engine.components.Component;
-import game.engine.components.Position;
 import game.engine.components.Render;
-import game.engine.components.RigidBody;
+import game.engine.components.attributes.AttributeMap;
 import game.engine.components.colliders.Collider;
 import game.engine.components.controllers.Controller;
+import game.engine.components.transforms.Acceleration;
+import game.engine.components.transforms.Position;
+import game.engine.components.transforms.Velocity;
 
 public class Entity {
 
@@ -62,45 +64,49 @@ public class Entity {
 	public Position getPosition() {
 		return getComponent(Position.class);
 	}
-
+	public Velocity getVelocity() {
+		return getComponent(Velocity.class);
+	}
+	public Acceleration getAcceleration() {
+		return getComponent(Acceleration.class);
+	}
 	public Controller getController() {
 		return getComponent(Controller.class);
 	}
-	
 	public Collider getCollider() {
 		return getComponent(Collider.class);
 	}
-
-	public RigidBody getRigidBody() {
-		return getComponent(RigidBody.class);
-	}
-	
 	public Render getRender() {
 		return getComponent(Render.class);
+	}
+	public AttributeMap getAttributeMap() {
+		return getComponent(AttributeMap.class);
 	}
 	
 	/*
 	 * Utility methods to set various components.
 	 */
 
-	public void setPosition(Position position) {
+	public void addPosition(Position position) {
 		addComponent(Position.class, position);
 	}
-
-	public void setController(Controller controller) {
+	public void addVelocity(Velocity velocity) {
+		addComponent(Velocity.class, velocity);
+	}
+	public void addAcceleration(Acceleration acceleration) {
+		addComponent(Acceleration.class, acceleration);
+	}
+	public void addController(Controller controller) {
 		addComponent(Controller.class, controller);
 	}
-
-	public void setCollider(Collider collider) {
+	public void addCollider(Collider collider) {
 		addComponent(Collider.class, collider);
 	}
-
-	public void setRigidBody(RigidBody rigidBody) {
-		addComponent(RigidBody.class, rigidBody);
-	}
-
-	public void setRender(Render render) {
+	public void addRender(Render render) {
 		addComponent(Render.class, render);
+	}
+	public void addAttributeMap(AttributeMap attributeMap) {
+		addComponent(AttributeMap.class, attributeMap);
 	}
 	
 	/*
@@ -110,18 +116,22 @@ public class Entity {
 	public boolean hasPosition() {
 		return getPosition() != null;
 	}
+	public boolean hasVelocity() {
+		return getVelocity() != null;
+	}
+	public boolean hasAcceleration() {
+		return getAcceleration() != null;
+	}
 	public boolean hasController() {
 		return getController() != null;
 	}
 	public boolean hasCollider() {
 		return getCollider() != null;
 	}
-	public boolean hasRigidBody() {
-		return getRigidBody() != null;
-	}
 	public boolean hasRender() {
 		return getRender() != null;
 	}
-
-	
+	public boolean hasAttributeMap() {
+		return getAttributeMap() != null;
+	}
 }

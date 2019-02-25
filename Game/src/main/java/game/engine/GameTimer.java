@@ -7,7 +7,7 @@ public abstract class GameTimer extends AnimationTimer {
 
 	private static final double NANO_CONVERSION = 1000000000d;
 
-	private long	lastTick	= 0;
+	private long	lastTick	= System.nanoTime();
 	private double	dt			= 1;
 
 	private Thread gameThread;

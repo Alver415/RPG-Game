@@ -15,5 +15,10 @@ public class CircleCollider extends Collider{
 	public void setRadius(double radius) {
 		this.radius = radius;
 	}
+
+	@Override
+	public void handleCollision(Collider other) {
+		// TODO Auto-generated method stub
+	}
 	
 }

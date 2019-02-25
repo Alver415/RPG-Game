@@ -1,6 +1,6 @@
 package gameplay.items.consumables;
 
-import gameplay.entity.Attribute;
+import gameplay.entity.AttributeType;
 
 public class HealthPotion extends Potion {
 
@@ -10,7 +10,7 @@ public class HealthPotion extends Potion {
 
 	@Override
 	public void consume() {
-		target.getAttribute(Attribute.HEALTH).add(50);
+		target.getAttribute(AttributeType.HEALTH).add(50);
 	}
 
 }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import gameplay.entity.Attribute;
+import gameplay.entity.AttributeType;
 import gameplay.entity.Character;
 import gameplay.entity.Modifier;
 
@@ -13,10 +13,10 @@ public abstract class Effect {
 	protected Character	source;
 	protected Character	target;
 
-	protected Map<Attribute, Set<Modifier>> modifiers;
+	protected Map<AttributeType, Set<Modifier>> modifiers;
 
 	public Effect(Character source, Character target) {
-		this.modifiers = new HashMap<Attribute, Set<Modifier>>();
+		this.modifiers = new HashMap<AttributeType, Set<Modifier>>();
 		this.source = source;
 		this.target = target;
 		apply();
@@ -48,11 +48,11 @@ public abstract class Effect {
 
 	public abstract void tick();
 
-	public Map<Attribute, Set<Modifier>> getModifiers() {
+	public Map<AttributeType, Set<Modifier>> getModifiers() {
 		return modifiers;
 	}
 
-	public void addModifier(Attribute attribute, Modifier modifier) {
+	public void addModifier(AttributeType attribute, Modifier modifier) {
 		modifiers.get(attribute).add(modifier);
 	}
 }

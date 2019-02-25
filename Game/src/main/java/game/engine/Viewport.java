@@ -2,8 +2,11 @@ package game.engine;
 
 public class Viewport {
 
+	private static final double zoomMax = 5;
+	private static final double zoomMin = 0.5;
+
 	private Entity target;
-	public static double zoom = 0.5;
+	private double zoom = 1;
 
 	public void setTarget(Entity target) {
 		this.target = target;
@@ -16,9 +19,21 @@ public class Viewport {
 	public double getZoom() {
 		return zoom;
 	}
+	
+	public void setZoom(double zoom) {
+		this.zoom = Math.max(Math.min(zoom, zoomMax), zoomMin);
+	}
 
 	public Entity getTarget() {
 		return target;
+	}
+
+	public void zoomIn() {
+		setZoom(zoom * 1.05);
+		
+	}
+	public void zoomOut() {
+		setZoom(zoom * 0.95);
 	}
 	
 }

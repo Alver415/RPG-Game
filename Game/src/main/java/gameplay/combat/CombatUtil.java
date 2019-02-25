@@ -1,6 +1,6 @@
 package gameplay.combat;
 
-import gameplay.entity.Attribute;
+import gameplay.entity.AttributeType;
 import gameplay.entity.Character;
 
 public final class CombatUtil {
@@ -13,13 +13,13 @@ public final class CombatUtil {
 
 	public static void attack(Character source, Character target) {
 
-		double sourceAtk = source.getAttributeAfterModifiers(Attribute.ATTACK).getVal();
-		double targetDef = source.getAttributeAfterModifiers(Attribute.DEFENSE).getVal();
+		double sourceAtk = source.getAttributeAfterModifiers(AttributeType.ATTACK).getVal();
+		double targetDef = source.getAttributeAfterModifiers(AttributeType.DEFENSE).getVal();
 
 		double percentReduction = targetDef / (DEFENSE_CONSTANT + targetDef);
 		double damage = sourceAtk * percentReduction;
 
-		source.getAttribute(Attribute.HEALTH).subtract(damage);
+		source.getAttribute(AttributeType.HEALTH).subtract(damage);
 		
 	}
 

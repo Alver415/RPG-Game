@@ -1,5 +1,7 @@
 package game.engine;
 
+import game.engine.components.transforms.Rotation;
+
 public class Vector2D {
 
 	public final static Vector2D	ZERO	= new Vector2D(0, 0);
@@ -138,6 +140,10 @@ public class Vector2D {
 
 	public static Vector2D midpoint(Vector2D a, Vector2D b) {
 		return scalar(add(a, b), 1 / 2f);
+	}
+	
+	public static Rotation theta(Vector2D vector) {
+		return new Rotation(Math.acos(vector.getX()));
 	}
 
 	/*

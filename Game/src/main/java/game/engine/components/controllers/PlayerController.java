@@ -6,11 +6,17 @@ import frontend.settings.Control;
 import game.engine.Entity;
 import game.engine.Vector2D;
 import game.engine.Viewport;
+import game.engine.components.transforms.Position;
+import game.engine.components.transforms.Velocity;
 
 public class PlayerController extends Controller {
 
-	private double		speed	= 25;
-	private Vector2D	direction;
+	private Vector2D	delta;
+	private Viewport  	viewport;
+	
+	public PlayerController(Viewport viewport) {
+		this.viewport = viewport;
+	}
 	
 	public void processInput(Set<Control> controls) {
 		double dx = 0;
@@ -34,29 +40,24 @@ public class PlayerController extends Controller {
 				speed = 50;
 				break;
 			case ZOOM_IN:
-				Viewport.zoom += 0.1;
+				viewport.zoomIn();
 				break;
 			case ZOOM_OUT:
-				Viewport.zoom -= 0.1;
+				viewport.zoomOut();
 				break;
 			default:
 				break;
 			}
 		}
 		
-		this.direction = Vector2D.normalize(dx, dy);
-
-	}
-
-	@Override
-	protected void move(Vector2D delta) {
-		entity.getPosition().add(delta);
+		delta = Vector2D.normalize(dx, dy).scalar(speed);
+		speed = 25;
 	}
 
 	@Override
 	public void tick(double dt) {
-		move(direction.scalar(speed * dt));
-		speed = 25;
+		Position pos = entity.getPosition();
+		pos.add(delta.scalar(dt));
 	}
 
 }

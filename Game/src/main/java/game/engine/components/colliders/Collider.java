@@ -1,30 +1,18 @@
-package game.engine.components;
+package game.engine.components.colliders;
 
-public class Collider extends Component{
+import game.engine.Vector2D;
+import game.engine.components.Component;
+import game.engine.components.transforms.Position;
 
-	private boolean isCollided;
-	private double radius = 10;
+public abstract class Collider extends Component{
+
+	Collider(){
+		
+	}
 	
-	public boolean isCollided() {
-		return isCollided;
+	public Vector2D getCenter() {
+		return entity.getPosition().asVector();
 	}
-
-	public void setCollided(boolean collided) {
-		this.isCollided = collided;
-	}
-
-	public Position getPosition() {
-		return entity.getPosition();
-	}
-
-	public double getRadius() {
-		return radius;
-	}
-
-	public void setRadius(double radius) {
-		this.radius = radius;
-	}
-
 	
-	
+	public abstract void handleCollision(Collider other);
 }

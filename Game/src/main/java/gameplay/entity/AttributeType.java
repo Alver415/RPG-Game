@@ -1,6 +1,6 @@
 package gameplay.entity;
 
-public enum Attribute {
+public enum AttributeType {
 	HEALTH("Health"),
 	SPEED("Speed"),
 	ATTACK("Attack"),
@@ -9,7 +9,7 @@ public enum Attribute {
 
 	private String displayName;
 
-	Attribute(String displayName) {
+	AttributeType(String displayName) {
 		this.displayName = displayName;
 	}
 

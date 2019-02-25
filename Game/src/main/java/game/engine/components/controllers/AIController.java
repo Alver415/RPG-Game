@@ -5,14 +5,9 @@ import java.util.Set;
 import game.engine.Entity;
 import game.engine.GameWorld;
 import game.engine.Vector2D;
+import game.engine.components.transforms.Position;
 
 public class AIController extends Controller {
-
-	private static final double speed = 20;
-
-	protected void move(Vector2D delta) {
-		entity.getPosition().add(delta);
-	}
 
 	@Override
 	public void tick(double dt) {
@@ -27,7 +22,8 @@ public class AIController extends Controller {
 			direction = Vector2D.ZERO.subtract(position).normalize();
 		}
 		Vector2D delta = direction.scalar(speed * dt);
-		move(delta);
+		Position pos = entity.getPosition();
+		pos.add(delta.normalize().scalar(speed * dt));
 	}
 
 	public Entity findPlayer() {
