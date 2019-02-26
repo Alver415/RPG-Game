@@ -5,20 +5,25 @@ import java.util.Set;
 
 import frontend.settings.Control;
 import game.engine.Entity;
+import game.engine.components.colliders.Collider;
 import game.engine.components.controllers.AIController;
-import game.engine.components.controllers.Controller;
+import game.engine.components.controllers.Behavior;
 import game.engine.components.controllers.PlayerController;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class InputSystem extends GameSystem {
+public class InputSystem extends GameSystem<Behavior> {
+
+	public static final InputSystem INSTANCE = new InputSystem();
 
 	private final EventHandler<InputEvent> inputHandler;
-	private final Set<Control>		buttonsDown;
-
-	public InputSystem() {
+	private final Set<Control> buttonsDown;
+	
+	private InputSystem() {
+		super(new HashSet<Behavior>());
+		
 		this.buttonsDown = new HashSet<>();
 		this.inputHandler = new EventHandler<InputEvent>() {
 			@Override
@@ -36,26 +41,18 @@ public class InputSystem extends GameSystem {
 		};
 	}
 
-	public EventHandler<InputEvent> getInputHandler(){
+	public EventHandler<InputEvent> getInputHandler() {
 		return inputHandler;
 	}
 
 	@Override
-	public void process(Set<Entity> entities, double dt) {
-		Set<Controller> controllers = new HashSet<Controller>();
-		
-		for (Entity entity : entities) {
-			if (entity.hasController()) {
-				controllers.add(entity.getController());
-			}
-		}
-		
-		for (Controller controller : controllers) {
+	public void tick(double dt) {
+		for (Behavior controller : components) {
 			if (controller instanceof PlayerController) {
 				((PlayerController) controller).processInput(buttonsDown);
 			}
 			controller.tick(dt);
 		}
 	}
-	
+
 }

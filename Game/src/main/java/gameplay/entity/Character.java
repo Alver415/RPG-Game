@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import game.engine.Vector2D;
-import game.engine.components.transforms.Position;
 import gameplay.effects.Effect;
 import gameplay.items.Equipment;
 import gameplay.items.Inventory;
@@ -22,7 +21,7 @@ import gameplay.items.consumables.Consumable;
 public class Character {
 
 	protected final String		name;
-	protected final Position	position;
+	protected final Vector2D	position;
 
 	protected final Map<AttributeType, Value>	attributes;
 	protected final Map<String, Ability>	abilities;
@@ -33,7 +32,7 @@ public class Character {
 
 	public Character(String name) {
 		this.name = name;
-		this.position = new Position();
+		this.position = new Vector2D();
 		this.equipment = new HashSet<Equipment>();
 
 		attributes = new HashMap<AttributeType, Value>();
@@ -141,7 +140,7 @@ public class Character {
 		return name;
 	}
 
-	public Position getPosition() {
+	public Vector2D getPosition() {
 		return position;
 	}
 

@@ -1,4 +1,7 @@
-package game.engine;
+package game.engine.components.rendering;
+
+import game.engine.Entity;
+import game.engine.Vector2D;
 
 public class Viewport {
 
@@ -8,12 +11,19 @@ public class Viewport {
 	private Entity target;
 	private double zoom = 1;
 
+	public Viewport() {
+		this.target = null;
+	}
+	public Viewport(Entity target) {
+		this.target = target;
+	}
+	
 	public void setTarget(Entity target) {
 		this.target = target;
 	}
 	
 	public Vector2D getVector2D() {
-		return target == null ? Vector2D.ZERO : target.getPosition().asVector();
+		return target == null ? Vector2D.ZERO : target.getPosition();
 	}
 	
 	public double getZoom() {

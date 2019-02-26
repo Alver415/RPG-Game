@@ -1,11 +1,13 @@
 package frontend;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import game.engine.Entity;
+import game.engine.GameTimer;
 import game.engine.GameWorld;
-import game.engine.Sprite;
-import game.engine.components.Render;
+import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.colliders.CircleCollider;
@@ -13,12 +15,10 @@ import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
 import game.engine.components.controllers.AIController;
 import game.engine.components.controllers.PlayerController;
-import game.engine.components.transforms.Acceleration;
-import game.engine.components.transforms.Position;
-import game.engine.components.transforms.Velocity;
-import game.engine.systems.CollisionSystem;
+import game.engine.components.rendering.Render;
+import game.engine.components.rendering.Sprite;
+import game.engine.components.rendering.Viewport;
 import game.engine.systems.InputSystem;
-import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -68,56 +68,68 @@ public class GameApplication extends Application {
 	}
 
 	private void setupGame(Scene scene) {
-		InputSystem inputSystem = new InputSystem();
-		scene.setOnKeyPressed(inputSystem.getInputHandler());
-		scene.setOnKeyReleased(inputSystem.getInputHandler());
-
+		GameWorld gameWorld = GameWorld.INSTANCE;
+		
 		Pane root = new Pane();
 		scene.setRoot(root);
 		Canvas canvas = new Canvas();
 		root.getChildren().add(canvas);
 		canvas.widthProperty().bind(root.widthProperty());
 		canvas.heightProperty().bind(root.heightProperty());
-		RenderingSystem renderingSystem = new RenderingSystem(canvas);
 
-		CollisionSystem collisionSystem = new CollisionSystem();
-		MovementSystem movementSystem = new MovementSystem();
+		InputSystem inputSystem = gameWorld.getInputSystem();
+		scene.setOnKeyPressed(inputSystem.getInputHandler());
+		scene.setOnKeyReleased(inputSystem.getInputHandler());
 
-		GameWorld gameWorld = new GameWorld(inputSystem, movementSystem, collisionSystem, renderingSystem);
-
+		RenderingSystem renderingSystem = gameWorld.getRenderingSystem();
+		Viewport viewport = renderingSystem.getViewport();
+		renderingSystem.setCanvas(canvas);
+		
 		Entity player = new Entity();
-		player.addPosition(new Position(0, 0));
-		player.addVelocity(new Velocity(0, 0));
-		player.addAcceleration(new Acceleration(0, 0));
-		player.addController(new PlayerController(renderingSystem.getViewport()));
-		player.addRender(new Render(Color.BLUE, 10, 10));
-		player.addCollider(new CircleCollider(5));
-		player.addAttributeMap(new AttributeMap());
+		
+		player.setBehavior(new PlayerController());
+		player.setRender(new Render(Color.BLUE, 10, 10));
+		player.setCollider(new CircleCollider(5));
+		player.setAttributeMap(new AttributeMap());
 		gameWorld.addEntity(player);
+		
+		viewport.setTarget(player);;
 
-		renderingSystem.setTarget(player);
-
-		for (int i = 0; i < 1; i++) {
+		int numEnemies = 5;
+		for (int i = 0; i < numEnemies; i++) {
 			Entity enemy = new Entity();
-			enemy.addPosition(new Position(-100, -100));
-			enemy.addVelocity(new Velocity(0, 0));
-			enemy.addAcceleration(new Acceleration(0, 0));
-			enemy.addController(new AIController());
-			enemy.addRender(new Render(Sprite.CHARMANDER, 10, 10));
-			enemy.addCollider(new RectangleCollider(10, 10) {
+			enemy.getTransform().move(new Vector2D((i - numEnemies / 2) * 15, 10));
+			enemy.setBehavior(new AIController());
+			enemy.setAttributeMap(new AttributeMap());
+			enemy.setRender(new Render(Sprite.CHARMANDER, 10, 10));
+			enemy.setCollider(new CircleCollider(5) {
+				
+				private Map<Collider, Long> recentCollisions = new HashMap<Collider, Long>();
+				private double cooldown = 0.5;
+				
 				@Override
 				public void handleCollision(Collider other) {
+					super.handleCollision(other);
+					long nanoTime = System.nanoTime();
+					if(recentCollisions.containsKey(other)) {
+						Long lastTime = recentCollisions.get(other);
+						boolean isReady = (nanoTime - lastTime) / GameTimer.NANO_CONVERSION > cooldown;
+						if (!isReady) {
+							return;
+						}
+					}
+					
 					if (other.equals(player.getCollider())) {
-						player.getAttributeMap().get(AttributeType.HEALTH).add(-1);
+						player.getAttributeMap().get(AttributeType.HEALTH).add(-10);
+						recentCollisions.put(other, nanoTime);
 					}
 				}
 			});
 			gameWorld.addEntity(enemy);
 		}
-
-//		 Entity background = new Entity();
-//		 background.addPosition(new Position());
-//		 background.addRender(new Render(Sprite.PALLET_TOWN, -1));
-//		 gameWorld.addEntity(background);
+		Entity background = new Entity();
+		Render render = new Render(Sprite.PALLET_TOWN);
+		render.setzIndex(-1);
+		background.setRender(render);
 	}
 }

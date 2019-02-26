@@ -3,24 +3,24 @@ package game.engine.components.controllers;
 import java.util.Set;
 
 import frontend.settings.Control;
-import game.engine.Entity;
 import game.engine.Vector2D;
-import game.engine.Viewport;
-import game.engine.components.transforms.Position;
-import game.engine.components.transforms.Velocity;
+import game.engine.components.attributes.AttributeType;
+import game.engine.components.rendering.Viewport;
+import game.engine.systems.RenderingSystem;
 
-public class PlayerController extends Controller {
+public class PlayerController extends Behavior {
 
 	private Vector2D	delta;
-	private Viewport  	viewport;
 	
-	public PlayerController(Viewport viewport) {
-		this.viewport = viewport;
+	public PlayerController() {
 	}
 	
 	public void processInput(Set<Control> controls) {
+		Viewport viewport = RenderingSystem.INSTANCE.getViewport();
 		double dx = 0;
 		double dy = 0;
+		
+		double speed = entity.getAttributeMap().get(AttributeType.SPEED).getVal();
 		
 		for (Control control : controls) {
 			switch (control) {
@@ -37,7 +37,7 @@ public class PlayerController extends Controller {
 				dx++;
 				break;
 			case SPACE:
-				speed = 50;
+				speed = entity.getAttributeMap().get(AttributeType.SPEED).getMax();
 				break;
 			case ZOOM_IN:
 				viewport.zoomIn();
@@ -51,13 +51,12 @@ public class PlayerController extends Controller {
 		}
 		
 		delta = Vector2D.normalize(dx, dy).scalar(speed);
-		speed = 25;
 	}
 
 	@Override
 	public void tick(double dt) {
-		Position pos = entity.getPosition();
-		pos.add(delta.scalar(dt));
+		Vector2D pos = entity.getPosition();
+		entity.getTransform().setPosition(pos.add(delta.scalar(dt)));
 	}
 
 }

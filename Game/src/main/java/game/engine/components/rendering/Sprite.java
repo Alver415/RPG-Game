@@ -1,4 +1,4 @@
-package game.engine;
+package game.engine.components.rendering;
 
 import javafx.scene.image.Image;
 

@@ -10,11 +10,14 @@ public class AttributeMap extends Component{
 	private final Map<AttributeType, Value> attributeMap = new HashMap<>();
 	
 	public AttributeMap() {
+		super(Component.Type.ATTRIBUTES);
 		for (AttributeType type : AttributeType.values()) {
 			attributeMap.put(type, new Value(100));
 		}
-		
-		attributeMap.get(AttributeType.SPEED).setVal(10);
+
+		Value speed = attributeMap.get(AttributeType.SPEED);
+		speed.setMax(50);
+		speed.setVal(25);
 	}
 	
 	public Value get(AttributeType type) {

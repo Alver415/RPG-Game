@@ -1,7 +1,7 @@
-package game.engine.components;
+package game.engine.components.rendering;
 
-import game.engine.Sprite;
 import game.engine.Vector2D;
+import game.engine.components.Component;
 import javafx.scene.paint.Color;
 
 public class Render extends Component {
@@ -15,7 +15,12 @@ public class Render extends Component {
 
 	private double zIndex;
 	
+	private Render() {
+		super(Component.Type.RENDER);
+	}
+	
 	public Render(Sprite sprite) {
+		this();
 		this.sprite = sprite;
 		this.fill = null;
 		this.width = sprite.getImage().getWidth();
@@ -23,6 +28,7 @@ public class Render extends Component {
 	}
 
 	public Render(Sprite sprite, double width, double height) {
+		this();
 		this.sprite = sprite;
 		this.fill = null;
 		this.width = width;
@@ -30,6 +36,7 @@ public class Render extends Component {
 	}
 
 	public Render(Color color, double width, double height) {
+		this();
 		this.sprite = null;
 		this.fill = color;
 		this.width = width;
@@ -42,7 +49,7 @@ public class Render extends Component {
 	}
 
 	public Vector2D getCenter() {
-		return entity.getPosition().asVector();
+		return entity.getPosition();
 	}
 	
 	public Sprite getSprite() {

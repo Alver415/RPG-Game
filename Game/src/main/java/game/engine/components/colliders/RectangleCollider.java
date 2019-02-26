@@ -28,7 +28,6 @@ public class RectangleCollider extends Collider{
 
 	@Override
 	public void handleCollision(Collider other) {
-		// TODO Auto-generated method stub
 	}
 
 	

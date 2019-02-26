@@ -3,30 +3,24 @@ package game.engine.systems;
 import java.util.HashSet;
 import java.util.Set;
 
-import game.engine.Entity;
 import game.engine.Vector2D;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
-import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
-import game.engine.components.transforms.Position;
 import javafx.scene.paint.Color;
 
-public class CollisionSystem extends GameSystem {
+public class CollisionSystem extends GameSystem<Collider> {
 
-	private final Set<Collider> colliders = new HashSet<Collider>();
+	public static final CollisionSystem INSTANCE = new CollisionSystem();
+	
+	private CollisionSystem() {
+		super(new HashSet<Collider>());
+	}
 	
 	@Override
-	public void process(Set<Entity> entities, double dt) {
-		colliders.clear();
+	public void tick(double dt) {
 		
-		for (Entity entity : entities) {
-			if (entity.hasCollider()) {
-				colliders.add(entity.getCollider());
-			}
-		}
-		
-		Set<Collision> potentialCollisions = broadPhaseCollision(colliders);
+		Set<Collision> potentialCollisions = broadPhaseCollision(components);
 		Set<Collision> actualCollisions = narrowPhaseCollisions(potentialCollisions);
 
 		for (Collision collision : actualCollisions) {

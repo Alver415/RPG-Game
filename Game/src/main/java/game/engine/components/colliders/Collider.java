@@ -2,16 +2,15 @@ package game.engine.components.colliders;
 
 import game.engine.Vector2D;
 import game.engine.components.Component;
-import game.engine.components.transforms.Position;
 
 public abstract class Collider extends Component{
 
-	Collider(){
-		
+	public Collider(){
+		super(Component.Type.COLLIDER);
 	}
 	
 	public Vector2D getCenter() {
-		return entity.getPosition().asVector();
+		return entity.getTransform().getPosition();
 	}
 	
 	public abstract void handleCollision(Collider other);

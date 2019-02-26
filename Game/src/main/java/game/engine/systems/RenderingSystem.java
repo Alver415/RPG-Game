@@ -1,52 +1,50 @@
 package game.engine.systems;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import game.engine.Entity;
-import game.engine.Sprite;
 import game.engine.Vector2D;
-import game.engine.Viewport;
-import game.engine.components.Render;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.attributes.Value;
-import javafx.animation.Timeline;
+import game.engine.components.rendering.Render;
+import game.engine.components.rendering.Sprite;
+import game.engine.components.rendering.Viewport;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class RenderingSystem extends GameSystem {
+public class RenderingSystem extends GameSystem<Render> {
 
-	private final Canvas canvas;
+	public static final RenderingSystem INSTANCE = new RenderingSystem();
+	
+	private final Viewport viewport;
+
 	private GraphicsContext graphicsContext;
-
 	private double cw;
 	private double ch;
-
-	private Viewport viewport;
-
-	public RenderingSystem(Canvas canvas) {
-		this.canvas = canvas;
-		this.graphicsContext = canvas.getGraphicsContext2D();
+	
+	private RenderingSystem() {
+		super(new HashSet<Render>());
 		this.viewport = new Viewport();
 	}
-
-	public void setTarget(Entity target) {
-		this.viewport.setTarget(target);
+	
+	public void setCanvas(Canvas canvas) {
+		this.graphicsContext = canvas.getGraphicsContext2D();
 	}
-
+	
 	public Viewport getViewport() {
 		return viewport;
 	}
-
+	
 	@Override
-	public void process(Set<Entity> entities, double dt) {
+	public void tick(double dt) {
+		if (graphicsContext == null) {
+			return;
+		}
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -55,22 +53,15 @@ public class RenderingSystem extends GameSystem {
 				graphicsContext.clearRect(0, 0, cw, ch);
 
 				renderGrid();
-
-				List<Render> renders = new ArrayList<Render>();
-				for (Entity entity : entities) {
-					if (entity.hasRender()) {
-						renders.add(entity.getRender());
-					}
-				}
-
-				Collections.sort(renders, new Comparator<Render>() {
+				
+				List<Render> sorted = new ArrayList<>(components);
+				sorted.sort(new Comparator<Render>() {
 					@Override
 					public int compare(Render o1, Render o2) {
 						return Double.compare(o1.getzIndex(), o2.getzIndex());
 					}
 				});
-
-				for (Render render : renders) {
+				for (Render render : sorted) {
 					render(render);
 				}
 			}
@@ -94,7 +85,7 @@ public class RenderingSystem extends GameSystem {
 		for (double x = xMin; x <= xMax; x += inc) {
 			for (double y = yMin; y <= yMax; y += inc) {
 				Vector2D worldToCanvas = worldToCanvas(new Vector2D(x, y));
-				graphicsContext.strokeRect(worldToCanvas.getX(), worldToCanvas.getY(), 0.1, 0.1);
+				graphicsContext.strokeRect(worldToCanvas.getX(), worldToCanvas.getY(), 1, 1);
 			}
 		}
 	}
@@ -155,7 +146,7 @@ public class RenderingSystem extends GameSystem {
 			graphicsContext.strokeOval(x, y, w, h);
 		}
 		
-		if (render.getEntity().hasAttributeMap()) {
+		if (render.getEntity().getAttributeMap() != null) {
 			Value value = render.getEntity().getAttributeMap().get(AttributeType.HEALTH);
 			double ratio = value.getVal() / value.getMax();
 			Color color = getColor(ratio);
@@ -177,4 +168,6 @@ public class RenderingSystem extends GameSystem {
 	private double clamp(double r) {
 		return Math.min(Math.max(r, 0), 1);
 	}
+
+
 }
