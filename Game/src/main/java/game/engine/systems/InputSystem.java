@@ -5,13 +5,18 @@ import java.util.Set;
 
 import frontend.settings.Control;
 import game.engine.Entity;
+import game.engine.GameWorld;
 import game.engine.components.colliders.Collider;
 import game.engine.components.controllers.AIController;
 import game.engine.components.controllers.Behavior;
 import game.engine.components.controllers.PlayerController;
+import game.engine.components.rendering.Render;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyCombination.Modifier;
 import javafx.scene.input.KeyEvent;
 
 public class InputSystem extends GameSystem<Behavior> {
@@ -28,10 +33,27 @@ public class InputSystem extends GameSystem<Behavior> {
 		this.inputHandler = new EventHandler<InputEvent>() {
 			@Override
 			public void handle(InputEvent event) {
+				new KeyCodeCombination(KeyCode.F, KeyCombination.CONTROL_ANY);
 				if (event instanceof KeyEvent) {
-					KeyCode code = ((KeyEvent) event).getCode();
+					KeyEvent keyEvent = (KeyEvent) event;
+					KeyCode code = keyEvent.getCode();
+					if (isPressed(keyEvent)) {
+						switch(code) {
+						case ESCAPE:
+							GameWorld.INSTANCE.getGameTimer().pause();
+							return;
+						case F:
+							if (((KeyEvent) event).isControlDown()) {
+								RenderingSystem.INSTANCE.toggleTime();
+							}
+							return;
+						default:
+							break;
+						}
+					}
+					
 					Control input = Control.get(code);
-					if (input != null && KeyEvent.KEY_PRESSED.equals(event.getEventType())) {
+					if (input != null && isPressed(keyEvent)) {
 						buttonsDown.add(input);
 					} else {
 						buttonsDown.remove(input);
@@ -39,6 +61,10 @@ public class InputSystem extends GameSystem<Behavior> {
 				}
 			}
 		};
+	}
+
+	private static boolean isPressed(KeyEvent event) {
+		return KeyEvent.KEY_PRESSED.equals(event.getEventType());
 	}
 
 	public EventHandler<InputEvent> getInputHandler() {

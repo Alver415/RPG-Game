@@ -88,45 +88,73 @@ public class GameApplication extends Application {
 		Entity player = new Entity();
 		
 		player.setBehavior(new PlayerController());
-		player.setRender(new Render(Color.BLUE, 10, 10));
-		player.setCollider(new CircleCollider(5));
+		player.setRender(new Render(Sprite.PALLET_TOWN, 10, 10));
+		player.setCollider(new RectangleCollider(10, 10, false));
 		player.setAttributeMap(new AttributeMap());
 		gameWorld.addEntity(player);
 		
 		viewport.setTarget(player);;
 
-		int numEnemies = 5;
-		for (int i = 0; i < numEnemies; i++) {
-			Entity enemy = new Entity();
-			enemy.getTransform().move(new Vector2D((i - numEnemies / 2) * 15, 10));
-			enemy.setBehavior(new AIController());
-			enemy.setAttributeMap(new AttributeMap());
-			enemy.setRender(new Render(Sprite.CHARMANDER, 10, 10));
-			enemy.setCollider(new CircleCollider(5) {
+		Entity enemy1 = new Entity();
+		enemy1.move(-30, -20);
+		enemy1.setAttributeMap(new AttributeMap());
+		enemy1.setRender(new Render(Sprite.CHARMANDER, 10, 10));
+		enemy1.setCollider(new RectangleCollider(10, 10, true));
+		gameWorld.addEntity(enemy1);
+
+		Entity enemy2 = new Entity();
+		enemy2.move(-10, -20);
+		enemy2.setAttributeMap(new AttributeMap());
+		enemy2.setRender(new Render(Sprite.SQUIRTLE, 10, 10));
+		enemy2.setCollider(new RectangleCollider(10, 10, false));
+		gameWorld.addEntity(enemy2);
+
+		Entity enemy3 = new Entity();
+		enemy3.move(10, -20);
+		enemy3.setAttributeMap(new AttributeMap());
+		enemy3.setRender(new Render(Sprite.BULBASAUR, 10, 10));
+		enemy3.setCollider(new CircleCollider(5, true));
+		gameWorld.addEntity(enemy3);
+
+		Entity enemy4 = new Entity();
+		enemy4.move(30, -20);
+		enemy4.setAttributeMap(new AttributeMap());
+		enemy4.setRender(new Render(Sprite.PIKACHU, 10, 10));
+		enemy4.setCollider(new CircleCollider(5, false));
+		gameWorld.addEntity(enemy4);
 				
-				private Map<Collider, Long> recentCollisions = new HashMap<Collider, Long>();
-				private double cooldown = 0.5;
-				
-				@Override
-				public void handleCollision(Collider other) {
-					super.handleCollision(other);
-					long nanoTime = System.nanoTime();
-					if(recentCollisions.containsKey(other)) {
-						Long lastTime = recentCollisions.get(other);
-						boolean isReady = (nanoTime - lastTime) / GameTimer.NANO_CONVERSION > cooldown;
-						if (!isReady) {
-							return;
-						}
-					}
-					
-					if (other.equals(player.getCollider())) {
-						player.getAttributeMap().get(AttributeType.HEALTH).add(-10);
-						recentCollisions.put(other, nanoTime);
-					}
-				}
-			});
-			gameWorld.addEntity(enemy);
-		}
+		// int numEnemies = 1;
+		// for (int i = 0; i < numEnemies; i++) {
+		// Entity enemy = new Entity();
+		// enemy.setBehavior(new AIController());
+		// enemy.setAttributeMap(new AttributeMap());
+		// enemy.setRender(new Render(Sprite.CHARMANDER, 10, 10));
+		// enemy.setCollider(new RectangleCollider(10, 10) {
+		//
+		// private Map<Collider, Long> recentCollisions = new HashMap<Collider, Long>();
+		// private double cooldown = 0.5;
+		//
+		// @Override
+		// public void handleCollision(Collider other) {
+		// super.handleCollision(other);
+		// long nanoTime = System.nanoTime();
+		// if(recentCollisions.containsKey(other)) {
+		// Long lastTime = recentCollisions.get(other);
+		// boolean isReady = (nanoTime - lastTime) / GameTimer.NANO_CONVERSION >
+		// cooldown;
+		// if (!isReady) {
+		// return;
+		// }
+		// }
+		//
+		// if (other.equals(player.getCollider())) {
+		// player.getAttributeMap().get(AttributeType.HEALTH).add(-10);
+		// recentCollisions.put(other, nanoTime);
+		// }
+		// }
+		// });
+		// gameWorld.addEntity(enemy);
+		// }
 		Entity background = new Entity();
 		Render render = new Render(Sprite.PALLET_TOWN);
 		render.setzIndex(-1);

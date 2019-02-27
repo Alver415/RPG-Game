@@ -10,6 +10,11 @@ public class CircleCollider extends Collider{
 		this.radius = radius;
 	}
 
+	public CircleCollider(double radius, boolean isStatic) {
+		this(radius);
+		this.isStatic = isStatic;
+	}
+
 	public double getRadius() {
 		return radius;
 	}
@@ -23,9 +28,15 @@ public class CircleCollider extends Collider{
 		if (other instanceof CircleCollider) {
 			handleCollision((CircleCollider) other);
 		}
+		else if (other instanceof RectangleCollider) {
+			handleCollision((RectangleCollider) other);
+		}
 	}
 
 	public void handleCollision(CircleCollider other) {
+		if (this.isStatic) {
+			return;
+		}
 		Vector2D aCenter = getCenter();
 		Vector2D bCenter = other.getCenter();
 
@@ -35,10 +46,42 @@ public class CircleCollider extends Collider{
 		double bRadius = getRadius();
 		
 		double distance = aCenter.distance(bCenter);
-		
 		double overlap = aRadius + bRadius - distance;
 		
-		getEntity().getTransform().move(difference.normalize().scalar(overlap * 0.5));
+		double compensation = other.isStatic ? overlap : overlap * 0.5;
+		getEntity().move(difference.normalize().scalar(compensation));
+	}
+
+	public void handleCollision(RectangleCollider other) {
+		if (this.isStatic) {
+			return;
+		}
+		Vector2D aCenter = getCenter();
+		Vector2D bCenter = other.getCenter();
+
+		double ax = aCenter.getX();
+		double ay = aCenter.getY();
+
+		double rgt = bCenter.getX() + other.getWidth() / 2;
+		double lft = bCenter.getX() - other.getWidth() / 2;
+
+		double top = bCenter.getY() + other.getHeight() / 2;
+		double bot = bCenter.getY() - other.getHeight() / 2;
+
+		// Find the closest point to the circle within the rectangle
+		double closestX = Math.min(Math.max(ax, lft), rgt);
+		double closestY = Math.min(Math.max(ay, bot), top);
+		Vector2D closest = new Vector2D(closestX, closestY);
+
+		Vector2D difference = aCenter.subtract(closest);
+
+		double distance = difference.magnitude();
+		double overlap = radius - distance;
+
+		Vector2D penetration = difference.normalize().scalar(overlap);
+
+		double compensation = other.isStatic ? 1 : 0.5;
+		getEntity().move(penetration.scalar(compensation));
 	}
 	
 }

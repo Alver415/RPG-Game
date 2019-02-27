@@ -5,9 +5,12 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
+import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.attributes.Value;
+import game.engine.components.colliders.CircleCollider;
+import game.engine.components.colliders.RectangleCollider;
 import game.engine.components.rendering.Render;
 import game.engine.components.rendering.Sprite;
 import game.engine.components.rendering.Viewport;
@@ -16,10 +19,13 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class RenderingSystem extends GameSystem<Render> {
 
 	public static final RenderingSystem INSTANCE = new RenderingSystem();
+
+	private static final Font FONT = new Font(12);
 	
 	private final Viewport viewport;
 
@@ -64,12 +70,33 @@ public class RenderingSystem extends GameSystem<Render> {
 				for (Render render : sorted) {
 					render(render);
 				}
+
+				renderTime();
 			}
 		});
 	}
 
+	private void renderTime() {
+		if (!showTime) {
+			return;
+		}
+		graphicsContext.setFont(FONT);
+		double totalSecs = GameWorld.INSTANCE.getGameTime();
+		int hours = (int) (totalSecs / 3600);
+		int minutes = (int) ((totalSecs % 3600) / 60);
+		int seconds = (int) (totalSecs % 60);
+
+		String timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+
+		graphicsContext.setStroke(Color.BLACK);
+		graphicsContext.strokeText(timeString, 2, FONT.getSize());
+
+		double fps = GameWorld.INSTANCE.getFPS();
+		String fpsString = Integer.toString((int) Math.floor(fps));
+		graphicsContext.strokeText(fpsString, cw - 15, FONT.getSize());
+	}
 	private void renderGrid() {
-		double inc = 5;
+		double inc = 10;
 
 		graphicsContext.setStroke(Color.GRAY);
 
@@ -140,7 +167,12 @@ public class RenderingSystem extends GameSystem<Render> {
 		if (sprite != null) {
 			Image image = sprite.getImage();
 			graphicsContext.drawImage(image, x, y, w, h);
-			graphicsContext.strokeRect(x, y, w, h);
+			if (render.getEntity().getCollider() instanceof CircleCollider) {
+				graphicsContext.strokeOval(x, y, w, h);
+			}
+			if (render.getEntity().getCollider() instanceof RectangleCollider) {
+				graphicsContext.strokeRect(x, y, w, h);
+			}
 		} else {
 			graphicsContext.fillOval(x, y, w, h);
 			graphicsContext.strokeOval(x, y, w, h);
@@ -169,5 +201,10 @@ public class RenderingSystem extends GameSystem<Render> {
 		return Math.min(Math.max(r, 0), 1);
 	}
 
+	private boolean showTime;
+
+	public void toggleTime() {
+		showTime = !showTime;
+	}
 
 }

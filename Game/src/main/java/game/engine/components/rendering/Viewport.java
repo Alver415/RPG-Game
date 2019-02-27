@@ -5,7 +5,7 @@ import game.engine.Vector2D;
 
 public class Viewport {
 
-	private static final double zoomMax = 5;
+	private static final double	zoomMax	= 50;
 	private static final double zoomMin = 0.5;
 
 	private Entity target;

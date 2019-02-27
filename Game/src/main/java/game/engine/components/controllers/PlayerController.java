@@ -36,7 +36,10 @@ public class PlayerController extends Behavior {
 			case RIGHT:
 				dx++;
 				break;
-			case SPACE:
+			case SNEAK:
+				speed = entity.getAttributeMap().get(AttributeType.SPEED).getMin();
+				break;
+			case SPRINT:
 				speed = entity.getAttributeMap().get(AttributeType.SPEED).getMax();
 				break;
 			case ZOOM_IN:

@@ -79,9 +79,20 @@ public class GameWorld {
 		return renderingSystem;
 	}
 
-	public GameTimer getTimer() {
+	public GameTimer getGameTimer() {
 		return timer;
 	}
 
+	public double getGameTime() {
+		return timer.getGameTime();
+	}
+
+	public double getDeltaTime() {
+		return timer.getDeltaTime();
+	}
+
+	public double getFPS() {
+		return timer.getFPS();
+	}
 	
 }

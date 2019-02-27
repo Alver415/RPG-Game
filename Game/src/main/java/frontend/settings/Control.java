@@ -17,8 +17,11 @@ public enum Control {
 	
 	ZOOM_IN(KeyCode.E),
 	ZOOM_OUT(KeyCode.Q),
-	
-	SPACE(KeyCode.SPACE);
+
+	SPRINT(KeyCode.SPACE),
+	SNEAK(KeyCode.SHIFT),
+
+	PAUSE(KeyCode.ESCAPE);
 
 	private final KeyCode	defaultKeyCode;
 	private KeyCode			currentKeyCode;

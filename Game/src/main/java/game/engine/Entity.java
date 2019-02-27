@@ -81,4 +81,13 @@ public class Entity {
 		RenderingSystem.INSTANCE.addComponent(render);
 	}
 
+	public void move(double x, double y) {
+		this.move(new Vector2D(x, y));
+	}
+
+	public void move(Vector2D vector) {
+		this.transform.move(vector);
+
+	}
+
 }

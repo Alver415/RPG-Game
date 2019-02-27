@@ -5,6 +5,8 @@ import game.engine.components.Component;
 
 public abstract class Collider extends Component{
 
+	protected boolean isStatic = false;
+
 	public Collider(){
 		super(Component.Type.COLLIDER);
 	}
