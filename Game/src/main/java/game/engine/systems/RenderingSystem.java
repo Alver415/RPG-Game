@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import game.engine.GameWorld;
 import game.engine.Vector2D;
@@ -34,7 +35,6 @@ public class RenderingSystem extends GameSystem<Render> {
 	private double ch;
 	
 	private RenderingSystem() {
-		super(new HashSet<Render>());
 		this.viewport = new Viewport();
 	}
 	
@@ -68,7 +68,7 @@ public class RenderingSystem extends GameSystem<Render> {
 					}
 				});
 				for (Render render : sorted) {
-					render(render);
+					render.draw(graphicsContext, viewport);;
 				}
 
 				renderTime();
@@ -95,6 +95,7 @@ public class RenderingSystem extends GameSystem<Render> {
 		String fpsString = Integer.toString((int) Math.floor(fps));
 		graphicsContext.strokeText(fpsString, cw - 15, FONT.getSize());
 	}
+	
 	private void renderGrid() {
 		double inc = 10;
 
@@ -117,7 +118,7 @@ public class RenderingSystem extends GameSystem<Render> {
 		}
 	}
 
-	private Vector2D canvasToWorld(Vector2D canvas) {
+	public Vector2D canvasToWorld(Vector2D canvas) {
 		// World position of the render
 		double cx = canvas.getX(); // world x
 		double cy = canvas.getY(); // world y
@@ -134,7 +135,7 @@ public class RenderingSystem extends GameSystem<Render> {
 		return new Vector2D(wx, wy);
 	}
 
-	private Vector2D worldToCanvas(Vector2D world) {
+	public Vector2D worldToCanvas(Vector2D world) {
 		// World position of the render
 		double wx = world.getX(); // world x
 		double wy = world.getY(); // world y
@@ -150,59 +151,9 @@ public class RenderingSystem extends GameSystem<Render> {
 
 		return new Vector2D(cx, cy);
 	}
-
-	protected void render(Render render) {
-		Sprite sprite = render.getSprite();
-		Vector2D world = render.getCenter();
-		Vector2D canvasPoint = worldToCanvas(world);
-
-		double z = viewport.getZoom(); // view zoom
-		double w = render.getWidth() * z; // relative width
-		double h = render.getHeight() * z; // relative height
-		double x = canvasPoint.getX() - w / 2;
-		double y = canvasPoint.getY() - h / 2;
-
-		graphicsContext.setStroke(render.getBorder());
-		graphicsContext.setFill(render.getFill());
-		if (sprite != null) {
-			Image image = sprite.getImage();
-			graphicsContext.drawImage(image, x, y, w, h);
-			if (render.getEntity().getCollider() instanceof CircleCollider) {
-				graphicsContext.strokeOval(x, y, w, h);
-			}
-			if (render.getEntity().getCollider() instanceof RectangleCollider) {
-				graphicsContext.strokeRect(x, y, w, h);
-			}
-		} else {
-			graphicsContext.fillOval(x, y, w, h);
-			graphicsContext.strokeOval(x, y, w, h);
-		}
-		
-		if (render.getEntity().getAttributeMap() != null) {
-			Value value = render.getEntity().getAttributeMap().get(AttributeType.HEALTH);
-			double ratio = value.getVal() / value.getMax();
-			Color color = getColor(ratio);
-
-			graphicsContext.setFill(Color.GRAY);
-			graphicsContext.fillRect(x, y - 10, w, 5);
-			graphicsContext.setFill(color);
-			graphicsContext.fillRect(x, y - 10, w * ratio, 5);
-			graphicsContext.strokeRect(x, y - 10, w, 5);
-		}
-	}
 	
-	private Color getColor(double ratio) {
-		double r = clamp((-2 * ratio) + 2);
-		double g = clamp(( 2 * ratio) + 0);
-		return Color.rgb((int) (r * 255), (int) (g * 255), 0);
-	}
-
-	private double clamp(double r) {
-		return Math.min(Math.max(r, 0), 1);
-	}
 
 	private boolean showTime;
-
 	public void toggleTime() {
 		showTime = !showTime;
 	}

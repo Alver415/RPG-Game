@@ -105,6 +105,7 @@ public class RectangleCollider extends Collider{
 		Vector2D overlap = Math.abs(xOverlap) <= Math.abs(yOverlap) ? new Vector2D(-xOverlap, 0)
 				: new Vector2D(0, -yOverlap);
 
+
 		double compensation = other.isStatic ? 1 : 0.5;
 		getEntity().move(overlap.scalar(compensation));
 

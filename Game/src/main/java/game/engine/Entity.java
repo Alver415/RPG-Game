@@ -10,7 +10,8 @@ import game.engine.components.rendering.Render;
 import game.engine.components.transforms.Transform;
 import game.engine.systems.AttributeSystem;
 import game.engine.systems.CollisionSystem;
-import game.engine.systems.InputSystem;
+import game.engine.systems.BehaviorSystem;
+import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
 
 public class Entity {
@@ -37,10 +38,6 @@ public class Entity {
 		return transform;
 	}
 
-	public Vector2D getPosition() {
-		return transform.getPosition();
-	}
-
 	public Behavior getBehavior() {
 		return behavior;
 	}
@@ -56,29 +53,9 @@ public class Entity {
 	public Render getRender() {
 		return render;
 	}
-	
-	public void setAttributeMap(AttributeMap attributeMap) {
-		attributeMap.setEntity(this);
-		this.attributeMap = attributeMap;
-		AttributeSystem.INSTANCE.addComponent(attributeMap);
-	}
 
-	public void setBehavior(Behavior behavior) {
-		behavior.setEntity(this);
-		this.behavior = behavior;
-		InputSystem.INSTANCE.addComponent(behavior);
-	}
-
-	public void setCollider(Collider collider) {
-		collider.setEntity(this);
-		this.collider = collider;
-		CollisionSystem.INSTANCE.addComponent(collider);
-	}
-
-	public void setRender(Render render) {
-		render.setEntity(this);
-		this.render = render;
-		RenderingSystem.INSTANCE.addComponent(render);
+	public Vector2D getPosition() {
+		return transform.getPosition();
 	}
 
 	public void move(double x, double y) {
@@ -87,7 +64,39 @@ public class Entity {
 
 	public void move(Vector2D vector) {
 		this.transform.move(vector);
+	}
+	
+	public void setAttributeMap(AttributeMap attributeMap) {
+		attributeMap.setEntity(this);
+		this.attributeMap = attributeMap;
+		AttributeSystem.INSTANCE.add(attributeMap);
+	}
 
+	public void setBehavior(Behavior behavior) {
+		behavior.setEntity(this);
+		this.behavior = behavior;
+		BehaviorSystem.INSTANCE.add(behavior);
+	}
+
+	public void setCollider(Collider collider) {
+		collider.setEntity(this);
+		this.collider = collider;
+		CollisionSystem.INSTANCE.add(collider);
+	}
+
+	public void setRender(Render render) {
+		render.setEntity(this);
+		this.render = render;
+		RenderingSystem.INSTANCE.add(render);
+	}
+	
+	public void terminate() {
+		GameWorld.INSTANCE.remove(this);
+		BehaviorSystem.INSTANCE.remove(this.getBehavior());
+		RenderingSystem.INSTANCE.remove(this.getRender());
+		MovementSystem.INSTANCE.remove(this.getTransform());
+		CollisionSystem.INSTANCE.remove(this.getCollider());
+		AttributeSystem.INSTANCE.remove(this.getAttributeMap());
 	}
 
 }

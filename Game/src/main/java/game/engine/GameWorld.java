@@ -5,21 +5,30 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import frontend.settings.Control;
+import game.engine.components.colliders.CircleCollider;
+import game.engine.components.colliders.Collider;
+import game.engine.components.controllers.PlayerController;
+import game.engine.components.controllers.TargetedProjectileBehavior;
+import game.engine.components.rendering.Render;
 import game.engine.systems.AttributeSystem;
+import game.engine.systems.BehaviorSystem;
 import game.engine.systems.CollisionSystem;
 import game.engine.systems.GameSystem;
-import game.engine.systems.InputSystem;
 import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
+import javafx.scene.paint.Color;
 
 public class GameWorld {
 
 	public final static GameWorld INSTANCE = new GameWorld();
 
 	private final GameTimer timer;
+	private final InputHandler inputHandler;
+	
 	private final Map<Long, Entity> entities;
 
-	private final InputSystem inputSystem;
+	private final BehaviorSystem behaviorSystem;
 	private final AttributeSystem attributeSystem;
 	private final MovementSystem movementSystem;
 	private final CollisionSystem collisionSystem;
@@ -27,7 +36,8 @@ public class GameWorld {
 
 	private GameWorld() {
 		this.entities = new HashMap<>();
-		this.inputSystem = InputSystem.INSTANCE;
+		this.inputHandler = new InputHandler();
+		this.behaviorSystem = BehaviorSystem.INSTANCE;
 		this.attributeSystem = AttributeSystem.INSTANCE;
 		this.movementSystem = MovementSystem.INSTANCE;
 		this.collisionSystem = CollisionSystem.INSTANCE;
@@ -36,7 +46,7 @@ public class GameWorld {
 		this.timer = new GameTimer() {
 			@Override
 			public void tick(double dt) {
-				process(inputSystem, dt);
+				process(behaviorSystem, dt);
 				process(attributeSystem, dt);
 				process(movementSystem, dt);
 				process(collisionSystem, dt);
@@ -55,6 +65,9 @@ public class GameWorld {
 	public void addEntity(Entity entity) {
 		this.entities.put(entity.getId(), entity);
 	}
+	public void remove(Entity entity) {
+		this.entities.remove(entity.getId());
+	}
 	
 	public Entity getEntity(Long id) {
 		return this.entities.get(id);
@@ -63,8 +76,8 @@ public class GameWorld {
 	public Set<Entity> getEntities() {
 		return new HashSet<>(entities.values());
 	}
-	public InputSystem getInputSystem() {
-		return inputSystem;
+	public BehaviorSystem getInputSystem() {
+		return behaviorSystem;
 	}
 
 	public MovementSystem getMovementSystem() {
@@ -95,4 +108,12 @@ public class GameWorld {
 		return timer.getFPS();
 	}
 	
+	public Set<Control> getControls(){
+		return inputHandler.getControls();
+	}
+
+	public InputHandler getInputHandler() {
+		return inputHandler;
+	}
+
 }

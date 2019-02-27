@@ -2,6 +2,7 @@ package game.engine.systems;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import game.engine.Vector2D;
 import game.engine.components.transforms.Transform;
@@ -12,7 +13,6 @@ public class MovementSystem extends GameSystem<Transform> {
 
 
 	private MovementSystem() {
-		super(new HashSet<Transform>());
 	}
 
 	@Override

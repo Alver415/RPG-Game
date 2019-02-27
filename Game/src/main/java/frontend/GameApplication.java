@@ -13,12 +13,13 @@ import game.engine.components.attributes.AttributeType;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
-import game.engine.components.controllers.AIController;
+import game.engine.components.controllers.FollowPlayerController;
 import game.engine.components.controllers.PlayerController;
 import game.engine.components.rendering.Render;
 import game.engine.components.rendering.Sprite;
 import game.engine.components.rendering.Viewport;
-import game.engine.systems.InputSystem;
+import game.engine.components.rendering.render.SpriteRender;
+import game.engine.systems.BehaviorSystem;
 import game.engine.systems.RenderingSystem;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -77,9 +78,9 @@ public class GameApplication extends Application {
 		canvas.widthProperty().bind(root.widthProperty());
 		canvas.heightProperty().bind(root.heightProperty());
 
-		InputSystem inputSystem = gameWorld.getInputSystem();
-		scene.setOnKeyPressed(inputSystem.getInputHandler());
-		scene.setOnKeyReleased(inputSystem.getInputHandler());
+		BehaviorSystem behavior = gameWorld.getInputSystem();
+		scene.setOnKeyPressed(gameWorld.getInputHandler());
+		scene.setOnKeyReleased(gameWorld.getInputHandler());
 
 		RenderingSystem renderingSystem = gameWorld.getRenderingSystem();
 		Viewport viewport = renderingSystem.getViewport();
@@ -88,7 +89,7 @@ public class GameApplication extends Application {
 		Entity player = new Entity();
 		
 		player.setBehavior(new PlayerController());
-		player.setRender(new Render(Sprite.PALLET_TOWN, 10, 10));
+		player.setRender(new SpriteRender(Sprite.TRAINER, 10d));
 		player.setCollider(new RectangleCollider(10, 10, false));
 		player.setAttributeMap(new AttributeMap());
 		gameWorld.addEntity(player);
@@ -98,28 +99,28 @@ public class GameApplication extends Application {
 		Entity enemy1 = new Entity();
 		enemy1.move(-30, -20);
 		enemy1.setAttributeMap(new AttributeMap());
-		enemy1.setRender(new Render(Sprite.CHARMANDER, 10, 10));
+		enemy1.setRender(new SpriteRender(Sprite.CHARMANDER, 10d));
 		enemy1.setCollider(new RectangleCollider(10, 10, true));
 		gameWorld.addEntity(enemy1);
 
 		Entity enemy2 = new Entity();
 		enemy2.move(-10, -20);
 		enemy2.setAttributeMap(new AttributeMap());
-		enemy2.setRender(new Render(Sprite.SQUIRTLE, 10, 10));
+		enemy2.setRender(new SpriteRender(Sprite.SQUIRTLE, 10d));
 		enemy2.setCollider(new RectangleCollider(10, 10, false));
 		gameWorld.addEntity(enemy2);
 
 		Entity enemy3 = new Entity();
 		enemy3.move(10, -20);
 		enemy3.setAttributeMap(new AttributeMap());
-		enemy3.setRender(new Render(Sprite.BULBASAUR, 10, 10));
+		enemy3.setRender(new SpriteRender(Sprite.BULBASAUR, 10d));
 		enemy3.setCollider(new CircleCollider(5, true));
 		gameWorld.addEntity(enemy3);
 
 		Entity enemy4 = new Entity();
 		enemy4.move(30, -20);
 		enemy4.setAttributeMap(new AttributeMap());
-		enemy4.setRender(new Render(Sprite.PIKACHU, 10, 10));
+		enemy4.setRender(new SpriteRender(Sprite.PIKACHU, 10d));
 		enemy4.setCollider(new CircleCollider(5, false));
 		gameWorld.addEntity(enemy4);
 				
@@ -156,8 +157,28 @@ public class GameApplication extends Application {
 		// gameWorld.addEntity(enemy);
 		// }
 		Entity background = new Entity();
-		Render render = new Render(Sprite.PALLET_TOWN);
+		Render render = new SpriteRender(Sprite.PALLET_TOWN);
 		render.setzIndex(-1);
 		background.setRender(render);
+
+		Entity right = new Entity();
+		right.move(100, 0);
+		right.setCollider(new RectangleCollider(10, 200, true));
+		gameWorld.addEntity(right);
+
+		Entity left = new Entity();
+		left.move(-100, 0);
+		left.setCollider(new RectangleCollider(10, 200, true));
+		gameWorld.addEntity(left);
+
+		Entity top = new Entity();
+		top.move(0, 100);
+		top.setCollider(new RectangleCollider(200, 10, true));
+		gameWorld.addEntity(top);
+		
+		Entity bot = new Entity();
+		bot.move(0, -100);
+		bot.setCollider(new RectangleCollider(200, 10, true));
+		gameWorld.addEntity(bot);
 	}
 }

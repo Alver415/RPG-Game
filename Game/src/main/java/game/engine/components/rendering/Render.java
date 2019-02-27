@@ -2,94 +2,67 @@ package game.engine.components.rendering;
 
 import game.engine.Vector2D;
 import game.engine.components.Component;
+import game.engine.components.colliders.CircleCollider;
+import game.engine.components.colliders.Collider;
+import game.engine.components.colliders.RectangleCollider;
+import game.engine.systems.RenderingSystem;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Render extends Component {
+public abstract class Render extends Component {
 
-	private Sprite sprite;
-	private Color fill;
-	private Color border;
+	private Color borderColor = Color.rgb(0, 0, 0, 0);
 	
-	private double width;
-	private double height;
-
 	private double zIndex;
 	
-	private Render() {
+	protected Render() {
 		super(Component.Type.RENDER);
 	}
 	
-	public Render(Sprite sprite) {
-		this();
-		this.sprite = sprite;
-		this.fill = null;
-		this.width = sprite.getImage().getWidth();
-		this.height = sprite.getImage().getWidth();
+	public final void draw(GraphicsContext gc, Viewport viewport) {
+		Vector2D worldCenter = getCenter();
+		Vector2D canvasCenter = RenderingSystem.INSTANCE.worldToCanvas(worldCenter);
+
+		double z = viewport.getZoom(); // view zoom
+		
+		double w = getWidth() * z; // relative width
+		double h = getHeight() * z; // relative height
+		double x = canvasCenter.getX() - w / 2;
+		double y = canvasCenter.getY() - h / 2;
+
+		draw(gc, x, y, w, h);
+		drawCollision(gc, x, y, w, h);
 	}
 
-	public Render(Sprite sprite, double width, double height) {
-		this();
-		this.sprite = sprite;
-		this.fill = null;
-		this.width = width;
-		this.height = height;
+	protected abstract void draw(GraphicsContext gc, double x, double y, double w, double h);
+	
+	protected void drawCollision(GraphicsContext gc, double x, double y, double w, double h) {
+		Collider c = entity.getCollider();
+		if (c != null) {
+			gc.setStroke(getBorderColor());
+			if (c instanceof RectangleCollider) {
+				gc.strokeRect(x, y, w, h);
+			} else if (c instanceof CircleCollider) {
+				gc.strokeOval(x, y, w, h);
+			}
+		}
+		
 	}
-
-	public Render(Color color, double width, double height) {
-		this();
-		this.sprite = null;
-		this.fill = color;
-		this.width = width;
-		this.height = height;
-	}
-
-	public Render(Sprite sprite, double zIndex) {
-		this(sprite);
-		this.zIndex = zIndex;
-	}
-
+	
 	public Vector2D getCenter() {
-		return entity.getPosition();
+		return entity.getTransform().getPosition();
+	}
+
+	public abstract double getWidth();
+	
+	public abstract double getHeight();
+	
+	public Color getBorderColor() {
+		return borderColor;
 	}
 	
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
-	}
-
-	public Color getFill() {
-		return fill;
-	}
-
-	public void setFill(Color fill) {
-		this.fill = fill;
-	}
-	
-	public Color getBorder() {
-		return border;
-	}
-
-	public void setBorder(Color border) {
-		this.border = border;
-	}
-
-	public double getWidth() {
-		return width;
-	}
-
-	public void setWidth(double width) {
-		this.width = width;
-	}
-
-	public double getHeight() {
-		return height;
-	}
-
-	public void setHeight(double height) {
-		this.height = height;
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
 	}
 	
 	public double getzIndex() {
@@ -100,7 +73,7 @@ public class Render extends Component {
 		this.zIndex = zIndex;
 	}
 
-	private static Color randomColor() {
+	protected static Color randomColor() {
 		int r = (int) (Math.random() * 255);
 		int g = (int) (Math.random() * 255);
 		int b = (int) (Math.random() * 255);

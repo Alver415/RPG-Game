@@ -21,6 +21,9 @@ public enum Control {
 	SPRINT(KeyCode.SPACE),
 	SNEAK(KeyCode.SHIFT),
 
+	SPAWN(KeyCode.N),
+	SHOOT(KeyCode.M),
+
 	PAUSE(KeyCode.ESCAPE);
 
 	private final KeyCode	defaultKeyCode;

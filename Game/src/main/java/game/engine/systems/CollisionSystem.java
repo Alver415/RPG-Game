@@ -1,12 +1,17 @@
 package game.engine.systems;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import game.engine.Vector2D;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
+import game.engine.components.rendering.Render;
 import javafx.scene.paint.Color;
 
 public class CollisionSystem extends GameSystem<Collider> {
@@ -14,7 +19,6 @@ public class CollisionSystem extends GameSystem<Collider> {
 	public static final CollisionSystem INSTANCE = new CollisionSystem();
 	
 	private CollisionSystem() {
-		super(new HashSet<Collider>());
 	}
 	
 	@Override
@@ -27,14 +31,16 @@ public class CollisionSystem extends GameSystem<Collider> {
 	}
 
 	private Set<Collision> broadPhaseCollision(Set<Collider> colliders) {
-		Set<Collision> collisions = new HashSet<Collision>();
-		for (Collider a : colliders) {
-			a.getEntity().getRender().setBorder(Color.BLACK);
-			for (Collider b : colliders) {
-				if (a == b) {
-					continue;
-				}
-				collisions.add(new Collision(a, b));
+   		Set<Collision> collisions = new HashSet<Collision>();
+		List<Collider> asList = new ArrayList<>(colliders);
+		int size = asList.size();
+		for (int a = 0; a < size; a++) {
+			Render render = asList.get(a).getEntity().getRender();
+			if (render != null) {
+				render.setBorderColor(Color.rgb(0, 0, 0, 0));
+			}
+			for (int b = a + 1; b < size; b++) {
+				collisions.add(new Collision(asList.get(a), asList.get(b)));
 			}
 		}
 		return collisions;
@@ -148,8 +154,6 @@ public class CollisionSystem extends GameSystem<Collider> {
 			Collider a = potentialCollision.getA();
 			Collider b = potentialCollision.getB();
 			if (isCollision(a, b)) {
-				a.getEntity().getRender().setBorder(Color.RED);
-				b.getEntity().getRender().setBorder(Color.RED);
 				collisions.add(potentialCollision);
 			}
 		}
@@ -174,8 +178,18 @@ public class CollisionSystem extends GameSystem<Collider> {
 		}
 		
 		public void handle() {
+			Render aRender = a.getEntity().getRender();
+			if (aRender != null) {
+				aRender.setBorderColor(Color.RED);
+			}
+			Render bRender = b.getEntity().getRender();
+			if (bRender != null) {
+				bRender.setBorderColor(Color.RED);
+			}
+			
 			a.handleCollision(b);
 			b.handleCollision(a);
 		}
 	}
+	
 }

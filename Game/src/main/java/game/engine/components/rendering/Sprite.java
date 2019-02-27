@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 
 public class Sprite {
 
+	public static final Sprite	TRAINER		= new Sprite("trainer.png");
+	
 	public static final Sprite	BULBASAUR	= new Sprite("bulbasaur.png");
 	public static final Sprite	CHARMANDER	= new Sprite("charmander.png");
 	public static final Sprite	SQUIRTLE	= new Sprite("squirtle.png");

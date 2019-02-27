@@ -3,25 +3,32 @@ package game.engine.components.controllers;
 import java.util.Set;
 
 import frontend.settings.Control;
+import game.engine.GameUtils;
+import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.rendering.Viewport;
+import game.engine.systems.BehaviorSystem;
 import game.engine.systems.RenderingSystem;
 
 public class PlayerController extends Behavior {
 
-	private Vector2D	delta;
-	
+	private Vector2D delta;
+
 	public PlayerController() {
 	}
-	
-	public void processInput(Set<Control> controls) {
+
+	private void processInput() {
 		Viewport viewport = RenderingSystem.INSTANCE.getViewport();
 		double dx = 0;
 		double dy = 0;
-		
-		double speed = entity.getAttributeMap().get(AttributeType.SPEED).getVal();
-		
+
+		double baseSpeed = entity.getAttributeMap().get(AttributeType.SPEED).getVal();
+		double sneakSpeed = entity.getAttributeMap().get(AttributeType.SPEED).getMin();
+		double sprintSpeed = entity.getAttributeMap().get(AttributeType.SPEED).getMax();
+
+		double speed = baseSpeed;
+		Set<Control> controls = GameWorld.INSTANCE.getControls();
 		for (Control control : controls) {
 			switch (control) {
 			case UP:
@@ -37,10 +44,16 @@ public class PlayerController extends Behavior {
 				dx++;
 				break;
 			case SNEAK:
-				speed = entity.getAttributeMap().get(AttributeType.SPEED).getMin();
+				speed = sneakSpeed;
 				break;
 			case SPRINT:
-				speed = entity.getAttributeMap().get(AttributeType.SPEED).getMax();
+				speed = sprintSpeed;
+				break;
+			case SPAWN:
+				GameUtils.spawn();
+				break;
+			case SHOOT:
+				GameUtils.shoot();
 				break;
 			case ZOOM_IN:
 				viewport.zoomIn();
@@ -52,14 +65,14 @@ public class PlayerController extends Behavior {
 				break;
 			}
 		}
-		
+
 		delta = Vector2D.normalize(dx, dy).scalar(speed);
 	}
 
 	@Override
 	public void tick(double dt) {
-		Vector2D pos = entity.getPosition();
-		entity.getTransform().setPosition(pos.add(delta.scalar(dt)));
+		processInput();
+		entity.move(delta.scalar(dt));
 	}
 
 }
