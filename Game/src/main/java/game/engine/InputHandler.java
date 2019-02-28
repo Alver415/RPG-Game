@@ -1,7 +1,7 @@
 package game.engine;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import frontend.settings.Control;
 import game.engine.systems.RenderingSystem;
@@ -15,7 +15,7 @@ public class InputHandler implements EventHandler<InputEvent>{
 	private final Set<Control> buttonsDown;
 	
 	public InputHandler() {
-		this.buttonsDown = new HashSet<>();
+		this.buttonsDown = ConcurrentHashMap.newKeySet();
 	}
 	
 	@Override

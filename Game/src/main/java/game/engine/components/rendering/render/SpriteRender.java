@@ -26,6 +26,10 @@ public class SpriteRender extends Render{
 		this.height = height;
 	}
 	
+	public void setSprite(Sprite sprite) {
+		this.sprite = sprite;
+	}
+
 	public double getWidth() {
 		return width == null ? sprite.getImage().getWidth() : width;
 	}

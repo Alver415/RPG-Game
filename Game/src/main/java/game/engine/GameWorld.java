@@ -6,18 +6,12 @@ import java.util.Map;
 import java.util.Set;
 
 import frontend.settings.Control;
-import game.engine.components.colliders.CircleCollider;
-import game.engine.components.colliders.Collider;
-import game.engine.components.controllers.PlayerController;
-import game.engine.components.controllers.TargetedProjectileBehavior;
-import game.engine.components.rendering.Render;
 import game.engine.systems.AttributeSystem;
 import game.engine.systems.BehaviorSystem;
 import game.engine.systems.CollisionSystem;
 import game.engine.systems.GameSystem;
 import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
-import javafx.scene.paint.Color;
 
 public class GameWorld {
 

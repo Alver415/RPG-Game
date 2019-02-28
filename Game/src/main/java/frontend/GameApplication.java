@@ -1,18 +1,12 @@
 package frontend;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import frontend.settings.Setting;
 import game.engine.Entity;
-import game.engine.GameTimer;
 import game.engine.GameWorld;
-import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeMap;
-import game.engine.components.attributes.AttributeType;
 import game.engine.components.colliders.CircleCollider;
-import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
 import game.engine.components.controllers.FollowPlayerBehavior;
 import game.engine.components.controllers.PlayerController;
@@ -21,15 +15,12 @@ import game.engine.components.rendering.Sprite;
 import game.engine.components.rendering.Viewport;
 import game.engine.components.rendering.render.RectangleRender;
 import game.engine.components.rendering.render.SpriteRender;
-import game.engine.systems.BehaviorSystem;
 import game.engine.systems.RenderingSystem;
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -52,25 +43,39 @@ public class GameApplication extends Application {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setOnCloseRequest(e -> System.exit(0));
 
-		Screen screen = Screen.getPrimary();
+		setupStage();
+
+		setAppScene(AppScene.GAME);
+
+		this.primaryStage.show();
+	}
+
+	private void setupStage() {
+		Integer screenIndex = Setting.SCREEN.get();
+		screenIndex -= 1;
+		Screen screen;
+		if (screenIndex > -1 && screenIndex < Screen.getScreens().size()) {
+			screen = Screen.getScreens().get(screenIndex);
+		} else {
+			screen = Screen.getPrimary();
+		}
         Rectangle2D bounds = screen.getVisualBounds();
 
         Boolean fullScreen = Setting.FULL_SCREEN.get();
 		if (fullScreen) {
 			primaryStage.initStyle(StageStyle.UNDECORATED);
-	        primaryStage.setFullScreen(true);
+			primaryStage.setX(bounds.getMinX());
+			primaryStage.setY(bounds.getMinY());
+			primaryStage.setWidth(bounds.getWidth());
+			primaryStage.setHeight(bounds.getHeight());
         } else {
             Double width = Setting.SCREEN_WIDTH.get();
             Double height = Setting.SCREEN_HEIGHT.get();
-	        primaryStage.setX((bounds.getWidth() - width) / 2);
-	        primaryStage.setY((bounds.getHeight() - height) / 2);
+			primaryStage.setX(bounds.getMinX() + (bounds.getWidth() - width) / 2);
+			primaryStage.setY(bounds.getMinY() + (bounds.getHeight() - height) / 2);
 	        primaryStage.setWidth(width);
 	        primaryStage.setHeight(height);
         }
-
-		setAppScene(AppScene.GAME);
-
-		this.primaryStage.show();
 	}
 
 	public void setAppScene(AppScene appScene) {
@@ -111,7 +116,7 @@ public class GameApplication extends Application {
 		Entity player = new Entity();
 		player.setBehavior(new PlayerController());
 		player.setRender(new SpriteRender(Sprite.TRAINER, 1d));
-		player.setCollider(new RectangleCollider(1, 1, false));
+		player.setCollider(new RectangleCollider(1, 1, true));
 		player.setAttributeMap(new AttributeMap());
 		gameWorld.addEntity(player);
 		
@@ -119,36 +124,37 @@ public class GameApplication extends Application {
 		
 		createMap(gameWorld);
 
-//		Entity enemy1 = new Entity();
-//		enemy1.move(-30, -20);
-//		enemy1.setAttributeMap(new AttributeMap());
-//		enemy1.setRender(new SpriteRender(Sprite.CHARMANDER, 10d));
-//		enemy1.setCollider(new RectangleCollider(10, 10, true));
-//		gameWorld.addEntity(enemy1);
-//
-//		Entity enemy2 = new Entity();
-//		enemy2.move(-10, -20);
-//		enemy2.setAttributeMap(new AttributeMap());
-//		enemy2.setRender(new SpriteRender(Sprite.SQUIRTLE, 10d));
-//		enemy2.setCollider(new RectangleCollider(10, 10, false));
-//		gameWorld.addEntity(enemy2);
-//
-//		Entity enemy3 = new Entity();
-//		enemy3.move(10, -20);
-//		enemy3.setAttributeMap(new AttributeMap());
-//		enemy3.setRender(new SpriteRender(Sprite.BULBASAUR, 10d));
-//		enemy3.setCollider(new CircleCollider(5, true));
-//		gameWorld.addEntity(enemy3);
-//
-//		Entity enemy4 = new Entity();
-//		enemy4.move(30, -20);
-//		enemy4.setAttributeMap(new AttributeMap());
-//		enemy4.setRender(new SpriteRender(Sprite.PIKACHU, 10d));
-//		enemy4.setCollider(new CircleCollider(5, false));
-//		gameWorld.addEntity(enemy4);
-				
-		
-		
+		Entity enemy1 = new Entity();
+		enemy1.move(-3, -2);
+		enemy1.setBehavior(new FollowPlayerBehavior());
+		enemy1.setAttributeMap(new AttributeMap());
+		enemy1.setRender(new SpriteRender(Sprite.CHARMANDER, 1d));
+		enemy1.setCollider(new RectangleCollider(1, 1, true));
+		gameWorld.addEntity(enemy1);
+
+		Entity enemy2 = new Entity();
+		enemy2.move(-1, -2);
+		enemy2.setBehavior(new FollowPlayerBehavior());
+		enemy2.setAttributeMap(new AttributeMap());
+		enemy2.setRender(new SpriteRender(Sprite.SQUIRTLE, 1d));
+		enemy2.setCollider(new RectangleCollider(1, 1, false));
+		gameWorld.addEntity(enemy2);
+
+		Entity enemy3 = new Entity();
+		enemy3.move(1, -2);
+		enemy3.setBehavior(new FollowPlayerBehavior());
+		enemy3.setAttributeMap(new AttributeMap());
+		enemy3.setRender(new SpriteRender(Sprite.BULBASAUR, 1d));
+		enemy3.setCollider(new CircleCollider(0.5, true));
+		gameWorld.addEntity(enemy3);
+
+		Entity enemy4 = new Entity();
+		enemy4.move(3, -2);
+		enemy4.setBehavior(new FollowPlayerBehavior());
+		enemy4.setAttributeMap(new AttributeMap());
+		enemy4.setRender(new SpriteRender(Sprite.PIKACHU, 1d));
+		enemy4.setCollider(new CircleCollider(0.5, false));
+		gameWorld.addEntity(enemy4);
 	}
 	
 	private void createMap(GameWorld gameWorld) {
@@ -171,7 +177,6 @@ public class GameApplication extends Application {
 
 		//Water
 		createWorldObject(gameWorld, 4, 0, 4, 4);
-		
 		
 		//Lab
 		createWorldObject(gameWorld, 10, 6, 6, 4);

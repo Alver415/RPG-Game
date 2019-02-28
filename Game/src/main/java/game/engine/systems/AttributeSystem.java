@@ -1,7 +1,5 @@
 package game.engine.systems;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.attributes.Value;

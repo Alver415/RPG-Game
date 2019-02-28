@@ -7,6 +7,7 @@ import java.util.Properties;
 public enum Setting {
 
 	FULL_SCREEN(true, Boolean.class),
+	SCREEN(1, Integer.class),
 	
 	SCREEN_WIDTH(500d, Double.class),
 	SCREEN_HEIGHT(500d, Double.class);

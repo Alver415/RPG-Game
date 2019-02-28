@@ -64,7 +64,11 @@ public abstract class GameTimer extends AnimationTimer {
 			gameThread = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					tick(deltaTime);
+					try {
+						tick(deltaTime);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					gameThread = null;
 				}
 			}, "Game Thread");

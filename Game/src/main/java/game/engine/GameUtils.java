@@ -13,11 +13,11 @@ public class GameUtils {
 
 	public static void spawn() {
 		Entity enemy = new Entity();
-		double randX = 200 * (Math.random() - 0.5);
-		double randY = 200 * (Math.random() - 0.5);
+		double randX = 20 * (Math.random() - 0.5);
+		double randY = 18 * (Math.random() - 0.5);
 		enemy.move(randX, randY);
-		enemy.setRender(new CircleRender(Color.GREEN, 10));
-		enemy.setCollider(new CircleCollider(5, false));
+		enemy.setRender(new CircleRender(Color.GREEN, 0.5));
+		enemy.setCollider(new CircleCollider(0.5, false));
 		GameWorld.INSTANCE.addEntity(enemy);
 	}
 	
@@ -25,8 +25,8 @@ public class GameUtils {
 		Entity player = findPlayer();
 		Entity bullet = new Entity();
 		bullet.move(0, 0);
-		bullet.setRender(new CircleRender(Color.RED, 2));
-		bullet.setCollider(new CircleCollider(1, true) {
+		bullet.setRender(new CircleRender(Color.RED, 0.1));
+		bullet.setCollider(new CircleCollider(0.1, true) {
 			@Override
 			public void handleCollision(Collider other) {
 				if (other.getEntity().equals(player)) {

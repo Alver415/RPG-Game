@@ -8,7 +8,6 @@ import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.rendering.Viewport;
-import game.engine.systems.BehaviorSystem;
 import game.engine.systems.RenderingSystem;
 
 public class PlayerController extends Behavior {

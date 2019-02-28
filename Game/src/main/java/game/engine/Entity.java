@@ -1,16 +1,13 @@
 package game.engine;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.colliders.Collider;
 import game.engine.components.controllers.Behavior;
 import game.engine.components.rendering.Render;
 import game.engine.components.transforms.Transform;
 import game.engine.systems.AttributeSystem;
-import game.engine.systems.CollisionSystem;
 import game.engine.systems.BehaviorSystem;
+import game.engine.systems.CollisionSystem;
 import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
 

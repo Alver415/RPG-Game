@@ -1,11 +1,11 @@
 package game.engine.components;
 
 import game.engine.Entity;
-import game.engine.components.attributes.*;
-import game.engine.components.colliders.*;
-import game.engine.components.controllers.*;
-import game.engine.components.rendering.*;
-import game.engine.components.transforms.*;
+import game.engine.components.attributes.AttributeMap;
+import game.engine.components.colliders.Collider;
+import game.engine.components.controllers.Behavior;
+import game.engine.components.rendering.Render;
+import game.engine.components.transforms.Transform;
 
 public abstract class Component {
 

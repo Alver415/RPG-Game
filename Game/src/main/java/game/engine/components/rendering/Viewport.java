@@ -5,11 +5,11 @@ import game.engine.Vector2D;
 
 public class Viewport {
 
-	private static final double	zoomMax	= 50;
-	private static final double zoomMin = 0.5;
+	private static final double	zoomMax	= 500;
+	private static final double	zoomMin	= 10;
 
 	private Entity target;
-	private double zoom = 5;
+	private double	zoom	= 50;
 
 	public Viewport() {
 		this.target = null;
