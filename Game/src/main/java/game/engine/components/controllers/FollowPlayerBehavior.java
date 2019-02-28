@@ -6,7 +6,7 @@ import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.transforms.Transform;
 
-public class FollowPlayerController extends Behavior {
+public class FollowPlayerBehavior extends Behavior {
 
 	private Entity target = GameUtils.findPlayer();
 	

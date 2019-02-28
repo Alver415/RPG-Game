@@ -19,7 +19,7 @@ public class Entity {
 	private static long next_id = 0;
 	private final long id;
 
-	private final Transform transform;
+	private Transform transform;
 	private AttributeMap attributeMap;
 	private Behavior behavior;
 	private Collider collider;
@@ -27,7 +27,7 @@ public class Entity {
 
 	public Entity() {
 		this.id = next_id++;
-		this.transform = new Transform();
+		setTransform(new Transform());
 	}
 
 	public long getId() {
@@ -66,6 +66,12 @@ public class Entity {
 		this.transform.move(vector);
 	}
 	
+	public void setTransform(Transform transform) {
+		transform.setEntity(this);
+		this.transform = transform;
+		MovementSystem.INSTANCE.add(transform);
+	}
+	
 	public void setAttributeMap(AttributeMap attributeMap) {
 		attributeMap.setEntity(this);
 		this.attributeMap = attributeMap;
@@ -99,4 +105,9 @@ public class Entity {
 		AttributeSystem.INSTANCE.remove(this.getAttributeMap());
 	}
 
+	@Override
+	public String toString() {
+		return id + " - " + (render == null ? "" : render.toString());
+	}
+	
 }

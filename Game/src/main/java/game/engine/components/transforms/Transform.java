@@ -47,9 +47,4 @@ public class Transform extends Component{
 		position = position.add(delta);
 	}
 
-	public void tick(double dt) {
-		velocity = velocity.add(acceleration.scalar(dt));
-		position = position.add(velocity.scalar(dt));
-	}
-	
 }

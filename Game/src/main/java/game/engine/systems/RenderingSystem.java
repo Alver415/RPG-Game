@@ -6,6 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.sun.javafx.geom.BaseBounds;
+import com.sun.javafx.geom.transform.BaseTransform;
+import com.sun.javafx.scene.BoundsAccessor;
+
 import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
@@ -16,8 +20,12 @@ import game.engine.components.rendering.Render;
 import game.engine.components.rendering.Sprite;
 import game.engine.components.rendering.Viewport;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.SepiaTone;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -61,10 +69,20 @@ public class RenderingSystem extends GameSystem<Render> {
 				renderGrid();
 				
 				List<Render> sorted = new ArrayList<>(components);
+				
+				//Sort objects first by zIndex, then by distance to the viewport.
+				//Things closer to the center will be drawn last (on top of things further from center)
 				sorted.sort(new Comparator<Render>() {
 					@Override
 					public int compare(Render o1, Render o2) {
-						return Double.compare(o1.getzIndex(), o2.getzIndex());
+						int zIndex = Double.compare(o1.getzIndex(), o2.getzIndex());
+						if (zIndex == 0) {
+							double d1 = o1.getEntity().getPosition().distance(viewport.getVector2D());
+							double d2 = o2.getEntity().getPosition().distance(viewport.getVector2D());
+							int distance = Double.compare(d2, d1);
+							return distance;
+						}
+						return zIndex;
 					}
 				});
 				for (Render render : sorted) {
@@ -97,7 +115,7 @@ public class RenderingSystem extends GameSystem<Render> {
 	}
 	
 	private void renderGrid() {
-		double inc = 10;
+		double inc = 1;
 
 		graphicsContext.setStroke(Color.GRAY);
 

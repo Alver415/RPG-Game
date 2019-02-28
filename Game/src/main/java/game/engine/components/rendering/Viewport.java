@@ -9,7 +9,7 @@ public class Viewport {
 	private static final double zoomMin = 0.5;
 
 	private Entity target;
-	private double zoom = 1;
+	private double zoom = 5;
 
 	public Viewport() {
 		this.target = null;

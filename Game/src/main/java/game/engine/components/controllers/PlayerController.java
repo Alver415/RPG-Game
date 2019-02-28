@@ -72,7 +72,7 @@ public class PlayerController extends Behavior {
 	@Override
 	public void tick(double dt) {
 		processInput();
-		entity.move(delta.scalar(dt));
+		entity.getTransform().setVelocity(delta);
 	}
 
 }

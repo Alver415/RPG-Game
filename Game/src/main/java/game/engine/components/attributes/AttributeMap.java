@@ -16,9 +16,9 @@ public class AttributeMap extends Component{
 		}
 
 		Value speed = attributeMap.get(AttributeType.SPEED);
-		speed.setMin(10);
-		speed.setMax(50);
-		speed.setVal(25);
+		speed.setMin(1);
+		speed.setMax(4);
+		speed.setVal(2);
 	}
 	
 	public Value get(AttributeType type) {

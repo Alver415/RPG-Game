@@ -40,4 +40,8 @@ public class SpriteRender extends Render{
 		gc.drawImage(image, x, y, w, h);
 	}
 	
+	@Override
+	public String toString() {
+		return sprite.getName();
+	}
 }
