@@ -10,6 +10,7 @@ import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.RectangleCollider;
 import game.engine.components.controllers.FollowPlayerBehavior;
 import game.engine.components.controllers.PlayerController;
+import game.engine.components.rendering.AnimatedSprite;
 import game.engine.components.rendering.Render;
 import game.engine.components.rendering.Sprite;
 import game.engine.components.rendering.Viewport;
@@ -128,33 +129,33 @@ public class GameApplication extends Application {
 		enemy1.move(-3, -2);
 		enemy1.setBehavior(new FollowPlayerBehavior());
 		enemy1.setAttributeMap(new AttributeMap());
-		enemy1.setRender(new SpriteRender(Sprite.CHARMANDER, 1d));
+		enemy1.setRender(new SpriteRender(AnimatedSprite.TEST, 1d));
 		enemy1.setCollider(new RectangleCollider(1, 1, true));
 		gameWorld.addEntity(enemy1);
-
-		Entity enemy2 = new Entity();
-		enemy2.move(-1, -2);
-		enemy2.setBehavior(new FollowPlayerBehavior());
-		enemy2.setAttributeMap(new AttributeMap());
-		enemy2.setRender(new SpriteRender(Sprite.SQUIRTLE, 1d));
-		enemy2.setCollider(new RectangleCollider(1, 1, false));
-		gameWorld.addEntity(enemy2);
-
-		Entity enemy3 = new Entity();
-		enemy3.move(1, -2);
-		enemy3.setBehavior(new FollowPlayerBehavior());
-		enemy3.setAttributeMap(new AttributeMap());
-		enemy3.setRender(new SpriteRender(Sprite.BULBASAUR, 1d));
-		enemy3.setCollider(new CircleCollider(0.5, true));
-		gameWorld.addEntity(enemy3);
-
-		Entity enemy4 = new Entity();
-		enemy4.move(3, -2);
-		enemy4.setBehavior(new FollowPlayerBehavior());
-		enemy4.setAttributeMap(new AttributeMap());
-		enemy4.setRender(new SpriteRender(Sprite.PIKACHU, 1d));
-		enemy4.setCollider(new CircleCollider(0.5, false));
-		gameWorld.addEntity(enemy4);
+//
+//		Entity enemy2 = new Entity();
+//		enemy2.move(-1, -2);
+//		enemy2.setBehavior(new FollowPlayerBehavior());
+//		enemy2.setAttributeMap(new AttributeMap());
+//		enemy2.setRender(new SpriteRender(Sprite.SQUIRTLE, 1d));
+//		enemy2.setCollider(new RectangleCollider(1, 1, false));
+//		gameWorld.addEntity(enemy2);
+//
+//		Entity enemy3 = new Entity();
+//		enemy3.move(1, -2);
+//		enemy3.setBehavior(new FollowPlayerBehavior());
+//		enemy3.setAttributeMap(new AttributeMap());
+//		enemy3.setRender(new SpriteRender(Sprite.BULBASAUR, 1d));
+//		enemy3.setCollider(new CircleCollider(0.5, true));
+//		gameWorld.addEntity(enemy3);
+//
+//		Entity enemy4 = new Entity();
+//		enemy4.move(3, -2);
+//		enemy4.setBehavior(new FollowPlayerBehavior());
+//		enemy4.setAttributeMap(new AttributeMap());
+//		enemy4.setRender(new SpriteRender(Sprite.PIKACHU, 1d));
+//		enemy4.setCollider(new CircleCollider(0.5, false));
+//		gameWorld.addEntity(enemy4);
 	}
 	
 	private void createMap(GameWorld gameWorld) {

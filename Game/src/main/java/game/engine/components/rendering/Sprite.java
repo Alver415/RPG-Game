@@ -13,12 +13,12 @@ public class Sprite {
 
 	public static final Sprite PALLET_TOWN = new Sprite("pallet_town");
 
-	private static final String FOLDER = "Sprites";
+	protected static final String FOLDER = "Sprites";
 
-	private final Image image;
-	private final String name;
+	protected final Image image;
+	protected final String name;
 
-	private Sprite(String fileName) {
+	protected Sprite(String fileName) {
 		this.name = fileName;
 		this.image = new Image(FOLDER + "/" + fileName + ".png");
 	}
