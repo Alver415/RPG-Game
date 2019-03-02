@@ -71,7 +71,7 @@ public class RectangleCollider extends Collider{
 		Vector2D penetration = difference.normalize().scalar(overlap);
 
 		double compensation = other.isStatic ? 1 : 0.5;
-		getGameObject().move(penetration.scalar(compensation));
+		getParent().move(penetration.scalar(compensation));
 	}
 
 	public void handleCollision(RectangleCollider other) {
@@ -107,7 +107,7 @@ public class RectangleCollider extends Collider{
 
 
 		double compensation = other.isStatic ? 1 : 0.5;
-		getGameObject().move(overlap.scalar(compensation));
+		getParent().move(overlap.scalar(compensation));
 
 	}
 	

@@ -63,8 +63,8 @@ public class RenderingSystem extends GameSystem<Render> {
 					public int compare(Render o1, Render o2) {
 						int zIndex = Double.compare(o1.getzIndex(), o2.getzIndex());
 						if (zIndex == 0) {
-							double d1 = o1.getGameObject().getPosition().distance(viewport.getVector2D());
-							double d2 = o2.getGameObject().getPosition().distance(viewport.getVector2D());
+							double d1 = o1.getParent().getPosition().distance(viewport.getVector2D());
+							double d2 = o2.getParent().getPosition().distance(viewport.getVector2D());
 							int distance = Double.compare(d2, d1);
 							return distance;
 						}

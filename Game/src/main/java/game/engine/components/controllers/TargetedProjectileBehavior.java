@@ -15,11 +15,11 @@ public class TargetedProjectileBehavior extends Behavior{
 	@Override
 	public void tick(double dt) {
 		Vector2D targetPos = target.getPosition();
-		Vector2D thisPos = gameObject.getPosition();
+		Vector2D thisPos = parent.getPosition();
 		
 		Vector2D direction = targetPos.subtract(thisPos).normalize();
 		
-		gameObject.move(direction.scalar(speed * dt));
+		parent.move(direction.scalar(speed * dt));
 	}
 	
 }

@@ -33,7 +33,7 @@ public class CollisionSystem extends GameSystem<Collider> {
 		List<Collider> asList = new ArrayList<>(colliders);
 		int size = asList.size();
 		for (int a = 0; a < size; a++) {
-			Render render = asList.get(a).getGameObject().getRender();
+			Render render = asList.get(a).getParent().getRender();
 			if (render != null) {
 				render.setBorderColor(Color.rgb(0, 0, 0, 0));
 			}
@@ -176,11 +176,11 @@ public class CollisionSystem extends GameSystem<Collider> {
 		}
 		
 		public void handle() {
-			Render aRender = a.getGameObject().getRender();
+			Render aRender = a.getParent().getRender();
 			if (aRender != null) {
 				aRender.setBorderColor(Color.RED);
 			}
-			Render bRender = b.getGameObject().getRender();
+			Render bRender = b.getParent().getRender();
 			if (bRender != null) {
 				bRender.setBorderColor(Color.RED);
 			}

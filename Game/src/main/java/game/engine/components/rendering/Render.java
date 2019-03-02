@@ -15,10 +15,6 @@ public abstract class Render extends Component {
 	
 	private double zIndex;
 	
-	protected Render() {
-		super(Component.Type.RENDER);
-	}
-	
 	public final void draw(GraphicsContext gc, Viewport viewport) {
 		Vector2D worldCenter = getCenter();
 		Vector2D canvasCenter = RenderingSystem.INSTANCE.worldToCanvas(worldCenter);
@@ -37,7 +33,7 @@ public abstract class Render extends Component {
 	protected abstract void draw(GraphicsContext gc, double x, double y, double w, double h);
 	
 	protected void drawCollision(GraphicsContext gc, double x, double y, double w, double h) {
-		Collider c = gameObject.getCollider();
+		Collider c = parent.getCollider();
 		if (c != null) {
 			gc.setStroke(getBorderColor());
 			if (c instanceof RectangleCollider) {
@@ -50,7 +46,7 @@ public abstract class Render extends Component {
 	}
 	
 	public Vector2D getCenter() {
-		return gameObject.getTransform().getPosition();
+		return parent.getTransform().getPosition();
 	}
 
 	public abstract double getWidth();

@@ -22,18 +22,18 @@ public class GameWorld {
 	
 	private final Map<Long, GameObject> entities;
 
-	private final BehaviorSystem behaviorSystem;
-	private final AttributeSystem attributeSystem;
-	private final MovementSystem movementSystem;
-	private final CollisionSystem collisionSystem;
-	private final RenderingSystem renderingSystem;
+	private final BehaviorSystem	behaviorSystem;
+	private final MovementSystem	movementSystem;
+	private final AttributeSystem	attributeSystem;
+	private final CollisionSystem	collisionSystem;
+	private final RenderingSystem	renderingSystem;
 
 	private GameWorld() {
 		this.entities = new HashMap<>();
 		this.inputHandler = new InputHandler();
 		this.behaviorSystem = BehaviorSystem.INSTANCE;
-		this.attributeSystem = AttributeSystem.INSTANCE;
 		this.movementSystem = MovementSystem.INSTANCE;
+		this.attributeSystem = AttributeSystem.INSTANCE;
 		this.collisionSystem = CollisionSystem.INSTANCE;
 		this.renderingSystem = RenderingSystem.INSTANCE;
 
@@ -41,8 +41,8 @@ public class GameWorld {
 			@Override
 			public void tick(double dt) {
 				process(behaviorSystem, dt);
-				process(attributeSystem, dt);
 				process(movementSystem, dt);
+				process(attributeSystem, dt);
 				process(collisionSystem, dt);
 				process(renderingSystem, dt);
 			}
@@ -72,10 +72,6 @@ public class GameWorld {
 	}
 	public BehaviorSystem getInputSystem() {
 		return behaviorSystem;
-	}
-
-	public MovementSystem getMovementSystem() {
-		return movementSystem;
 	}
 
 	public CollisionSystem getCollisionSystem() {

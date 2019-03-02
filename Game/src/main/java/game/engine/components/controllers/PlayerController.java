@@ -24,9 +24,9 @@ public class PlayerController extends Behavior {
 		double dx = 0;
 		double dy = 0;
 
-		double baseSpeed = gameObject.getAttributeMap().get(AttributeType.SPEED).getVal();
-		double sneakSpeed = gameObject.getAttributeMap().get(AttributeType.SPEED).getMin();
-		double sprintSpeed = gameObject.getAttributeMap().get(AttributeType.SPEED).getMax();
+		double baseSpeed = parent.getAttributeMap().get(AttributeType.SPEED).getVal();
+		double sneakSpeed = parent.getAttributeMap().get(AttributeType.SPEED).getMin();
+		double sprintSpeed = parent.getAttributeMap().get(AttributeType.SPEED).getMax();
 
 		double speed = baseSpeed;
 		Set<Control> controls = GameWorld.INSTANCE.getControls();
@@ -73,8 +73,11 @@ public class PlayerController extends Behavior {
 	@Override
 	public void tick(double dt) {
 		processInput();
-		gameObject.getTransform().setVelocity(delta);
+		parent.getTransform().setVelocity(delta);
 
+		if (delta.equals(Vector2D.ZERO)) {
+			return;
+		}
 		AnimatedSprite animation;
 		if (delta.getY() > Math.abs(delta.getX())) {
 			animation = AnimatedSprite.UP;
@@ -86,7 +89,7 @@ public class PlayerController extends Behavior {
 			animation = AnimatedSprite.DOWN;
 		}
 
-		((SpriteRender) gameObject.getRender()).setSprite(animation);
+		((SpriteRender) parent.getRender()).setSprite(animation);
 	}
 
 }

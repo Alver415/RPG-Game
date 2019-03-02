@@ -15,12 +15,7 @@ public class MovementSystem extends GameSystem<Transform> {
 		for (Transform transform : components) {
 			Vector2D position = transform.getPosition();
 			Vector2D velocity = transform.getVelocity();
-			Vector2D acceleration = transform.getAcceleration();
-			
-			Vector2D newVelocity = velocity.add(acceleration.scalar(dt));
 			Vector2D newPosition = position.add(velocity.scalar(dt));
-			
-			transform.setVelocity(newVelocity);
 			transform.setPosition(newPosition);
 		}
 	}

@@ -124,7 +124,7 @@ public class GameApplication extends Application {
 		viewport.setTarget(player);;
 		
 		createMap(gameWorld);
-		spawnEnemies(gameWorld);
+		// spawnEnemies(gameWorld);
 	}
 
 	private void spawnEnemies(GameWorld gameWorld) {
@@ -196,7 +196,6 @@ public class GameApplication extends Application {
 		//Fences
 		createWorldObject(gameWorld, 10, 4, 6, 1);
 		createWorldObject(gameWorld, 4, 8, 4, 1);
-		
 		
 	}
 	

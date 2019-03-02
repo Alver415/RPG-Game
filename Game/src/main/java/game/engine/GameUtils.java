@@ -29,8 +29,8 @@ public class GameUtils {
 		bullet.setCollider(new CircleCollider(0.1, true) {
 			@Override
 			public void handleCollision(Collider other) {
-				if (other.getGameObject().equals(player)) {
-					gameObject.terminate();
+				if (other.getParent().equals(player)) {
+					parent.terminate();
 				}
 			}
 		});

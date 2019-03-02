@@ -1,5 +1,8 @@
 package game.engine;
 
+import java.util.Set;
+
+import game.engine.components.Component;
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.colliders.Collider;
 import game.engine.components.controllers.Behavior;
@@ -11,19 +14,19 @@ import game.engine.systems.CollisionSystem;
 import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
 
-public class GameObject {
+public class GameObject implements Child {
 
 	private static long next_id = 0;
 	private final long id;
 
-	private Transform transform;
-	private AttributeMap attributeMap;
-	private Behavior behavior;
-	private Collider collider;
-	private Render render;
+	private GameObject				parent;
+	private final Set<GameObject>	children;
+	private final Set<Component>	components;
 
 	public GameObject() {
 		this.id = next_id++;
+		this.children = new ParentAwareSet<GameObject>(this);
+		this.components = new ParentAwareSet<Component>(this);
 		setTransform(new Transform());
 	}
 
@@ -31,28 +34,55 @@ public class GameObject {
 		return id;
 	}
 
-	public Transform getTransform() {
-		return transform;
+	@Override
+	public GameObject getParent() {
+		return parent;
 	}
 
-	public Behavior getBehavior() {
-		return behavior;
+	@Override
+	public void setParent(GameObject parent) {
+		this.parent = parent;
 	}
 
-	public AttributeMap getAttributeMap() {
-		return attributeMap;
+	public Set<GameObject> getChildren() {
+		return children;
 	}
 
-	public Collider getCollider() {
-		return collider;
+	public void addChild(GameObject child) {
+		this.children.add(child);
 	}
 
-	public Render getRender() {
-		return render;
+	public Set<Component> getComponents() {
+		return components;
 	}
+
+	public void addComponent(Component component) {
+		this.components.add(component);
+	}
+
+	public Vector2D getWorldPosition() {
+		if (this.parent == null) {
+			return getPosition();
+		} else {
+			return this.parent.getPosition().add(getPosition());
+		}
+	}
+
+	public Vector2D getWorldVelocity() {
+		if (this.parent == null) {
+			return getVelocity();
+		} else {
+			return this.parent.getVelocity().add(getVelocity());
+		}
+	}
+
 
 	public Vector2D getPosition() {
-		return transform.getPosition();
+		return getTransform().getPosition();
+	}
+
+	public Vector2D getVelocity() {
+		return getTransform().getVelocity();
 	}
 
 	public void move(double x, double y) {
@@ -60,36 +90,66 @@ public class GameObject {
 	}
 
 	public void move(Vector2D vector) {
-		this.transform.move(vector);
+		getTransform().move(vector);
 	}
-	
+
+	public Transform getTransform() {
+		return getComponent(Transform.class);
+	}
+
+	public Behavior getBehavior() {
+		return getComponent(Behavior.class);
+	}
+
+	public AttributeMap getAttributeMap() {
+		return getComponent(AttributeMap.class);
+	}
+
+	public Collider getCollider() {
+		return getComponent(Collider.class);
+	}
+
+	public Render getRender() {
+		return getComponent(Render.class);
+	}
+
+	public <T extends Component> T getComponent(Class<T> clazz) {
+		T c = null;
+		for (Component component : components) {
+			if (clazz.isAssignableFrom(component.getClass())) {
+				c = clazz.cast(component);
+			}
+		}
+		return c;
+	}
+
 	public void setTransform(Transform transform) {
-		transform.setGameObject(this);
-		this.transform = transform;
+		transform.setParent(this);
+		addComponent(transform);
 		MovementSystem.INSTANCE.add(transform);
 	}
-	
+
 	public void setAttributeMap(AttributeMap attributeMap) {
-		attributeMap.setGameObject(this);
-		this.attributeMap = attributeMap;
+		attributeMap.setParent(this);
+		addComponent(attributeMap);
 		AttributeSystem.INSTANCE.add(attributeMap);
 	}
 
 	public void setBehavior(Behavior behavior) {
-		behavior.setGameObject(this);
-		this.behavior = behavior;
+		behavior.setParent(this);
+		addComponent(behavior);
 		BehaviorSystem.INSTANCE.add(behavior);
 	}
 
 	public void setCollider(Collider collider) {
-		collider.setGameObject(this);
-		this.collider = collider;
+		collider.setParent(this);
+		addComponent(collider);
 		CollisionSystem.INSTANCE.add(collider);
 	}
 
 	public void setRender(Render render) {
-		render.setGameObject(this);
-		this.render = render;
+		render.setParent(this);
+		addComponent(render);
 		RenderingSystem.INSTANCE.add(render);
 	}
 	
@@ -97,14 +157,14 @@ public class GameObject {
 		GameWorld.INSTANCE.remove(this);
 		BehaviorSystem.INSTANCE.remove(this.getBehavior());
 		RenderingSystem.INSTANCE.remove(this.getRender());
-		MovementSystem.INSTANCE.remove(this.getTransform());
 		CollisionSystem.INSTANCE.remove(this.getCollider());
 		AttributeSystem.INSTANCE.remove(this.getAttributeMap());
 	}
 
 	@Override
 	public String toString() {
-		return id + " - " + (render == null ? "" : render.toString());
+		return id + " - " + (getRender() == null ? "" : getRender().toString());
 	}
+
 	
 }

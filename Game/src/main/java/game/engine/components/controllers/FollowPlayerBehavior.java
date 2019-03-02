@@ -13,7 +13,7 @@ public class FollowPlayerBehavior extends Behavior {
 	@Override
 	public void tick(double dt) {
 		Vector2D direction;
-		Vector2D position = gameObject.getPosition();
+		Vector2D position = parent.getPosition();
 
 		GameObject player = target;
 		if (player != null) {
@@ -26,10 +26,10 @@ public class FollowPlayerBehavior extends Behavior {
 		} else {
 			direction = Vector2D.ZERO.subtract(position).normalize();
 		}
-		double speed = gameObject.getAttributeMap().get(AttributeType.SPEED).getVal();
+		double speed = parent.getAttributeMap().get(AttributeType.SPEED).getVal();
 		
 		Vector2D delta = direction.scalar(speed * dt);
-		Transform transform = gameObject.getTransform();
+		Transform transform = parent.getTransform();
 		transform.move(delta.normalize().scalar(speed * dt));
 	}
 
