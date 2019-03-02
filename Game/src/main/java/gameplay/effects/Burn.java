@@ -1,6 +1,6 @@
 package gameplay.effects;
 
-import gameplay.entity.Character;
+import gameplay.gameObject.Character;
 
 public class Burn extends Effect {
 

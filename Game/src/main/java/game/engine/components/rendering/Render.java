@@ -37,7 +37,7 @@ public abstract class Render extends Component {
 	protected abstract void draw(GraphicsContext gc, double x, double y, double w, double h);
 	
 	protected void drawCollision(GraphicsContext gc, double x, double y, double w, double h) {
-		Collider c = entity.getCollider();
+		Collider c = gameObject.getCollider();
 		if (c != null) {
 			gc.setStroke(getBorderColor());
 			if (c instanceof RectangleCollider) {
@@ -50,7 +50,7 @@ public abstract class Render extends Component {
 	}
 	
 	public Vector2D getCenter() {
-		return entity.getTransform().getPosition();
+		return gameObject.getTransform().getPosition();
 	}
 
 	public abstract double getWidth();

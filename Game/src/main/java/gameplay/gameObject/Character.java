@@ -1,10 +1,10 @@
-package gameplay.entity;
+package gameplay.gameObject;
 
-import static gameplay.entity.AttributeType.ATTACK;
-import static gameplay.entity.AttributeType.HEALTH;
-import static gameplay.entity.AttributeType.MAGIC;
-import static gameplay.entity.Modifier.Type.ADDITIVE;
-import static gameplay.entity.Modifier.Type.MULTIPLICATIVE;
+import static gameplay.gameObject.AttributeType.ATTACK;
+import static gameplay.gameObject.AttributeType.HEALTH;
+import static gameplay.gameObject.AttributeType.MAGIC;
+import static gameplay.gameObject.Modifier.Type.ADDITIVE;
+import static gameplay.gameObject.Modifier.Type.MULTIPLICATIVE;
 
 import java.util.HashMap;
 import java.util.HashSet;

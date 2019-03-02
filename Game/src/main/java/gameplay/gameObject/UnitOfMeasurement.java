@@ -1,4 +1,4 @@
-package gameplay.entity;
+package gameplay.gameObject;
 
 public enum UnitOfMeasurement {
 

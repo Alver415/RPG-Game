@@ -20,7 +20,7 @@ public class GameWorld {
 	private final GameTimer timer;
 	private final InputHandler inputHandler;
 	
-	private final Map<Long, Entity> entities;
+	private final Map<Long, GameObject> entities;
 
 	private final BehaviorSystem behaviorSystem;
 	private final AttributeSystem attributeSystem;
@@ -56,18 +56,18 @@ public class GameWorld {
 		}
 	}
 
-	public void addEntity(Entity entity) {
-		this.entities.put(entity.getId(), entity);
+	public void addGameObject(GameObject gameObject) {
+		this.entities.put(gameObject.getId(), gameObject);
 	}
-	public void remove(Entity entity) {
-		this.entities.remove(entity.getId());
+	public void remove(GameObject gameObject) {
+		this.entities.remove(gameObject.getId());
 	}
 	
-	public Entity getEntity(Long id) {
+	public GameObject getGameObject(Long id) {
 		return this.entities.get(id);
 	}
 
-	public Set<Entity> getEntities() {
+	public Set<GameObject> getEntities() {
 		return new HashSet<>(entities.values());
 	}
 	public BehaviorSystem getInputSystem() {

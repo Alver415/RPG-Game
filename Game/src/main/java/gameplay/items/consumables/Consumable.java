@@ -1,6 +1,6 @@
 package gameplay.items.consumables;
 
-import gameplay.entity.Character;
+import gameplay.gameObject.Character;
 import gameplay.items.Item;
 
 public abstract class Consumable extends Item {

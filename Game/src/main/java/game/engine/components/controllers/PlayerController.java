@@ -7,7 +7,9 @@ import game.engine.GameUtils;
 import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
+import game.engine.components.rendering.AnimatedSprite;
 import game.engine.components.rendering.Viewport;
+import game.engine.components.rendering.render.SpriteRender;
 import game.engine.systems.RenderingSystem;
 
 public class PlayerController extends Behavior {
@@ -22,9 +24,9 @@ public class PlayerController extends Behavior {
 		double dx = 0;
 		double dy = 0;
 
-		double baseSpeed = entity.getAttributeMap().get(AttributeType.SPEED).getVal();
-		double sneakSpeed = entity.getAttributeMap().get(AttributeType.SPEED).getMin();
-		double sprintSpeed = entity.getAttributeMap().get(AttributeType.SPEED).getMax();
+		double baseSpeed = gameObject.getAttributeMap().get(AttributeType.SPEED).getVal();
+		double sneakSpeed = gameObject.getAttributeMap().get(AttributeType.SPEED).getMin();
+		double sprintSpeed = gameObject.getAttributeMap().get(AttributeType.SPEED).getMax();
 
 		double speed = baseSpeed;
 		Set<Control> controls = GameWorld.INSTANCE.getControls();
@@ -71,7 +73,20 @@ public class PlayerController extends Behavior {
 	@Override
 	public void tick(double dt) {
 		processInput();
-		entity.getTransform().setVelocity(delta);
+		gameObject.getTransform().setVelocity(delta);
+
+		AnimatedSprite animation;
+		if (delta.getY() > Math.abs(delta.getX())) {
+			animation = AnimatedSprite.UP;
+		} else if (delta.getX() > 0) {
+			animation = AnimatedSprite.RIGHT;
+		} else if (delta.getX() < 0) {
+			animation = AnimatedSprite.LEFT;
+		} else {
+			animation = AnimatedSprite.DOWN;
+		}
+
+		((SpriteRender) gameObject.getRender()).setSprite(animation);
 	}
 
 }

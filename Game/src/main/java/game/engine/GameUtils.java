@@ -12,37 +12,37 @@ import javafx.scene.paint.Color;
 public class GameUtils {
 
 	public static void spawn() {
-		Entity enemy = new Entity();
+		GameObject enemy = new GameObject();
 		double randX = 20 * (Math.random() - 0.5);
 		double randY = 18 * (Math.random() - 0.5);
 		enemy.move(randX, randY);
 		enemy.setRender(new CircleRender(Color.GREEN, 0.5));
 		enemy.setCollider(new CircleCollider(0.5, false));
-		GameWorld.INSTANCE.addEntity(enemy);
+		GameWorld.INSTANCE.addGameObject(enemy);
 	}
 	
 	public static void shoot() {
-		Entity player = findPlayer();
-		Entity bullet = new Entity();
+		GameObject player = findPlayer();
+		GameObject bullet = new GameObject();
 		bullet.move(0, 0);
 		bullet.setRender(new CircleRender(Color.RED, 0.1));
 		bullet.setCollider(new CircleCollider(0.1, true) {
 			@Override
 			public void handleCollision(Collider other) {
-				if (other.getEntity().equals(player)) {
-					entity.terminate();
+				if (other.getGameObject().equals(player)) {
+					gameObject.terminate();
 				}
 			}
 		});
 		bullet.setBehavior(new TargetedProjectileBehavior(player));
-		GameWorld.INSTANCE.addEntity(bullet);
+		GameWorld.INSTANCE.addGameObject(bullet);
 	}
 	
-	public static Entity findPlayer() {
-		Set<Entity> entities = GameWorld.INSTANCE.getEntities();
-		for (Entity entity : entities) {
-			if (entity.getBehavior() instanceof PlayerController) {
-				return entity;
+	public static GameObject findPlayer() {
+		Set<GameObject> entities = GameWorld.INSTANCE.getEntities();
+		for (GameObject gameObject : entities) {
+			if (gameObject.getBehavior() instanceof PlayerController) {
+				return gameObject;
 			}
 		}
 		return null;

@@ -49,7 +49,7 @@ public class CircleCollider extends Collider{
 		double overlap = aRadius + bRadius - distance;
 		
 		double compensation = other.isStatic ? overlap : overlap * 0.5;
-		getEntity().move(difference.normalize().scalar(compensation));
+		getGameObject().move(difference.normalize().scalar(compensation));
 	}
 
 	public void handleCollision(RectangleCollider other) {
@@ -81,7 +81,7 @@ public class CircleCollider extends Collider{
 		Vector2D penetration = difference.normalize().scalar(overlap);
 
 		double compensation = other.isStatic ? 1 : 0.5;
-		getEntity().move(penetration.scalar(compensation));
+		getGameObject().move(penetration.scalar(compensation));
 	}
 	
 }

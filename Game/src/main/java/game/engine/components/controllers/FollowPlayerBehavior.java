@@ -1,6 +1,6 @@
 package game.engine.components.controllers;
 
-import game.engine.Entity;
+import game.engine.GameObject;
 import game.engine.GameUtils;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
@@ -8,14 +8,14 @@ import game.engine.components.transforms.Transform;
 
 public class FollowPlayerBehavior extends Behavior {
 
-	private Entity target = GameUtils.findPlayer();
+	private GameObject target = GameUtils.findPlayer();
 	
 	@Override
 	public void tick(double dt) {
 		Vector2D direction;
-		Vector2D position = entity.getPosition();
+		Vector2D position = gameObject.getPosition();
 
-		Entity player = target;
+		GameObject player = target;
 		if (player != null) {
 			double distance = player.getPosition().distance(position);
 			if (distance > 100) {
@@ -26,10 +26,10 @@ public class FollowPlayerBehavior extends Behavior {
 		} else {
 			direction = Vector2D.ZERO.subtract(position).normalize();
 		}
-		double speed = entity.getAttributeMap().get(AttributeType.SPEED).getVal();
+		double speed = gameObject.getAttributeMap().get(AttributeType.SPEED).getVal();
 		
 		Vector2D delta = direction.scalar(speed * dt);
-		Transform transform = entity.getTransform();
+		Transform transform = gameObject.getTransform();
 		transform.move(delta.normalize().scalar(speed * dt));
 	}
 

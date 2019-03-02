@@ -12,7 +12,7 @@ public abstract class Collider extends Component{
 	}
 	
 	public Vector2D getCenter() {
-		return entity.getTransform().getPosition();
+		return gameObject.getTransform().getPosition();
 	}
 	
 	public abstract void handleCollision(Collider other);

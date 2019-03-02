@@ -1,6 +1,6 @@
 package game.engine.components.rendering;
 
-import game.engine.Entity;
+import game.engine.GameObject;
 import game.engine.Vector2D;
 
 public class Viewport {
@@ -8,17 +8,17 @@ public class Viewport {
 	private static final double	zoomMax	= 500;
 	private static final double	zoomMin	= 10;
 
-	private Entity target;
+	private GameObject target;
 	private double	zoom	= 50;
 
 	public Viewport() {
 		this.target = null;
 	}
-	public Viewport(Entity target) {
+	public Viewport(GameObject target) {
 		this.target = target;
 	}
 	
-	public void setTarget(Entity target) {
+	public void setTarget(GameObject target) {
 		this.target = target;
 	}
 	
@@ -34,7 +34,7 @@ public class Viewport {
 		this.zoom = Math.max(Math.min(zoom, zoomMax), zoomMin);
 	}
 
-	public Entity getTarget() {
+	public GameObject getTarget() {
 		return target;
 	}
 

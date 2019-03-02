@@ -39,10 +39,12 @@ public class InputHandler implements EventHandler<InputEvent>{
 			}
 			
 			Control input = Control.get(code);
-			if (input != null && isPressed(keyEvent)) {
-				buttonsDown.add(input);
-			} else {
-				buttonsDown.remove(input);
+			if (input != null) {
+				if (isPressed(keyEvent)) {
+					buttonsDown.add(input);
+				} else {
+					buttonsDown.remove(input);
+				}
 			}
 		}
 	}

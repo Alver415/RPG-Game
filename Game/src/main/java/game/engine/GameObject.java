@@ -11,7 +11,7 @@ import game.engine.systems.CollisionSystem;
 import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
 
-public class Entity {
+public class GameObject {
 
 	private static long next_id = 0;
 	private final long id;
@@ -22,7 +22,7 @@ public class Entity {
 	private Collider collider;
 	private Render render;
 
-	public Entity() {
+	public GameObject() {
 		this.id = next_id++;
 		setTransform(new Transform());
 	}
@@ -64,31 +64,31 @@ public class Entity {
 	}
 	
 	public void setTransform(Transform transform) {
-		transform.setEntity(this);
+		transform.setGameObject(this);
 		this.transform = transform;
 		MovementSystem.INSTANCE.add(transform);
 	}
 	
 	public void setAttributeMap(AttributeMap attributeMap) {
-		attributeMap.setEntity(this);
+		attributeMap.setGameObject(this);
 		this.attributeMap = attributeMap;
 		AttributeSystem.INSTANCE.add(attributeMap);
 	}
 
 	public void setBehavior(Behavior behavior) {
-		behavior.setEntity(this);
+		behavior.setGameObject(this);
 		this.behavior = behavior;
 		BehaviorSystem.INSTANCE.add(behavior);
 	}
 
 	public void setCollider(Collider collider) {
-		collider.setEntity(this);
+		collider.setGameObject(this);
 		this.collider = collider;
 		CollisionSystem.INSTANCE.add(collider);
 	}
 
 	public void setRender(Render render) {
-		render.setEntity(this);
+		render.setGameObject(this);
 		this.render = render;
 		RenderingSystem.INSTANCE.add(render);
 	}

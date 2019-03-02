@@ -1,6 +1,6 @@
 package game.engine.components;
 
-import game.engine.Entity;
+import game.engine.GameObject;
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.colliders.Collider;
 import game.engine.components.controllers.Behavior;
@@ -27,7 +27,7 @@ public abstract class Component {
 	}
 	
 	protected final Type type;
-	protected Entity entity;
+	protected GameObject gameObject;
 
 	protected Component(Type type) {
 		this.type = type;
@@ -37,12 +37,12 @@ public abstract class Component {
 		return type;
 	}
 	
-	public Entity getEntity() {
-		return entity;
+	public GameObject getGameObject() {
+		return gameObject;
 	}
 	
-	public void setEntity(Entity entity) {
-		this.entity = entity;
+	public void setGameObject(GameObject gameObject) {
+		this.gameObject = gameObject;
 	}
 	
 	
