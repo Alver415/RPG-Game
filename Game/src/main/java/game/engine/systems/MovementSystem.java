@@ -5,9 +5,8 @@ import game.engine.components.transforms.Transform;
 
 public class MovementSystem extends GameSystem<Transform> {
 
-	public static final MovementSystem INSTANCE = new MovementSystem();
-
-	private MovementSystem() {
+	public MovementSystem() {
+		super(Transform.class);
 	}
 
 	@Override

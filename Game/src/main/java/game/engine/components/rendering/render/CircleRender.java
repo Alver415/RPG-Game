@@ -29,7 +29,7 @@ public class CircleRender extends BasicRender{
 	}
 	
 	@Override
-	protected void draw(GraphicsContext gc, double x, double y, double w, double h) {
+	protected void drawInternal(GraphicsContext gc, double x, double y, double w, double h) {
 		gc.setFill(getColor());
 		gc.fillOval(x, y, w, h);
 		gc.setStroke(getBorderColor());

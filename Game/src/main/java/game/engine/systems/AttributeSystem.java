@@ -6,9 +6,8 @@ import game.engine.components.attributes.Value;
 
 public class AttributeSystem extends GameSystem<AttributeMap> {
 
-	public static final AttributeSystem INSTANCE = new AttributeSystem();
-
-	private AttributeSystem() {
+	public AttributeSystem() {
+		super(AttributeMap.class);
 	}
 
 	@Override

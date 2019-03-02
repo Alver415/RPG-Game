@@ -15,16 +15,11 @@ public enum Control {
 	LEFT(KeyCode.A),
 	RIGHT(KeyCode.D),
 	
-	ZOOM_IN(KeyCode.E),
-	ZOOM_OUT(KeyCode.Q),
-
 	SPRINT(KeyCode.SPACE),
 	SNEAK(KeyCode.SHIFT),
 
 	SPAWN(KeyCode.N),
-	SHOOT(KeyCode.M),
-
-	PAUSE(KeyCode.ESCAPE);
+	SHOOT(KeyCode.M);
 
 	private final KeyCode	defaultKeyCode;
 	private KeyCode			currentKeyCode;

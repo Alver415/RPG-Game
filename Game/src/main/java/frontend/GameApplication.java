@@ -115,49 +115,49 @@ public class GameApplication extends Application {
 		renderingSystem.setCanvas(canvas);
 		
 		GameObject player = new GameObject();
-		player.setBehavior(new PlayerController());
-		player.setRender(new SpriteRender(AnimatedSprite.DOWN, 1d));
-		player.setCollider(new CircleCollider(0.5d, false));
-		player.setAttributeMap(new AttributeMap());
+		player.addComponent(new PlayerController());
+		player.addComponent(new SpriteRender(AnimatedSprite.DOWN, 1d));
+		player.addComponent(new CircleCollider(0.5d, false));
+		player.addComponent(new AttributeMap());
 		gameWorld.addGameObject(player);
 		
 		viewport.setTarget(player);;
 		
 		createMap(gameWorld);
-		// spawnEnemies(gameWorld);
+		spawnEnemies(gameWorld);
 	}
 
 	private void spawnEnemies(GameWorld gameWorld) {
 		GameObject enemy1 = new GameObject();
 		enemy1.move(-3, -2);
-		enemy1.setBehavior(new FollowPlayerBehavior());
-		enemy1.setAttributeMap(new AttributeMap());
-		enemy1.setRender(new SpriteRender(StaticSprite.BULBASAUR, 1d));
-		enemy1.setCollider(new RectangleCollider(1, 1, true));
+		enemy1.addComponent(new FollowPlayerBehavior());
+		enemy1.addComponent(new AttributeMap());
+		enemy1.addComponent(new SpriteRender(StaticSprite.BULBASAUR, 1d));
+		enemy1.addComponent(new RectangleCollider(1, 1, true));
 		gameWorld.addGameObject(enemy1);
 
 		GameObject enemy2 = new GameObject();
 		enemy2.move(-1, -2);
-		enemy2.setBehavior(new FollowPlayerBehavior());
-		enemy2.setAttributeMap(new AttributeMap());
-		enemy2.setRender(new SpriteRender(StaticSprite.SQUIRTLE, 1d));
-		enemy2.setCollider(new RectangleCollider(1, 1, false));
+		enemy2.addComponent(new FollowPlayerBehavior());
+		enemy2.addComponent(new AttributeMap());
+		enemy2.addComponent(new SpriteRender(StaticSprite.SQUIRTLE, 1d));
+		enemy2.addComponent(new RectangleCollider(1, 1, false));
 		gameWorld.addGameObject(enemy2);
 
 		GameObject enemy3 = new GameObject();
 		enemy3.move(1, -2);
-		enemy3.setBehavior(new FollowPlayerBehavior());
-		enemy3.setAttributeMap(new AttributeMap());
-		enemy3.setRender(new SpriteRender(StaticSprite.CHARMANDER, 1d));
-		enemy3.setCollider(new CircleCollider(0.5, true));
+		enemy3.addComponent(new FollowPlayerBehavior());
+		enemy3.addComponent(new AttributeMap());
+		enemy3.addComponent(new SpriteRender(StaticSprite.CHARMANDER, 1d));
+		enemy3.addComponent(new CircleCollider(0.5, true));
 		gameWorld.addGameObject(enemy3);
 
 		GameObject enemy4 = new GameObject();
 		enemy4.move(3, -2);
-		enemy4.setBehavior(new FollowPlayerBehavior());
-		enemy4.setAttributeMap(new AttributeMap());
-		enemy4.setRender(new SpriteRender(StaticSprite.PIKACHU, 1d));
-		enemy4.setCollider(new CircleCollider(0.5, false));
+		enemy4.addComponent(new FollowPlayerBehavior());
+		enemy4.addComponent(new AttributeMap());
+		enemy4.addComponent(new SpriteRender(StaticSprite.PIKACHU, 1d));
+		enemy4.addComponent(new CircleCollider(0.5, false));
 		gameWorld.addGameObject(enemy4);
 	}
 
@@ -165,7 +165,7 @@ public class GameApplication extends Application {
 		GameObject background = new GameObject();
 		Render render = new SpriteRender(StaticSprite.PALLET_TOWN, 20d, 18d);
 		render.setzIndex(-1);
-		background.setRender(render);
+		background.addComponent(render);
 
 		//Walls
 		createWorldObject(gameWorld, 0, 0, 1, 17);
@@ -204,8 +204,8 @@ public class GameApplication extends Application {
 		GameObject right = new GameObject();
 		right.move(-10 + w / 2, -9 + h / 2);
 		right.move(x, y);
-		right.setRender(new RectangleRender(color, w, h));
-		right.setCollider(new RectangleCollider(w, h, true));
+		right.addComponent(new RectangleRender(color, w, h));
+		right.addComponent(new RectangleCollider(w, h, true));
 		gameWorld.addGameObject(right);
 	}
 }

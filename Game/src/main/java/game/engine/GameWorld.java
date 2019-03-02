@@ -1,11 +1,15 @@
 package game.engine;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import frontend.settings.Control;
+import game.engine.components.Component;
 import game.engine.systems.AttributeSystem;
 import game.engine.systems.BehaviorSystem;
 import game.engine.systems.CollisionSystem;
@@ -21,30 +25,25 @@ public class GameWorld {
 	private final InputHandler inputHandler;
 	
 	private final Map<Long, GameObject> entities;
-
-	private final BehaviorSystem	behaviorSystem;
-	private final MovementSystem	movementSystem;
-	private final AttributeSystem	attributeSystem;
-	private final CollisionSystem	collisionSystem;
-	private final RenderingSystem	renderingSystem;
+	private final List<GameSystem<?>>	gameSystems;
 
 	private GameWorld() {
 		this.entities = new HashMap<>();
 		this.inputHandler = new InputHandler();
-		this.behaviorSystem = BehaviorSystem.INSTANCE;
-		this.movementSystem = MovementSystem.INSTANCE;
-		this.attributeSystem = AttributeSystem.INSTANCE;
-		this.collisionSystem = CollisionSystem.INSTANCE;
-		this.renderingSystem = RenderingSystem.INSTANCE;
+		this.gameSystems = Collections.synchronizedList(new ArrayList<>());
+
+		this.gameSystems.add(new BehaviorSystem());
+		this.gameSystems.add(new MovementSystem());
+		this.gameSystems.add(new AttributeSystem());
+		this.gameSystems.add(new CollisionSystem());
+		this.gameSystems.add(new RenderingSystem());
 
 		this.timer = new GameTimer() {
 			@Override
 			public void tick(double dt) {
-				process(behaviorSystem, dt);
-				process(movementSystem, dt);
-				process(attributeSystem, dt);
-				process(collisionSystem, dt);
-				process(renderingSystem, dt);
+				for (GameSystem<?> gameSystem : gameSystems) {
+					process(gameSystem, dt);
+				}
 			}
 		};
 		this.timer.start();
@@ -53,6 +52,12 @@ public class GameWorld {
 	private void process(GameSystem<?> system, double dt) {
 		if (system != null) {
 			system.tick(dt);
+		}
+	}
+
+	public <T extends Component> void register(Component component) {
+		for (GameSystem<?> gameSystem : gameSystems) {
+			gameSystem.register(component);
 		}
 	}
 
@@ -69,17 +74,6 @@ public class GameWorld {
 
 	public Set<GameObject> getEntities() {
 		return new HashSet<>(entities.values());
-	}
-	public BehaviorSystem getInputSystem() {
-		return behaviorSystem;
-	}
-
-	public CollisionSystem getCollisionSystem() {
-		return collisionSystem;
-	}
-
-	public RenderingSystem getRenderingSystem() {
-		return renderingSystem;
 	}
 
 	public GameTimer getGameTimer() {
@@ -106,4 +100,28 @@ public class GameWorld {
 		return inputHandler;
 	}
 
+	public RenderingSystem getRenderingSystem() {
+		return getGameSystem(RenderingSystem.class);
+	}
+
+	private <T extends GameSystem<?>> T getGameSystem(Class<T> clazz) {
+		for (GameSystem<?> gameSystem : gameSystems) {
+			if (clazz.isAssignableFrom(gameSystem.getClass())) {
+				return clazz.cast(gameSystem);
+			}
+		}
+		return null;
+	}
+
+	public void toggleTime() {
+		this.getRenderingSystem().toggleTime();
+	}
+
+	public void zoomIn() {
+		this.getRenderingSystem().zoomOut();
+	}
+
+	public void zoomOut() {
+		this.getRenderingSystem().zoomOut();
+	}
 }

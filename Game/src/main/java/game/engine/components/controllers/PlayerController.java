@@ -8,9 +8,7 @@ import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
 import game.engine.components.rendering.AnimatedSprite;
-import game.engine.components.rendering.Viewport;
 import game.engine.components.rendering.render.SpriteRender;
-import game.engine.systems.RenderingSystem;
 
 public class PlayerController extends Behavior {
 
@@ -20,7 +18,6 @@ public class PlayerController extends Behavior {
 	}
 
 	private void processInput() {
-		Viewport viewport = RenderingSystem.INSTANCE.getViewport();
 		double dx = 0;
 		double dy = 0;
 
@@ -55,12 +52,6 @@ public class PlayerController extends Behavior {
 				break;
 			case SHOOT:
 				GameUtils.shoot();
-				break;
-			case ZOOM_IN:
-				viewport.zoomIn();
-				break;
-			case ZOOM_OUT:
-				viewport.zoomOut();
 				break;
 			default:
 				break;

@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import frontend.settings.Control;
-import game.engine.systems.RenderingSystem;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
@@ -28,9 +27,15 @@ public class InputHandler implements EventHandler<InputEvent>{
 				case ESCAPE:
 					GameWorld.INSTANCE.getGameTimer().pause();
 					return;
+				case E:
+					GameWorld.INSTANCE.zoomIn();
+					return;
+				case Q:
+					GameWorld.INSTANCE.zoomOut();
+					return;
 				case F:
 					if (((KeyEvent) event).isControlDown()) {
-						RenderingSystem.INSTANCE.toggleTime();
+						GameWorld.INSTANCE.toggleTime();
 					}
 					return;
 				default:

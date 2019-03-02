@@ -13,12 +13,11 @@ import game.engine.components.rendering.Render;
 import javafx.scene.paint.Color;
 
 public class CollisionSystem extends GameSystem<Collider> {
-
-	public static final CollisionSystem INSTANCE = new CollisionSystem();
 	
-	private CollisionSystem() {
+	public CollisionSystem() {
+		super(Collider.class);
 	}
-	
+
 	@Override
 	public void tick(double dt) {
 		Set<Collision> potentialCollisions = broadPhaseCollision(components);

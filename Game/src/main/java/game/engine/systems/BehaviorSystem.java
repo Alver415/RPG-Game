@@ -4,7 +4,9 @@ import game.engine.components.controllers.Behavior;
 
 public class BehaviorSystem extends GameSystem<Behavior> {
 
-	public static final BehaviorSystem INSTANCE = new BehaviorSystem();
+	public BehaviorSystem() {
+		super(Behavior.class);
+	}
 
 	@Override
 	public void tick(double dt) {

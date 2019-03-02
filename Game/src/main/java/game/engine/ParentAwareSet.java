@@ -1,9 +1,9 @@
 package game.engine;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ParentAwareSet<T extends Child> implements Set<T> {
 
@@ -11,7 +11,7 @@ public class ParentAwareSet<T extends Child> implements Set<T> {
 	private final Set<T>	wrapped;
 
 	public ParentAwareSet(GameObject parent) {
-		this.wrapped = new HashSet<T>();
+		this.wrapped = ConcurrentHashMap.newKeySet();
 		this.parent = parent;
 	}
 

@@ -16,8 +16,8 @@ public class GameUtils {
 		double randX = 20 * (Math.random() - 0.5);
 		double randY = 18 * (Math.random() - 0.5);
 		enemy.move(randX, randY);
-		enemy.setRender(new CircleRender(Color.GREEN, 0.5));
-		enemy.setCollider(new CircleCollider(0.5, false));
+		enemy.addComponent(new CircleRender(Color.GREEN, 0.5));
+		enemy.addComponent(new CircleCollider(0.5, false));
 		GameWorld.INSTANCE.addGameObject(enemy);
 	}
 	
@@ -25,8 +25,8 @@ public class GameUtils {
 		GameObject player = findPlayer();
 		GameObject bullet = new GameObject();
 		bullet.move(0, 0);
-		bullet.setRender(new CircleRender(Color.RED, 0.1));
-		bullet.setCollider(new CircleCollider(0.1, true) {
+		bullet.addComponent(new CircleRender(Color.RED, 0.1));
+		bullet.addComponent(new CircleCollider(0.1, true) {
 			@Override
 			public void handleCollision(Collider other) {
 				if (other.getParent().equals(player)) {
@@ -34,7 +34,7 @@ public class GameUtils {
 				}
 			}
 		});
-		bullet.setBehavior(new TargetedProjectileBehavior(player));
+		bullet.addComponent(new TargetedProjectileBehavior(player));
 		GameWorld.INSTANCE.addGameObject(bullet);
 	}
 	

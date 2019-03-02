@@ -5,7 +5,6 @@ import game.engine.components.Component;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
-import game.engine.systems.RenderingSystem;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -15,24 +14,16 @@ public abstract class Render extends Component {
 	
 	private double zIndex;
 	
-	public final void draw(GraphicsContext gc, Viewport viewport) {
-		Vector2D worldCenter = getCenter();
-		Vector2D canvasCenter = RenderingSystem.INSTANCE.worldToCanvas(worldCenter);
-
-		double z = viewport.getZoom(); // view zoom
-		
-		double w = getWidth() * z; // relative width
-		double h = getHeight() * z; // relative height
-		double x = canvasCenter.getX() - w / 2;
-		double y = canvasCenter.getY() - h / 2;
-
-		draw(gc, x, y, w, h);
+	public final void draw(GraphicsContext gc, double x, double y, double w, double h) {
+		drawInternal(gc, x, y, w, h);
 		drawCollision(gc, x, y, w, h);
 	}
 
-	protected abstract void draw(GraphicsContext gc, double x, double y, double w, double h);
+	protected abstract void drawInternal(GraphicsContext gc, double x, double y, double w, double h);
 	
 	protected void drawCollision(GraphicsContext gc, double x, double y, double w, double h) {
+		// Temporary: Render shouldn't know about collider.
+		// Components should be modularized.
 		Collider c = parent.getCollider();
 		if (c != null) {
 			gc.setStroke(getBorderColor());

@@ -16,17 +16,15 @@ import javafx.scene.text.Font;
 
 public class RenderingSystem extends GameSystem<Render> {
 
-	public static final RenderingSystem INSTANCE = new RenderingSystem();
-
 	private static final Font FONT = new Font(12);
 
 	private final Viewport viewport;
-
 	private GraphicsContext	graphicsContext;
 	private double			cw;
 	private double			ch;
 
-	private RenderingSystem() {
+	public RenderingSystem() {
+		super(Render.class);
 		this.viewport = new Viewport();
 	}
 
@@ -36,6 +34,14 @@ public class RenderingSystem extends GameSystem<Render> {
 
 	public Viewport getViewport() {
 		return viewport;
+	}
+
+	public void zoomIn() {
+		this.getViewport().zoomIn();
+	}
+
+	public void zoomOut() {
+		this.getViewport().zoomOut();
 	}
 
 	@Override
@@ -72,8 +78,17 @@ public class RenderingSystem extends GameSystem<Render> {
 					}
 				});
 				for (Render render : sorted) {
-					render.draw(graphicsContext, viewport);
-					;
+					Vector2D worldCenter = render.getCenter();
+					Vector2D canvasCenter = worldToCanvas(worldCenter);
+
+					double z = viewport.getZoom(); // view zoom
+
+					double w = render.getWidth() * z; // relative width
+					double h = render.getHeight() * z; // relative height
+					double x = canvasCenter.getX() - w / 2;
+					double y = canvasCenter.getY() - h / 2;
+
+					render.draw(graphicsContext, x, y, w, h);
 				}
 
 				renderTime();
@@ -161,7 +176,7 @@ public class RenderingSystem extends GameSystem<Render> {
 		return new Vector2D(cx, cy);
 	}
 
-	private boolean showTime;
+	private boolean showTime = true;
 
 	public void toggleTime() {
 		showTime = !showTime;

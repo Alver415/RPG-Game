@@ -26,7 +26,7 @@ public class RectangleRender extends BasicRender{
 	}
 
 	@Override
-	protected void draw(GraphicsContext gc, double x, double y, double w, double h) {
+	protected void drawInternal(GraphicsContext gc, double x, double y, double w, double h) {
 		gc.setFill(getColor());
 		gc.fillRect(x, y, w, h);
 		gc.setStroke(getBorderColor());
