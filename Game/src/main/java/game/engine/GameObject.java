@@ -1,60 +1,98 @@
 package game.engine;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import game.engine.components.Component;
 import game.engine.components.attributes.AttributeMap;
+import game.engine.components.behaviors.Behavior;
 import game.engine.components.colliders.Collider;
-import game.engine.components.controllers.Behavior;
+import game.engine.components.controllers.Controller;
+import game.engine.components.controllers.PlayerController;
 import game.engine.components.rendering.Render;
 import game.engine.components.transforms.Transform;
 
-public class GameObject implements Child {
+public class GameObject implements Parent, Child {
 
-	private static long next_id = 0;
-	private final long id;
-
-	private GameObject				parent;
-	private final Set<GameObject>	children;
+	private Parent					parent;
+	private final Set<GameObject>	gameObjects;
 	private final Set<Component>	components;
 
 	public GameObject() {
-		this.id = next_id++;
-		this.children = new ParentAwareSet<GameObject>(this);
+		this.gameObjects = new ParentAwareSet<GameObject>(this);
 		this.components = new ParentAwareSet<Component>(this);
-		setTransform(new Transform());
-	}
 
-	public long getId() {
-		return id;
+		// All GameObjects should always have a Transform Component.
+		Transform transform = new Transform();
+		transform.setParent(this);
+		addComponent(transform);
 	}
 
 	@Override
-	public GameObject getParent() {
+	public Parent getParent() {
 		return parent;
 	}
 
 	@Override
-	public void setParent(GameObject parent) {
+	public void setParent(Parent parent) {
 		this.parent = parent;
 	}
 
-	public Set<GameObject> getChildren() {
-		return children;
+	@Override
+	public Set<Child> getChildren() {
+		Set<Child> set = new HashSet<>();
+		set.addAll(this.gameObjects);
+		set.addAll(this.components);
+		return set;
 	}
 
-	public void addChild(GameObject child) {
-		this.children.add(child);
+	@Override
+	public void addChild(Child child) {
+		if (child instanceof GameObject) {
+			this.gameObjects.add((GameObject) child);
+		} else if (child instanceof Component) {
+			this.components.add((Component) child);
+		}
 	}
 
-	public Set<Component> getComponents() {
-		return components;
+	public void addGameObject(GameObject gameObject) {
+		this.gameObjects.add(gameObject);
+		GameWorld gameWorld = this.getGameWorld();
+		if (gameWorld != null) {
+			gameWorld.register(gameObject);
+		}
 	}
 
 	public void addComponent(Component component) {
 		this.components.add(component);
-		GameWorld.INSTANCE.register(component);
+		GameWorld gameWorld = this.getGameWorld();
+		if (gameWorld != null) {
+			gameWorld.register(component);
+		}
 	}
+
+	private GameWorld getGameWorld() {
+		Parent root = getRoot();
+		if (root instanceof GameWorld) {
+			return (GameWorld) root;
+		}
+		return null;
+	}
+
+	private GameObject getParentGameObject() {
+		if (this.parent instanceof GameObject) {
+			return (GameObject) getParent();
+		}
+		return null;
+	}
+
+	public Parent getRoot() {
+		if (this.parent == null) {
+			return this;
+		}
+		return this.parent.getRoot();
+	}
+
 
 	public <T extends Component> T getComponent(Class<T> clazz) {
 		T c = null;
@@ -70,7 +108,7 @@ public class GameObject implements Child {
 		if (this.parent == null) {
 			return getPosition();
 		} else {
-			return this.parent.getPosition().add(getPosition());
+			return this.getParentGameObject().getPosition().add(getPosition());
 		}
 	}
 
@@ -78,7 +116,7 @@ public class GameObject implements Child {
 		if (this.parent == null) {
 			return getVelocity();
 		} else {
-			return this.parent.getVelocity().add(getVelocity());
+			return this.getParentGameObject().getVelocity().add(getVelocity());
 		}
 	}
 
@@ -103,6 +141,10 @@ public class GameObject implements Child {
 		return getComponent(Transform.class);
 	}
 
+	public Controller getController() {
+		return getComponent(Controller.class);
+	}
+
 	public Behavior getBehavior() {
 		return getComponent(Behavior.class);
 	}
@@ -118,10 +160,6 @@ public class GameObject implements Child {
 	public Render getRender() {
 		return getComponent(Render.class);
 	}
-	public void setTransform(Transform transform) {
-		transform.setParent(this);
-		addComponent(transform);
-	}
 
 	public void terminate() {
 		GameWorld.INSTANCE.remove(this);
@@ -129,8 +167,7 @@ public class GameObject implements Child {
 
 	@Override
 	public String toString() {
-		return id + " - " + (getRender() == null ? "" : getRender().toString());
+		return getRender() == null ? "" : getRender().toString();
 	}
 
-	
 }

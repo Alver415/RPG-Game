@@ -2,15 +2,20 @@ package game.engine.components.controllers;
 
 import java.util.Set;
 
+import com.sun.javafx.tk.Toolkit;
+
 import frontend.settings.Control;
+import game.engine.GameObject;
 import game.engine.GameUtils;
 import game.engine.GameWorld;
 import game.engine.Vector2D;
 import game.engine.components.attributes.AttributeType;
+import game.engine.components.colliders.CircleCollider;
 import game.engine.components.rendering.AnimatedSprite;
 import game.engine.components.rendering.render.SpriteRender;
+import javafx.scene.input.InputEvent;
 
-public class PlayerController extends Behavior {
+public class PlayerController extends Controller {
 
 	private Vector2D delta;
 
@@ -48,10 +53,10 @@ public class PlayerController extends Behavior {
 				speed = sprintSpeed;
 				break;
 			case SPAWN:
-				GameUtils.spawn();
+				GameUtils.spawnEnemy();
 				break;
 			case SHOOT:
-				GameUtils.shoot();
+				shoot();
 				break;
 			default:
 				break;
@@ -61,8 +66,13 @@ public class PlayerController extends Behavior {
 		delta = Vector2D.normalize(dx, dy).scalar(speed);
 	}
 
-	@Override
-	public void tick(double dt) {
+	private void shoot() {
+		GameObject bullet = new GameObject();
+		bullet.getTransform().setVelocity(velocity);
+		bullet.addChild(new CircleCollider(0.1, true));
+	}
+
+	public void processInput(Set<InputEvent> events) {
 		processInput();
 		parent.getTransform().setVelocity(delta);
 
@@ -81,6 +91,12 @@ public class PlayerController extends Behavior {
 		}
 
 		((SpriteRender) parent.getRender()).setSprite(animation);
+	}
+
+	@Override
+	public void tick(double dt) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

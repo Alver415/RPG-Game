@@ -5,29 +5,29 @@ import javafx.scene.paint.Color;
 
 public class CircleRender extends BasicRender{
 
-	private double radius;
+	private double diameter;
 	
-	public CircleRender(Color color, double radius) {
+	public CircleRender(Color color, double diameter) {
 		super(color);
-		this.radius = radius;
+		this.diameter = diameter / 2;
 	}
 	
 	public double getWidth() {
-		return radius * 2;
+		return diameter;
 	}
 	
 	public double getHeight() {
-		return radius * 2;
-	}
-
-	public double getRadius() {
-		return radius;
+		return diameter;
 	}
 
 	public double getDiameter() {
-		return radius;
+		return diameter;
 	}
-	
+
+	public double getRadius() {
+		return diameter / 2;
+	}
+
 	@Override
 	protected void drawInternal(GraphicsContext gc, double x, double y, double w, double h) {
 		gc.setFill(getColor());

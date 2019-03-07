@@ -2,11 +2,10 @@ package game.engine;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import frontend.settings.Control;
 import game.engine.components.Component;
@@ -17,20 +16,21 @@ import game.engine.systems.GameSystem;
 import game.engine.systems.MovementSystem;
 import game.engine.systems.RenderingSystem;
 
-public class GameWorld {
+public class GameWorld implements Parent {
 
 	public final static GameWorld INSTANCE = new GameWorld();
 
 	private final GameTimer timer;
 	private final InputHandler inputHandler;
 	
-	private final Map<Long, GameObject> entities;
+	private final Set<GameObject>		gameObjects;
 	private final List<GameSystem<?>>	gameSystems;
 
 	private GameWorld() {
-		this.entities = new HashMap<>();
-		this.inputHandler = new InputHandler();
+		this.gameObjects = ConcurrentHashMap.newKeySet();
 		this.gameSystems = Collections.synchronizedList(new ArrayList<>());
+
+		this.inputHandler = new InputHandler();
 
 		this.gameSystems.add(new BehaviorSystem());
 		this.gameSystems.add(new MovementSystem());
@@ -55,25 +55,39 @@ public class GameWorld {
 		}
 	}
 
-	public <T extends Component> void register(Component component) {
-		for (GameSystem<?> gameSystem : gameSystems) {
-			gameSystem.register(component);
+	public void register(Child child) {
+		if(child instanceof Component) {
+			for (GameSystem<?> gameSystem : gameSystems) {
+				gameSystem.register((Component)child);
+			}
+		}
+		if (child instanceof GameObject) {
+			this.gameObjects.add((GameObject) child);
 		}
 	}
 
-	public void addGameObject(GameObject gameObject) {
-		this.entities.put(gameObject.getId(), gameObject);
-	}
-	public void remove(GameObject gameObject) {
-		this.entities.remove(gameObject.getId());
-	}
-	
-	public GameObject getGameObject(Long id) {
-		return this.entities.get(id);
+	public Set<GameObject> getGameObjects() {
+		return this.gameObjects;
 	}
 
-	public Set<GameObject> getEntities() {
-		return new HashSet<>(entities.values());
+	@Override
+	public Set<Child> getChildren() {
+		return new HashSet<>(this.gameObjects);
+	}
+
+	@Override
+	public void addChild(Child newGameObject) {
+		if (newGameObject instanceof GameObject) {
+			GameObject gameObject = (GameObject) newGameObject;
+			this.gameObjects.add(gameObject);
+			for (Child child : gameObject.getChildren()) {
+				register(child);
+			}
+		}
+	}
+
+	public void remove(GameObject gameObject) {
+		this.gameObjects.remove(gameObject);
 	}
 
 	public GameTimer getGameTimer() {
@@ -90,10 +104,6 @@ public class GameWorld {
 
 	public double getFPS() {
 		return timer.getFPS();
-	}
-	
-	public Set<Control> getControls(){
-		return inputHandler.getControls();
 	}
 
 	public InputHandler getInputHandler() {
@@ -113,15 +123,22 @@ public class GameWorld {
 		return null;
 	}
 
-	public void toggleTime() {
-		this.getRenderingSystem().toggleTime();
+	public void toggleDebugDisplay() {
+		this.getRenderingSystem().toggleDebugDisplay();
 	}
 
 	public void zoomIn() {
-		this.getRenderingSystem().zoomOut();
+		this.getRenderingSystem().zoomIn();
 	}
 
 	public void zoomOut() {
 		this.getRenderingSystem().zoomOut();
 	}
+
+	@Override
+	public Parent getRoot() {
+		return null;
+	}
+
+
 }

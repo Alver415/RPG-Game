@@ -1,65 +1,45 @@
 package game.engine;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import frontend.settings.Control;
+import game.engine.components.controllers.PlayerController;
+import game.engine.systems.GameSystem;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
-public class InputHandler implements EventHandler<InputEvent>{
+public class InputHandler extends GameSystem<PlayerController> implements EventHandler<InputEvent> {
 	
-	private final Set<Control> buttonsDown;
+	private final Set<InputEvent> events;
 	
 	public InputHandler() {
-		this.buttonsDown = ConcurrentHashMap.newKeySet();
+		super(PlayerController.class);
+		this.events = ConcurrentHashMap.newKeySet();
 	}
 	
 	@Override
 	public void handle(InputEvent event) {
-		if (event instanceof KeyEvent) {
-			KeyEvent keyEvent = (KeyEvent) event;
-			KeyCode code = keyEvent.getCode();
-			if (isPressed(keyEvent)) {
-				switch(code) {
-				case ESCAPE:
-					GameWorld.INSTANCE.getGameTimer().pause();
-					return;
-				case E:
-					GameWorld.INSTANCE.zoomIn();
-					return;
-				case Q:
-					GameWorld.INSTANCE.zoomOut();
-					return;
-				case F:
-					if (((KeyEvent) event).isControlDown()) {
-						GameWorld.INSTANCE.toggleTime();
-					}
-					return;
-				default:
-					break;
-				}
-			}
-			
-			Control input = Control.get(code);
-			if (input != null) {
-				if (isPressed(keyEvent)) {
-					buttonsDown.add(input);
-				} else {
-					buttonsDown.remove(input);
-				}
-			}
-		}
+		this.events.add(event);
 	}
 
-	private static boolean isPressed(KeyEvent event) {
-		return KeyEvent.KEY_PRESSED.equals(event.getEventType());
+	public Set<InputEvent> getInputEvents() {
+		return new HashSet<>(events);
 	}
 	
-	public Set<Control> getControls(){
-		return buttonsDown;
+	public void consume(InputEvent inputEvent) {
+		this.events.remove(inputEvent);
+	}
+
+	@Override
+	public void tick(double dt) {
+		for (PlayerController controller : components) {
+			controller.processInput(events);
+		}
 	}
 
 }

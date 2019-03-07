@@ -1,18 +1,26 @@
 package game.engine.components;
 
+import game.engine.Child;
 import game.engine.GameObject;
+import game.engine.Parent;
 
-public abstract class Component implements IComponent {
+public abstract class Component implements Child {
 
-	protected GameObject	parent;
+	protected GameObject parent;
 
-	public GameObject getParent() {
+	public GameObject getParentGameObject() {
+		return (GameObject) parent;
+	}
+
+	public Parent getParent() {
 		return parent;
 	}
 
-	public void setParent(GameObject parent) {
-		this.parent = parent;
+	public void setParent(Parent parent) {
+		this.parent = (GameObject) parent;
 	}
 	
+	public void tick(double dt) {
+	}
 	
 }

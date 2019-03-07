@@ -6,8 +6,9 @@ import java.util.List;
 
 import game.engine.GameWorld;
 import game.engine.Vector2D;
+import game.engine.components.Component;
+import game.engine.components.rendering.Camera;
 import game.engine.components.rendering.Render;
-import game.engine.components.rendering.Viewport;
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,35 +19,44 @@ public class RenderingSystem extends GameSystem<Render> {
 
 	private static final Font FONT = new Font(12);
 
-	private final Viewport viewport;
+	private Camera			camera;
 	private GraphicsContext	graphicsContext;
 	private double			cw;
 	private double			ch;
 
+	private boolean debugDisplay = true;
+
 	public RenderingSystem() {
 		super(Render.class);
-		this.viewport = new Viewport();
+	}
+
+	public void register(Component component) {
+		if (component instanceof Camera) {
+			this.camera = (Camera) component;
+			return;
+		}
+		super.register(component);
 	}
 
 	public void setCanvas(Canvas canvas) {
 		this.graphicsContext = canvas.getGraphicsContext2D();
 	}
 
-	public Viewport getViewport() {
-		return viewport;
+	public Camera getCamera() {
+		return camera;
 	}
 
 	public void zoomIn() {
-		this.getViewport().zoomIn();
+		this.getCamera().zoomIn();
 	}
 
 	public void zoomOut() {
-		this.getViewport().zoomOut();
+		this.getCamera().zoomOut();
 	}
 
 	@Override
 	public void tick(double dt) {
-		if (graphicsContext == null) {
+		if (graphicsContext == null || camera == null) {
 			return;
 		}
 		Platform.runLater(new Runnable() {
@@ -69,8 +79,8 @@ public class RenderingSystem extends GameSystem<Render> {
 					public int compare(Render o1, Render o2) {
 						int zIndex = Double.compare(o1.getzIndex(), o2.getzIndex());
 						if (zIndex == 0) {
-							double d1 = o1.getParent().getPosition().distance(viewport.getVector2D());
-							double d2 = o2.getParent().getPosition().distance(viewport.getVector2D());
+							double d1 = o1.getParentGameObject().getPosition().distance(camera.getPosition());
+							double d2 = o2.getParentGameObject().getPosition().distance(camera.getPosition());
 							int distance = Double.compare(d2, d1);
 							return distance;
 						}
@@ -81,7 +91,7 @@ public class RenderingSystem extends GameSystem<Render> {
 					Vector2D worldCenter = render.getCenter();
 					Vector2D canvasCenter = worldToCanvas(worldCenter);
 
-					double z = viewport.getZoom(); // view zoom
+					double z = camera.getZoom(); // view zoom
 
 					double w = render.getWidth() * z; // relative width
 					double h = render.getHeight() * z; // relative height
@@ -97,7 +107,7 @@ public class RenderingSystem extends GameSystem<Render> {
 	}
 
 	private void renderTime() {
-		if (!showTime) {
+		if (!debugDisplay) {
 			return;
 		}
 		graphicsContext.setFont(FONT);
@@ -148,9 +158,9 @@ public class RenderingSystem extends GameSystem<Render> {
 		double cy = canvas.getY(); // world y
 
 		// World position relative to the viewport
-		double vx = viewport.getVector2D().getX(); // view x
-		double vy = viewport.getVector2D().getY(); // view y
-		double vz = viewport.getZoom(); // view zoom
+		double vx = camera.getPosition().getX(); // view x
+		double vy = camera.getPosition().getY(); // view y
+		double vz = camera.getZoom(); // view zoom
 
 		// Canvas position
 		double wx = (cx - cw / 2) / vz + vx;
@@ -165,9 +175,9 @@ public class RenderingSystem extends GameSystem<Render> {
 		double wy = world.getY(); // world y
 
 		// World position relative to the viewport
-		double vx = viewport.getVector2D().getX(); // view x
-		double vy = viewport.getVector2D().getY(); // view y
-		double vz = viewport.getZoom(); // view zoom
+		double vx = camera.getPosition().getX(); // view x
+		double vy = camera.getPosition().getY(); // view y
+		double vz = camera.getZoom(); // view zoom
 
 		// Canvas position
 		double cx = ((wx - vx) * vz) + cw / 2; // canvas x
@@ -176,10 +186,8 @@ public class RenderingSystem extends GameSystem<Render> {
 		return new Vector2D(cx, cy);
 	}
 
-	private boolean showTime = true;
-
-	public void toggleTime() {
-		showTime = !showTime;
+	public void toggleDebugDisplay() {
+		debugDisplay = !debugDisplay;
 	}
 
 }

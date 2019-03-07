@@ -23,4 +23,8 @@ public class AttributeMap extends Component{
 	public Value get(AttributeType type) {
 		return attributeMap.get(type);
 	}
+
+	@Override
+	public void tick(double dt) {
+	}
 }

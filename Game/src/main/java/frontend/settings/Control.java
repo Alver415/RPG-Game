@@ -39,10 +39,10 @@ public enum Control {
 
 	// Static fields and methods
 
-	private static Map<KeyCode, Control> MAP = new HashMap<KeyCode, Control>();
+	private static Map<Object, Control> MAP = new HashMap<Object, Control>();
 
-	public static Control get(KeyCode keyCode) {
-		return MAP.get(keyCode);
+	public static Control get(Object key) {
+		return MAP.get(key);
 	}
 
 	private static final String		SETTINGS_LOCATION	= "src/main/resources/Settings/controls.txt";
@@ -58,7 +58,7 @@ public enum Control {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Map<KeyCode, Control> newMap = new HashMap<KeyCode, Control>();
+		Map<Object, Control> newMap = new HashMap<Object, Control>();
 		for (Control control : values()) {
 			String stringVal = PROPERTIES.getProperty(control.name());
 			if (stringVal == null) {

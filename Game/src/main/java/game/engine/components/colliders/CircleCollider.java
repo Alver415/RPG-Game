@@ -4,23 +4,27 @@ import game.engine.Vector2D;
 
 public class CircleCollider extends Collider{
 
-	private double radius;
+	private double diameter;
 	
-	public CircleCollider(double radius) {
-		this.radius = radius;
+	public CircleCollider(double diameter) {
+		this.diameter = diameter;
 	}
 
-	public CircleCollider(double radius, boolean isStatic) {
-		this(radius);
+	public CircleCollider(double diameter, boolean isStatic) {
+		this(diameter);
 		this.isStatic = isStatic;
 	}
 
-	public double getRadius() {
-		return radius;
+	public double getDiameter() {
+		return diameter;
 	}
 
-	public void setRadius(double radius) {
-		this.radius = radius;
+	public void setDiameter(double diameter) {
+		this.diameter = diameter;
+	}
+
+	public double getRadius() {
+		return diameter / 2;
 	}
 
 	@Override
@@ -42,14 +46,14 @@ public class CircleCollider extends Collider{
 
 		Vector2D difference = aCenter.subtract(bCenter);
 	
-		double aRadius = getRadius();
-		double bRadius = getRadius();
+		double aDiameter = getDiameter();
+		double bDiameter = getDiameter();
 		
 		double distance = aCenter.distance(bCenter);
-		double overlap = aRadius + bRadius - distance;
+		double overlap = aDiameter + bDiameter - distance;
 		
 		double compensation = other.isStatic ? overlap : overlap * 0.5;
-		getParent().move(difference.normalize().scalar(compensation));
+		getParentGameObject().move(difference.normalize().scalar(compensation));
 	}
 
 	public void handleCollision(RectangleCollider other) {
@@ -76,12 +80,13 @@ public class CircleCollider extends Collider{
 		Vector2D difference = aCenter.subtract(closest);
 
 		double distance = difference.magnitude();
-		double overlap = radius - distance;
+		double overlap = diameter - distance;
 
 		Vector2D penetration = difference.normalize().scalar(overlap);
 
 		double compensation = other.isStatic ? 1 : 0.5;
-		getParent().move(penetration.scalar(compensation));
+		getParentGameObject().move(penetration.scalar(compensation));
 	}
+
 	
 }

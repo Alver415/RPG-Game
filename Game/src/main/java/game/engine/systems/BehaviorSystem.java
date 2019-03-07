@@ -1,6 +1,6 @@
 package game.engine.systems;
 
-import game.engine.components.controllers.Behavior;
+import game.engine.components.behaviors.Behavior;
 
 public class BehaviorSystem extends GameSystem<Behavior> {
 

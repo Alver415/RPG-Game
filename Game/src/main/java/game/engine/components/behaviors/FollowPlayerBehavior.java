@@ -1,4 +1,4 @@
-package game.engine.components.controllers;
+package game.engine.components.behaviors;
 
 import game.engine.GameObject;
 import game.engine.GameUtils;

@@ -12,4 +12,7 @@ public abstract class Collider extends Component{
 	}
 	
 	public abstract void handleCollision(Collider other);
+
+	public void tick(double dt) {
+	}
 }

@@ -2,7 +2,7 @@ package game.engine;
 
 public interface Child {
 
-	GameObject getParent();
+	Parent getParent();
 
-	void setParent(GameObject parent);
+	void setParent(Parent parent);
 }
