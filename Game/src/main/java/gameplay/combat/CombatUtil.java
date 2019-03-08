@@ -1,7 +1,7 @@
 package gameplay.combat;
 
-import gameplay.entity.AttributeType;
-import gameplay.entity.Character;
+import gameplay.gameObject.AttributeType;
+import gameplay.gameObject.Character;
 
 public final class CombatUtil {
 

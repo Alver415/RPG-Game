@@ -39,7 +39,7 @@ public class SpriteRender extends Render{
 	}
 	
 	@Override
-	protected void draw(GraphicsContext gc, double x, double y, double w, double h) {
+	protected void drawInternal(GraphicsContext gc, double x, double y, double w, double h) {
 		Image image = sprite.getImage();
 		gc.drawImage(image, x, y, w, h);
 	}

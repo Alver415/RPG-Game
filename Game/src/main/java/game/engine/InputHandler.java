@@ -1,58 +1,59 @@
 package game.engine;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import frontend.settings.Control;
-import game.engine.systems.RenderingSystem;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
-public class InputHandler implements EventHandler<InputEvent>{
+public class InputHandler implements EventHandler<InputEvent> {
 	
-	private final Set<Control> buttonsDown;
+	private final Set<KeyCode> pressedKeys;
+	private final Set<MouseEvent> mouseEvents;
 	
 	public InputHandler() {
-		this.buttonsDown = ConcurrentHashMap.newKeySet();
+		this.pressedKeys = ConcurrentHashMap.newKeySet();
+		this.mouseEvents = ConcurrentHashMap.newKeySet();
 	}
 	
 	@Override
 	public void handle(InputEvent event) {
-		if (event instanceof KeyEvent) {
+		if (event instanceof KeyEvent){
 			KeyEvent keyEvent = (KeyEvent) event;
-			KeyCode code = keyEvent.getCode();
-			if (isPressed(keyEvent)) {
-				switch(code) {
-				case ESCAPE:
-					GameWorld.INSTANCE.getGameTimer().pause();
-					return;
-				case F:
-					if (((KeyEvent) event).isControlDown()) {
-						RenderingSystem.INSTANCE.toggleTime();
-					}
-					return;
-				default:
-					break;
-				}
+			if (isPressed(keyEvent)){
+				this.pressedKeys.add(keyEvent.getCode());	
+			} else if (isReleased(keyEvent)){
+				this.pressedKeys.remove(keyEvent.getCode());
 			}
-			
-			Control input = Control.get(code);
-			if (input != null && isPressed(keyEvent)) {
-				buttonsDown.add(input);
-			} else {
-				buttonsDown.remove(input);
-			}
+		}
+
+		else if (event instanceof MouseEvent){
+			this.mouseEvents.add((MouseEvent)event);	
 		}
 	}
 
-	private static boolean isPressed(KeyEvent event) {
-		return KeyEvent.KEY_PRESSED.equals(event.getEventType());
+
+	private boolean isPressed(KeyEvent keyEvent) {
+		return KeyEvent.KEY_PRESSED.equals(keyEvent.getEventType());
 	}
-	
-	public Set<Control> getControls(){
-		return buttonsDown;
+	private boolean isReleased(KeyEvent keyEvent) {
+		return KeyEvent.KEY_RELEASED.equals(keyEvent.getEventType());
+	}
+
+	public Set<KeyCode> getPressedKeys() {
+		return new HashSet<>(pressedKeys);
+	}
+
+	public Set<MouseEvent> getMouseEvents() {
+		return new HashSet<>(mouseEvents);
+	}
+
+	public void tick() {
+		this.mouseEvents.clear();
 	}
 
 }

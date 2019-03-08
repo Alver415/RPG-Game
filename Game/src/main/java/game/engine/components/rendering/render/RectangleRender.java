@@ -3,7 +3,7 @@ package game.engine.components.rendering.render;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class RectangleRender extends BasicRender{
+public class RectangleRender extends BasicShapeRender{
 
 	private double width;
 	private double height;
@@ -26,7 +26,7 @@ public class RectangleRender extends BasicRender{
 	}
 
 	@Override
-	protected void draw(GraphicsContext gc, double x, double y, double w, double h) {
+	protected void drawInternal(GraphicsContext gc, double x, double y, double w, double h) {
 		gc.setFill(getColor());
 		gc.fillRect(x, y, w, h);
 		gc.setStroke(getBorderColor());

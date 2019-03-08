@@ -3,11 +3,11 @@ package game.engine.components.rendering.render;
 import game.engine.components.rendering.Render;
 import javafx.scene.paint.Color;
 
-public abstract class BasicRender extends Render{
+public abstract class BasicShapeRender extends Render{
 
 	private Color color;
 	
-	public BasicRender(Color color) {
+	public BasicShapeRender(Color color) {
 		super();
 		this.color = color;
 	}

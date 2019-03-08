@@ -7,13 +7,12 @@ public abstract class Collider extends Component{
 
 	protected boolean isStatic = false;
 
-	public Collider(){
-		super(Component.Type.COLLIDER);
-	}
-	
 	public Vector2D getCenter() {
-		return entity.getTransform().getPosition();
+		return parent.getTransform().getPosition();
 	}
 	
 	public abstract void handleCollision(Collider other);
+
+	public void tick(double dt) {
+	}
 }

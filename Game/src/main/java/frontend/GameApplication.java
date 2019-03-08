@@ -3,17 +3,19 @@ package frontend;
 import java.io.IOException;
 
 import frontend.settings.Setting;
-import game.engine.Entity;
+import game.engine.GameObject;
 import game.engine.GameWorld;
+import game.engine.PlayerControlledBehavior;
 import game.engine.components.attributes.AttributeMap;
+import game.engine.components.behaviors.FollowPlayerBehavior;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.RectangleCollider;
-import game.engine.components.controllers.FollowPlayerBehavior;
-import game.engine.components.controllers.PlayerController;
 import game.engine.components.rendering.AnimatedSprite;
+import game.engine.components.rendering.Camera;
 import game.engine.components.rendering.Render;
-import game.engine.components.rendering.Sprite;
-import game.engine.components.rendering.Viewport;
+import game.engine.components.rendering.StaticSprite;
+import game.engine.components.rendering.render.ColliderRender;
+import game.engine.components.rendering.render.HealthBarRender;
 import game.engine.components.rendering.render.RectangleRender;
 import game.engine.components.rendering.render.SpriteRender;
 import game.engine.systems.RenderingSystem;
@@ -107,62 +109,67 @@ public class GameApplication extends Application {
 		canvas.widthProperty().bind(root.widthProperty());
 		canvas.heightProperty().bind(root.heightProperty());
 
+		scene.setOnMousePressed(gameWorld.getInputHandler());
 		scene.setOnKeyPressed(gameWorld.getInputHandler());
 		scene.setOnKeyReleased(gameWorld.getInputHandler());
 
 		RenderingSystem renderingSystem = gameWorld.getRenderingSystem();
-		Viewport viewport = renderingSystem.getViewport();
 		renderingSystem.setCanvas(canvas);
 		
-		Entity player = new Entity();
-		player.setBehavior(new PlayerController());
-		player.setRender(new SpriteRender(Sprite.TRAINER, 1d));
-		player.setCollider(new RectangleCollider(1, 1, true));
-		player.setAttributeMap(new AttributeMap());
-		gameWorld.addEntity(player);
-		
-		viewport.setTarget(player);;
+		GameObject player = new GameObject();
+		player.addComponent(new PlayerControlledBehavior());
+		player.addComponent(new SpriteRender(AnimatedSprite.DOWN, 1d));
+		player.addComponent(new HealthBarRender());
+		player.addComponent(new ColliderRender());
+		player.addComponent(new CircleCollider(1d, true));
+		player.addComponent(new AttributeMap());
+		player.addComponent(new Camera());
+		gameWorld.addChild(player);
 		
 		createMap(gameWorld);
-
-		Entity enemy1 = new Entity();
-		enemy1.move(-3, -2);
-		enemy1.setBehavior(new FollowPlayerBehavior());
-		enemy1.setAttributeMap(new AttributeMap());
-		enemy1.setRender(new SpriteRender(AnimatedSprite.TEST, 1d));
-		enemy1.setCollider(new RectangleCollider(1, 1, true));
-		gameWorld.addEntity(enemy1);
-//
-//		Entity enemy2 = new Entity();
-//		enemy2.move(-1, -2);
-//		enemy2.setBehavior(new FollowPlayerBehavior());
-//		enemy2.setAttributeMap(new AttributeMap());
-//		enemy2.setRender(new SpriteRender(Sprite.SQUIRTLE, 1d));
-//		enemy2.setCollider(new RectangleCollider(1, 1, false));
-//		gameWorld.addEntity(enemy2);
-//
-//		Entity enemy3 = new Entity();
-//		enemy3.move(1, -2);
-//		enemy3.setBehavior(new FollowPlayerBehavior());
-//		enemy3.setAttributeMap(new AttributeMap());
-//		enemy3.setRender(new SpriteRender(Sprite.BULBASAUR, 1d));
-//		enemy3.setCollider(new CircleCollider(0.5, true));
-//		gameWorld.addEntity(enemy3);
-//
-//		Entity enemy4 = new Entity();
-//		enemy4.move(3, -2);
-//		enemy4.setBehavior(new FollowPlayerBehavior());
-//		enemy4.setAttributeMap(new AttributeMap());
-//		enemy4.setRender(new SpriteRender(Sprite.PIKACHU, 1d));
-//		enemy4.setCollider(new CircleCollider(0.5, false));
-//		gameWorld.addEntity(enemy4);
+		 spawnEnemies(gameWorld);
 	}
-	
+
+	private void spawnEnemies(GameWorld gameWorld) {
+		GameObject enemy1 = new GameObject();
+		enemy1.move(-3, -2);
+		enemy1.addComponent(new FollowPlayerBehavior());
+		enemy1.addComponent(new AttributeMap());
+		enemy1.addComponent(new SpriteRender(StaticSprite.BULBASAUR, 1d));
+		enemy1.addComponent(new RectangleCollider(1, 1, true));
+		gameWorld.addChild(enemy1);
+
+		GameObject enemy2 = new GameObject();
+		enemy2.move(-1, -2);
+		enemy2.addComponent(new FollowPlayerBehavior());
+		enemy2.addComponent(new AttributeMap());
+		enemy2.addComponent(new SpriteRender(StaticSprite.SQUIRTLE, 1d));
+		enemy2.addComponent(new RectangleCollider(1, 1, false));
+		gameWorld.addChild(enemy2);
+
+		GameObject enemy3 = new GameObject();
+		enemy3.move(1, -2);
+		enemy3.addComponent(new FollowPlayerBehavior());
+		enemy3.addComponent(new AttributeMap());
+		enemy3.addComponent(new SpriteRender(StaticSprite.CHARMANDER, 1d));
+		enemy3.addComponent(new CircleCollider(1, true));
+		gameWorld.addChild(enemy3);
+
+		GameObject enemy4 = new GameObject();
+		enemy4.move(3, -2);
+		enemy4.addComponent(new FollowPlayerBehavior());
+		enemy4.addComponent(new AttributeMap());
+		enemy4.addComponent(new SpriteRender(StaticSprite.PIKACHU, 1d));
+		enemy4.addComponent(new CircleCollider(1, false));
+		gameWorld.addChild(enemy4);
+	}
+
 	private void createMap(GameWorld gameWorld) {
-		Entity background = new Entity();
-		Render render = new SpriteRender(Sprite.PALLET_TOWN, 20d, 18d);
+		GameObject background = new GameObject();
+		Render render = new SpriteRender(StaticSprite.PALLET_TOWN, 20d, 18d);
 		render.setzIndex(-1);
-		background.setRender(render);
+		background.addComponent(render);
+		gameWorld.addChild(background);
 
 		//Walls
 		createWorldObject(gameWorld, 0, 0, 1, 17);
@@ -194,16 +201,15 @@ public class GameApplication extends Application {
 		createWorldObject(gameWorld, 10, 4, 6, 1);
 		createWorldObject(gameWorld, 4, 8, 4, 1);
 		
-		
 	}
 	
 	private void createWorldObject(GameWorld gameWorld, double x, double y, double w, double h) {
-		Color color = Color.rgb(0, 0, 0, 0);
-		Entity right = new Entity();
+		Color color = Color.rgb(0, 0, 50, 0.5d);
+		GameObject right = new GameObject();
 		right.move(-10 + w / 2, -9 + h / 2);
 		right.move(x, y);
-		right.setRender(new RectangleRender(color, w, h));
-		right.setCollider(new RectangleCollider(w, h, true));
-		gameWorld.addEntity(right);
+		right.addComponent(new RectangleRender(color, w, h));
+		right.addComponent(new RectangleCollider(w, h, true));
+		gameWorld.addChild(right);
 	}
 }

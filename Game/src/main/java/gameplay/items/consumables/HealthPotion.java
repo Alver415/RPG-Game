@@ -1,6 +1,6 @@
 package gameplay.items.consumables;
 
-import gameplay.entity.AttributeType;
+import gameplay.gameObject.AttributeType;
 
 public class HealthPotion extends Potion {
 

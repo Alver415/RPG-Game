@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import gameplay.entity.AttributeType;
-import gameplay.entity.Character;
-import gameplay.entity.Modifier;
+import gameplay.gameObject.AttributeType;
+import gameplay.gameObject.Character;
+import gameplay.gameObject.Modifier;
 
 public abstract class Effect {
 

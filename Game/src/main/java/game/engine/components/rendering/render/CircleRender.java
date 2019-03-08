@@ -3,33 +3,33 @@ package game.engine.components.rendering.render;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CircleRender extends BasicRender{
+public class CircleRender extends BasicShapeRender{
 
-	private double radius;
+	private double diameter;
 	
-	public CircleRender(Color color, double radius) {
+	public CircleRender(Color color, double diameter) {
 		super(color);
-		this.radius = radius;
+		this.diameter = diameter / 2;
 	}
 	
 	public double getWidth() {
-		return radius * 2;
+		return diameter;
 	}
 	
 	public double getHeight() {
-		return radius * 2;
-	}
-
-	public double getRadius() {
-		return radius;
+		return diameter;
 	}
 
 	public double getDiameter() {
-		return radius;
+		return diameter;
 	}
-	
+
+	public double getRadius() {
+		return diameter / 2;
+	}
+
 	@Override
-	protected void draw(GraphicsContext gc, double x, double y, double w, double h) {
+	protected void drawInternal(GraphicsContext gc, double x, double y, double w, double h) {
 		gc.setFill(getColor());
 		gc.fillOval(x, y, w, h);
 		gc.setStroke(getBorderColor());

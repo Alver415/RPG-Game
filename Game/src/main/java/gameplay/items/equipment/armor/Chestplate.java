@@ -1,6 +1,6 @@
 package gameplay.items.equipment.armor;
 
-import static gameplay.entity.AttributeType.DEFENSE;
+import static gameplay.gameObject.AttributeType.DEFENSE;
 
 import gameplay.items.Armor;
 

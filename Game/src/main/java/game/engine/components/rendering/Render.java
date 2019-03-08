@@ -2,10 +2,6 @@ package game.engine.components.rendering;
 
 import game.engine.Vector2D;
 import game.engine.components.Component;
-import game.engine.components.colliders.CircleCollider;
-import game.engine.components.colliders.Collider;
-import game.engine.components.colliders.RectangleCollider;
-import game.engine.systems.RenderingSystem;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -15,42 +11,14 @@ public abstract class Render extends Component {
 	
 	private double zIndex;
 	
-	protected Render() {
-		super(Component.Type.RENDER);
-	}
-	
-	public final void draw(GraphicsContext gc, Viewport viewport) {
-		Vector2D worldCenter = getCenter();
-		Vector2D canvasCenter = RenderingSystem.INSTANCE.worldToCanvas(worldCenter);
-
-		double z = viewport.getZoom(); // view zoom
-		
-		double w = getWidth() * z; // relative width
-		double h = getHeight() * z; // relative height
-		double x = canvasCenter.getX() - w / 2;
-		double y = canvasCenter.getY() - h / 2;
-
-		draw(gc, x, y, w, h);
-		drawCollision(gc, x, y, w, h);
+	public final void draw(GraphicsContext gc, double x, double y, double w, double h) {
+		drawInternal(gc, x, y, w, h);
 	}
 
-	protected abstract void draw(GraphicsContext gc, double x, double y, double w, double h);
-	
-	protected void drawCollision(GraphicsContext gc, double x, double y, double w, double h) {
-		Collider c = entity.getCollider();
-		if (c != null) {
-			gc.setStroke(getBorderColor());
-			if (c instanceof RectangleCollider) {
-				gc.strokeRect(x, y, w, h);
-			} else if (c instanceof CircleCollider) {
-				gc.strokeOval(x, y, w, h);
-			}
-		}
-		
-	}
+	protected abstract void drawInternal(GraphicsContext gc, double x, double y, double w, double h);
 	
 	public Vector2D getCenter() {
-		return entity.getTransform().getPosition();
+		return parent.getTransform().getPosition();
 	}
 
 	public abstract double getWidth();

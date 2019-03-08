@@ -2,8 +2,8 @@ package gameplay.items;
 
 import java.util.HashMap;
 
-import gameplay.entity.AttributeType;
-import gameplay.entity.Value;
+import gameplay.gameObject.AttributeType;
+import gameplay.gameObject.Value;
 
 public class Equipment extends Item {
 

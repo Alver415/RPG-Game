@@ -3,48 +3,32 @@ package game.engine;
 import java.util.Set;
 
 import game.engine.components.colliders.CircleCollider;
-import game.engine.components.colliders.Collider;
-import game.engine.components.controllers.PlayerController;
-import game.engine.components.controllers.TargetedProjectileBehavior;
 import game.engine.components.rendering.render.CircleRender;
 import javafx.scene.paint.Color;
 
 public class GameUtils {
 
-	public static void spawn() {
-		Entity enemy = new Entity();
+	public static void spawnEnemy() {
+		GameObject enemy = new GameObject();
 		double randX = 20 * (Math.random() - 0.5);
 		double randY = 18 * (Math.random() - 0.5);
 		enemy.move(randX, randY);
-		enemy.setRender(new CircleRender(Color.GREEN, 0.5));
-		enemy.setCollider(new CircleCollider(0.5, false));
-		GameWorld.INSTANCE.addEntity(enemy);
+		enemy.addComponent(new CircleRender(Color.GREEN, 1));
+		enemy.addComponent(new CircleCollider(1, false));
+		GameWorld.INSTANCE.addChild(enemy);
 	}
 	
-	public static void shoot() {
-		Entity player = findPlayer();
-		Entity bullet = new Entity();
-		bullet.move(0, 0);
-		bullet.setRender(new CircleRender(Color.RED, 0.1));
-		bullet.setCollider(new CircleCollider(0.1, true) {
-			@Override
-			public void handleCollision(Collider other) {
-				if (other.getEntity().equals(player)) {
-					entity.terminate();
-				}
-			}
-		});
-		bullet.setBehavior(new TargetedProjectileBehavior(player));
-		GameWorld.INSTANCE.addEntity(bullet);
-	}
-	
-	public static Entity findPlayer() {
-		Set<Entity> entities = GameWorld.INSTANCE.getEntities();
-		for (Entity entity : entities) {
-			if (entity.getBehavior() instanceof PlayerController) {
-				return entity;
+	public static GameObject findPlayer() {
+		Set<GameObject> entities = GameWorld.INSTANCE.getGameObjects();
+		for (GameObject gameObject : entities) {
+			if (gameObject.getBehavior() instanceof PlayerControlledBehavior) {
+				return gameObject;
 			}
 		}
 		return null;
+	}
+
+	public static double clamp(double min, double val, double max) {
+		return Math.max(Math.min(val, max), min);
 	}
 }

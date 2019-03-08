@@ -13,12 +13,11 @@ import game.engine.components.rendering.Render;
 import javafx.scene.paint.Color;
 
 public class CollisionSystem extends GameSystem<Collider> {
-
-	public static final CollisionSystem INSTANCE = new CollisionSystem();
 	
-	private CollisionSystem() {
+	public CollisionSystem() {
+		super(Collider.class);
 	}
-	
+
 	@Override
 	public void tick(double dt) {
 		Set<Collision> potentialCollisions = broadPhaseCollision(components);
@@ -33,7 +32,7 @@ public class CollisionSystem extends GameSystem<Collider> {
 		List<Collider> asList = new ArrayList<>(colliders);
 		int size = asList.size();
 		for (int a = 0; a < size; a++) {
-			Render render = asList.get(a).getEntity().getRender();
+			Render render = asList.get(a).getParentGameObject().getRender();
 			if (render != null) {
 				render.setBorderColor(Color.rgb(0, 0, 0, 0));
 			}
@@ -176,11 +175,11 @@ public class CollisionSystem extends GameSystem<Collider> {
 		}
 		
 		public void handle() {
-			Render aRender = a.getEntity().getRender();
+			Render aRender = a.getParentGameObject().getRender();
 			if (aRender != null) {
 				aRender.setBorderColor(Color.RED);
 			}
-			Render bRender = b.getEntity().getRender();
+			Render bRender = b.getParentGameObject().getRender();
 			if (bRender != null) {
 				bRender.setBorderColor(Color.RED);
 			}

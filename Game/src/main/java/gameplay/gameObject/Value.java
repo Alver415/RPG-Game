@@ -1,4 +1,4 @@
-package gameplay.entity;
+package gameplay.gameObject;
 
 public class Value {
 

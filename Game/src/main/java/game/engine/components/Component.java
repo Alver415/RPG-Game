@@ -1,49 +1,27 @@
 package game.engine.components;
 
-import game.engine.Entity;
-import game.engine.components.attributes.AttributeMap;
-import game.engine.components.colliders.Collider;
-import game.engine.components.controllers.Behavior;
-import game.engine.components.rendering.Render;
-import game.engine.components.transforms.Transform;
+import game.engine.Child;
+import game.engine.GameObject;
+import game.engine.Parent;
 
-public abstract class Component {
+public abstract class Component implements Child {
 
-	public enum Type{
-		RENDER(Render.class),
-		COLLIDER(Collider.class),
-		CONTROLLER(Behavior.class),
-		ATTRIBUTES(AttributeMap.class),
-		TRANSFORM(Transform.class);
-		
-		private final Class<? extends Component> baseClass;
+	protected GameObject parent;
 
-		Type(Class<? extends Component> baseClass){
-			this.baseClass = baseClass;
-		}
-		public Class<? extends Component> getBaseClass(){
-			return baseClass;
-		}
+	public GameObject getParentGameObject() {
+		return (GameObject) parent;
 	}
-	
-	protected final Type type;
-	protected Entity entity;
 
-	protected Component(Type type) {
-		this.type = type;
+	public Parent getParent() {
+		return parent;
+	}
+
+	public void setParent(Parent parent) {
+		this.parent = (GameObject) parent;
 	}
 	
-	public Type getType() {
-		return type;
+	@Override
+	public String toString() {
+		return this.getParentGameObject() + " [" + this.getClass().getSimpleName() + "]";
 	}
-	
-	public Entity getEntity() {
-		return entity;
-	}
-	
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-	
-	
 }
