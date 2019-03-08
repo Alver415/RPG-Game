@@ -1,16 +1,13 @@
 package game.engine.components.rendering.render;
 
-import game.engine.components.attributes.AttributeMap;
-import game.engine.components.attributes.AttributeType;
-import game.engine.components.attributes.Value;
 import game.engine.components.rendering.Render;
 import javafx.scene.paint.Color;
 
-public abstract class BasicRender extends Render{
+public abstract class BasicShapeRender extends Render{
 
 	private Color color;
 	
-	public BasicRender(Color color) {
+	public BasicShapeRender(Color color) {
 		super();
 		this.color = color;
 	}

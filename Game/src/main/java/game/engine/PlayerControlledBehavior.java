@@ -12,9 +12,7 @@ import game.engine.components.rendering.AnimatedSprite;
 import game.engine.components.rendering.render.CircleRender;
 import game.engine.components.rendering.render.SpriteRender;
 import game.engine.systems.RenderingSystem;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 

@@ -3,7 +3,7 @@ package game.engine.components.rendering.render;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class RectangleRender extends BasicRender{
+public class RectangleRender extends BasicShapeRender{
 
 	private double width;
 	private double height;

@@ -46,11 +46,11 @@ public class CircleCollider extends Collider{
 
 		Vector2D difference = aCenter.subtract(bCenter);
 	
-		double aDiameter = getDiameter();
-		double bDiameter = getDiameter();
+		double aRadius = getRadius();
+		double bRadius = getRadius();
 		
 		double distance = aCenter.distance(bCenter);
-		double overlap = aDiameter + bDiameter - distance;
+		double overlap = aRadius + bRadius - distance;
 		
 		double compensation = other.isStatic ? overlap : overlap * 0.5;
 		getParentGameObject().move(difference.normalize().scalar(compensation));
@@ -80,7 +80,7 @@ public class CircleCollider extends Collider{
 		Vector2D difference = aCenter.subtract(closest);
 
 		double distance = difference.magnitude();
-		double overlap = diameter - distance;
+		double overlap = getRadius() - distance;
 
 		Vector2D penetration = difference.normalize().scalar(overlap);
 

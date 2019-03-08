@@ -1,14 +1,10 @@
 package game.engine.components.rendering.render;
 
-import game.engine.components.attributes.AttributeMap;
-import game.engine.components.attributes.AttributeType;
-import game.engine.components.attributes.Value;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
 import game.engine.components.rendering.Render;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class ColliderRender extends Render{
 

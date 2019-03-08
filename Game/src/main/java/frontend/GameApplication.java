@@ -121,13 +121,13 @@ public class GameApplication extends Application {
 		player.addComponent(new SpriteRender(AnimatedSprite.DOWN, 1d));
 		player.addComponent(new HealthBarRender());
 		player.addComponent(new ColliderRender());
-		player.addComponent(new CircleCollider(0.5d, true));
+		player.addComponent(new CircleCollider(1d, true));
 		player.addComponent(new AttributeMap());
 		player.addComponent(new Camera());
 		gameWorld.addChild(player);
 		
 		createMap(gameWorld);
-//		 spawnEnemies(gameWorld);
+		 spawnEnemies(gameWorld);
 	}
 
 	private void spawnEnemies(GameWorld gameWorld) {
@@ -152,7 +152,7 @@ public class GameApplication extends Application {
 		enemy3.addComponent(new FollowPlayerBehavior());
 		enemy3.addComponent(new AttributeMap());
 		enemy3.addComponent(new SpriteRender(StaticSprite.CHARMANDER, 1d));
-		enemy3.addComponent(new CircleCollider(0.5, true));
+		enemy3.addComponent(new CircleCollider(1, true));
 		gameWorld.addChild(enemy3);
 
 		GameObject enemy4 = new GameObject();
@@ -160,7 +160,7 @@ public class GameApplication extends Application {
 		enemy4.addComponent(new FollowPlayerBehavior());
 		enemy4.addComponent(new AttributeMap());
 		enemy4.addComponent(new SpriteRender(StaticSprite.PIKACHU, 1d));
-		enemy4.addComponent(new CircleCollider(0.5, false));
+		enemy4.addComponent(new CircleCollider(1, false));
 		gameWorld.addChild(enemy4);
 	}
 

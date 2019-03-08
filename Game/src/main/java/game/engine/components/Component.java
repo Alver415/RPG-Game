@@ -19,4 +19,9 @@ public abstract class Component implements Child {
 	public void setParent(Parent parent) {
 		this.parent = (GameObject) parent;
 	}
+	
+	@Override
+	public String toString() {
+		return this.getParentGameObject() + " [" + this.getClass().getSimpleName() + "]";
+	}
 }

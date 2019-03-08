@@ -3,7 +3,7 @@ package game.engine.components.rendering.render;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class CircleRender extends BasicRender{
+public class CircleRender extends BasicShapeRender{
 
 	private double diameter;
 	
