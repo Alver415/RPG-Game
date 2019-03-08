@@ -7,10 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ParentAwareSet<T extends Child> implements Set<T> {
 
-	private final GameObject	parent;
+	private final Parent	parent;
 	private final Set<T>	wrapped;
 
-	public ParentAwareSet(GameObject parent) {
+	public ParentAwareSet(Parent parent) {
 		this.wrapped = ConcurrentHashMap.newKeySet();
 		this.parent = parent;
 	}

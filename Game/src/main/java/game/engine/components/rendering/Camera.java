@@ -31,8 +31,4 @@ public class Camera extends Component {
 		setZoom(zoom * 0.95);
 	}
 
-	@Override
-	public void tick(double dt) {
-	}
-	
 }

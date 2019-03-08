@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 public enum Control {
 
@@ -14,27 +15,30 @@ public enum Control {
 	DOWN(KeyCode.S),
 	LEFT(KeyCode.A),
 	RIGHT(KeyCode.D),
+
+	ZOOM_IN(KeyCode.E),
+	ZOOM_OUT(KeyCode.Q),
 	
 	SPRINT(KeyCode.SPACE),
 	SNEAK(KeyCode.SHIFT),
-
+	
 	SPAWN(KeyCode.N),
-	SHOOT(KeyCode.M);
+	SHOOT(MouseButton.PRIMARY);
 
-	private final KeyCode	defaultKeyCode;
-	private KeyCode			currentKeyCode;
+	private final Object	defaultInput;
+	private Object			currentInput;
 
-	Control(KeyCode defaultKeyCode) {
-		this.defaultKeyCode = defaultKeyCode;
-		this.currentKeyCode = defaultKeyCode;
+	Control(Object defaultInput) {
+		this.defaultInput = defaultInput;
+		this.currentInput = defaultInput;
 	}
 
-	public KeyCode getDefault() {
-		return defaultKeyCode;
+	public Object getDefault() {
+		return defaultInput;
 	}
 
-	public KeyCode get() {
-		return currentKeyCode;
+	public Object get() {
+		return currentInput;
 	}
 
 	// Static fields and methods
@@ -58,17 +62,33 @@ public enum Control {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		Map<Object, Control> newMap = new HashMap<Object, Control>();
 		for (Control control : values()) {
 			String stringVal = PROPERTIES.getProperty(control.name());
 			if (stringVal == null) {
-				control.currentKeyCode = control.defaultKeyCode;
+				control.currentInput = control.defaultInput;
 			} else {
-				control.currentKeyCode = KeyCode.valueOf(stringVal);
+				control.currentInput = coerceInput(stringVal);
 			}
 			newMap.put(control.get(), control);
 		}
 		MAP = newMap;
+	}
+
+	private static Object coerceInput(String stringVal) {
+		try {
+			return KeyCode.valueOf(stringVal);
+		} catch (Exception e) {
+			
+		}
+
+		try {
+			return MouseButton.valueOf(stringVal);
+		} catch (Exception e) {
+			
+		}
+		return null;
 	}
 
 }

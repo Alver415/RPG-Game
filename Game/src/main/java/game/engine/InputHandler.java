@@ -4,42 +4,56 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import frontend.settings.Control;
-import game.engine.components.controllers.PlayerController;
-import game.engine.systems.GameSystem;
 import javafx.event.EventHandler;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class InputHandler extends GameSystem<PlayerController> implements EventHandler<InputEvent> {
+public class InputHandler implements EventHandler<InputEvent> {
 	
-	private final Set<InputEvent> events;
+	private final Set<KeyCode> pressedKeys;
+	private final Set<MouseEvent> mouseEvents;
 	
 	public InputHandler() {
-		super(PlayerController.class);
-		this.events = ConcurrentHashMap.newKeySet();
+		this.pressedKeys = ConcurrentHashMap.newKeySet();
+		this.mouseEvents = ConcurrentHashMap.newKeySet();
 	}
 	
 	@Override
 	public void handle(InputEvent event) {
-		this.events.add(event);
-	}
-
-	public Set<InputEvent> getInputEvents() {
-		return new HashSet<>(events);
-	}
-	
-	public void consume(InputEvent inputEvent) {
-		this.events.remove(inputEvent);
-	}
-
-	@Override
-	public void tick(double dt) {
-		for (PlayerController controller : components) {
-			controller.processInput(events);
+		if (event instanceof KeyEvent){
+			KeyEvent keyEvent = (KeyEvent) event;
+			if (isPressed(keyEvent)){
+				this.pressedKeys.add(keyEvent.getCode());	
+			} else if (isReleased(keyEvent)){
+				this.pressedKeys.remove(keyEvent.getCode());
+			}
 		}
+
+		else if (event instanceof MouseEvent){
+			this.mouseEvents.add((MouseEvent)event);	
+		}
+	}
+
+
+	private boolean isPressed(KeyEvent keyEvent) {
+		return KeyEvent.KEY_PRESSED.equals(keyEvent.getEventType());
+	}
+	private boolean isReleased(KeyEvent keyEvent) {
+		return KeyEvent.KEY_RELEASED.equals(keyEvent.getEventType());
+	}
+
+	public Set<KeyCode> getPressedKeys() {
+		return new HashSet<>(pressedKeys);
+	}
+
+	public Set<MouseEvent> getMouseEvents() {
+		return new HashSet<>(mouseEvents);
+	}
+
+	public void tick() {
+		this.mouseEvents.clear();
 	}
 
 }

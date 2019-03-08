@@ -2,6 +2,9 @@ package game.engine.components.rendering;
 
 import game.engine.Vector2D;
 import game.engine.components.Component;
+import game.engine.components.attributes.AttributeMap;
+import game.engine.components.attributes.AttributeType;
+import game.engine.components.attributes.Value;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.Collider;
 import game.engine.components.colliders.RectangleCollider;
@@ -16,25 +19,9 @@ public abstract class Render extends Component {
 	
 	public final void draw(GraphicsContext gc, double x, double y, double w, double h) {
 		drawInternal(gc, x, y, w, h);
-		drawCollision(gc, x, y, w, h);
 	}
 
 	protected abstract void drawInternal(GraphicsContext gc, double x, double y, double w, double h);
-	
-	protected void drawCollision(GraphicsContext gc, double x, double y, double w, double h) {
-		// Temporary: Render shouldn't know about collider.
-		// Components should be modularized.
-		Collider c = parent.getCollider();
-		if (c != null) {
-			gc.setStroke(getBorderColor());
-			if (c instanceof RectangleCollider) {
-				gc.strokeRect(x, y, w, h);
-			} else if (c instanceof CircleCollider) {
-				gc.strokeOval(x, y, w, h);
-			}
-		}
-		
-	}
 	
 	public Vector2D getCenter() {
 		return parent.getTransform().getPosition();

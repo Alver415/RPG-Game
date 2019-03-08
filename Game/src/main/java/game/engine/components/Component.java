@@ -19,8 +19,4 @@ public abstract class Component implements Child {
 	public void setParent(Parent parent) {
 		this.parent = (GameObject) parent;
 	}
-	
-	public void tick(double dt) {
-	}
-	
 }

@@ -23,8 +23,8 @@ public abstract class GameSystem<T extends Component> {
 		}
 	}
 
-	public void remove(T component) {
-		if (component != null && this.components.contains(component)) {
+	public void unregister(Component component) {
+		if (relevantType.isInstance(component) && component != null && this.components.contains(component)) {
 			this.components.remove(component);
 		}
 	}

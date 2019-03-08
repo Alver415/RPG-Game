@@ -7,8 +7,6 @@ import game.engine.components.Component;
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.behaviors.Behavior;
 import game.engine.components.colliders.Collider;
-import game.engine.components.controllers.Controller;
-import game.engine.components.controllers.PlayerController;
 import game.engine.components.rendering.Render;
 import game.engine.components.transforms.Transform;
 
@@ -49,9 +47,9 @@ public class GameObject implements Parent, Child {
 	@Override
 	public void addChild(Child child) {
 		if (child instanceof GameObject) {
-			this.gameObjects.add((GameObject) child);
+			this.addGameObject((GameObject) child);
 		} else if (child instanceof Component) {
-			this.components.add((Component) child);
+			this.addComponent((Component) child);
 		}
 	}
 
@@ -136,13 +134,9 @@ public class GameObject implements Parent, Child {
 	public void move(Vector2D vector) {
 		getTransform().move(vector);
 	}
-
+	
 	public Transform getTransform() {
 		return getComponent(Transform.class);
-	}
-
-	public Controller getController() {
-		return getComponent(Controller.class);
 	}
 
 	public Behavior getBehavior() {

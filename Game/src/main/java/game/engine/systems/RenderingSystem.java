@@ -135,17 +135,17 @@ public class RenderingSystem extends GameSystem<Render> {
 		Vector2D worldMax = canvasToWorld(new Vector2D(cw, ch));
 
 		double xMin = Math.floor(worldMin.getX() / inc) * inc;
-		double yMin = Math.floor(worldMin.getY() / inc) * inc;
+		double yMin = Math.ceil(worldMin.getY() / inc) * inc;
 
 		double xMax = Math.ceil(worldMax.getX() / inc) * inc;
-		double yMax = Math.ceil(worldMax.getY() / inc) * inc;
+		double yMax = Math.floor(worldMax.getY() / inc) * inc;
 
 		for (double x = xMin; x <= xMax; x += inc) {
 			Vector2D start = worldToCanvas(new Vector2D(x, yMin));
 			Vector2D end = worldToCanvas(new Vector2D(x, yMax));
 			graphicsContext.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
 		}
-		for (double y = yMin; y <= yMax; y += inc) {
+		for (double y = yMax; y <= yMin; y += inc) {
 			Vector2D start = worldToCanvas(new Vector2D(xMin, y));
 			Vector2D end = worldToCanvas(new Vector2D(xMax, y));
 			graphicsContext.strokeLine(start.getX(), start.getY(), end.getX(), end.getY());
@@ -154,8 +154,8 @@ public class RenderingSystem extends GameSystem<Render> {
 
 	public Vector2D canvasToWorld(Vector2D canvas) {
 		// World position of the render
-		double cx = canvas.getX(); // world x
-		double cy = canvas.getY(); // world y
+		double cx = canvas.getX(); // canvas x
+		double cy = canvas.getY(); // canvas y
 
 		// World position relative to the viewport
 		double vx = camera.getPosition().getX(); // view x
@@ -163,8 +163,8 @@ public class RenderingSystem extends GameSystem<Render> {
 		double vz = camera.getZoom(); // view zoom
 
 		// Canvas position
-		double wx = (cx - cw / 2) / vz + vx;
-		double wy = (cy - ch / 2) / vz + vy;
+		double wx = (	   cx  - cw / 2) / vz + vx;
+		double wy = ((ch - cy) - ch / 2) / vz + vy;
 
 		return new Vector2D(wx, wy);
 	}

@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
-import frontend.settings.Control;
 import game.engine.components.Component;
 import game.engine.systems.AttributeSystem;
 import game.engine.systems.BehaviorSystem;
@@ -27,7 +25,7 @@ public class GameWorld implements Parent {
 	private final List<GameSystem<?>>	gameSystems;
 
 	private GameWorld() {
-		this.gameObjects = ConcurrentHashMap.newKeySet();
+		this.gameObjects = new ParentAwareSet<>(this);
 		this.gameSystems = Collections.synchronizedList(new ArrayList<>());
 
 		this.inputHandler = new InputHandler();
@@ -44,6 +42,7 @@ public class GameWorld implements Parent {
 				for (GameSystem<?> gameSystem : gameSystems) {
 					process(gameSystem, dt);
 				}
+				inputHandler.tick();
 			}
 		};
 		this.timer.start();
@@ -58,11 +57,29 @@ public class GameWorld implements Parent {
 	public void register(Child child) {
 		if(child instanceof Component) {
 			for (GameSystem<?> gameSystem : gameSystems) {
-				gameSystem.register((Component)child);
+				Component component = (Component)child;
+				gameSystem.register(component);
 			}
 		}
 		if (child instanceof GameObject) {
-			this.gameObjects.add((GameObject) child);
+			GameObject gameObject = (GameObject) child;
+			if (gameObject.getParent() == null) {
+				this.gameObjects.add(gameObject);
+			}
+			for (Child child2 : gameObject.getChildren()) {
+				register(child2);
+			}
+		}
+	}
+
+	public void unregister(Child child) {
+		if(child instanceof Component) {
+			for (GameSystem<?> gameSystem : gameSystems) {
+				gameSystem.unregister((Component)child);
+			}
+		}
+		if (child instanceof GameObject) {
+			this.gameObjects.remove((GameObject) child);
 		}
 	}
 
@@ -80,6 +97,7 @@ public class GameWorld implements Parent {
 		if (newGameObject instanceof GameObject) {
 			GameObject gameObject = (GameObject) newGameObject;
 			this.gameObjects.add(gameObject);
+			register(newGameObject);
 			for (Child child : gameObject.getChildren()) {
 				register(child);
 			}
@@ -88,6 +106,10 @@ public class GameWorld implements Parent {
 
 	public void remove(GameObject gameObject) {
 		this.gameObjects.remove(gameObject);
+		unregister(gameObject);
+		for (Child child : gameObject.getChildren()) {
+			unregister(child);
+		}
 	}
 
 	public GameTimer getGameTimer() {
@@ -137,7 +159,7 @@ public class GameWorld implements Parent {
 
 	@Override
 	public Parent getRoot() {
-		return null;
+		return this;
 	}
 
 

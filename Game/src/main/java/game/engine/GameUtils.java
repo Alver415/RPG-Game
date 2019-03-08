@@ -2,10 +2,7 @@ package game.engine;
 
 import java.util.Set;
 
-import game.engine.components.behaviors.TargetedProjectileBehavior;
 import game.engine.components.colliders.CircleCollider;
-import game.engine.components.colliders.Collider;
-import game.engine.components.controllers.PlayerController;
 import game.engine.components.rendering.render.CircleRender;
 import javafx.scene.paint.Color;
 
@@ -24,7 +21,7 @@ public class GameUtils {
 	public static GameObject findPlayer() {
 		Set<GameObject> entities = GameWorld.INSTANCE.getGameObjects();
 		for (GameObject gameObject : entities) {
-			if (gameObject.getController() instanceof PlayerController) {
+			if (gameObject.getBehavior() instanceof PlayerControlledBehavior) {
 				return gameObject;
 			}
 		}

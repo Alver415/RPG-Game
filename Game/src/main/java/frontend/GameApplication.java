@@ -5,15 +5,17 @@ import java.io.IOException;
 import frontend.settings.Setting;
 import game.engine.GameObject;
 import game.engine.GameWorld;
+import game.engine.PlayerControlledBehavior;
 import game.engine.components.attributes.AttributeMap;
 import game.engine.components.behaviors.FollowPlayerBehavior;
 import game.engine.components.colliders.CircleCollider;
 import game.engine.components.colliders.RectangleCollider;
-import game.engine.components.controllers.PlayerController;
 import game.engine.components.rendering.AnimatedSprite;
 import game.engine.components.rendering.Camera;
 import game.engine.components.rendering.Render;
 import game.engine.components.rendering.StaticSprite;
+import game.engine.components.rendering.render.ColliderRender;
+import game.engine.components.rendering.render.HealthBarRender;
 import game.engine.components.rendering.render.RectangleRender;
 import game.engine.components.rendering.render.SpriteRender;
 import game.engine.systems.RenderingSystem;
@@ -115,15 +117,17 @@ public class GameApplication extends Application {
 		renderingSystem.setCanvas(canvas);
 		
 		GameObject player = new GameObject();
-		player.addComponent(new PlayerController());
+		player.addComponent(new PlayerControlledBehavior());
 		player.addComponent(new SpriteRender(AnimatedSprite.DOWN, 1d));
+		player.addComponent(new HealthBarRender());
+		player.addComponent(new ColliderRender());
 		player.addComponent(new CircleCollider(0.5d, true));
 		player.addComponent(new AttributeMap());
 		player.addComponent(new Camera());
 		gameWorld.addChild(player);
 		
 		createMap(gameWorld);
-		// spawnEnemies(gameWorld);
+//		 spawnEnemies(gameWorld);
 	}
 
 	private void spawnEnemies(GameWorld gameWorld) {
